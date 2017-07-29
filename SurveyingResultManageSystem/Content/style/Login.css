@@ -1,0 +1,40 @@
+﻿html {
+    height: 100%;
+}
+
+body {
+    margin: 0px;
+    padding: 0px;
+    text-align: center;
+    height: 100%;
+    background-image: url(../../Sources/Images/login_bg.png);
+    background-size: cover;
+}
+
+#div_content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background-color: whitesmoke;
+    padding: 30px;
+}
+
+#div_username, #div_password {
+    margin-bottom: 15px;
+}
+
+#div_title {
+    text-align: center;
+    display: inline-flex;
+}
+
+#title_img {
+    padding-right: 20px;
+    height: 50px;
+    width: 44px;
+    float: left;
+}
+
+#input_btn {
+    background-color: #0972A7;
+}

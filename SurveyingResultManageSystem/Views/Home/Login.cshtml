@@ -1,0 +1,57 @@
+﻿@model SurveyingResultManageSystem.tb_UserInfo
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>郴州市测绘成果管理系统</title>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <link href="~/Content/style/Login.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="div_content">
+        <div id="div_title">
+            <img id="title_img" src="~/Sources/Images/chenzhou.png" />
+            <h1>郴州市测绘成果管理系统</h1>
+        </div>
+@using (Html.BeginForm())
+{
+        <div id="div_username">
+            @Html.LabelFor(m =>m.UserName,new { @style="display:inline",@for = "用户名"})
+            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "请输入用户名", id = "account" })
+          @*  <p style="display:inline">用户名：</p>*@
+          @*  <input type="text" placeholder="请输入用户名！" />*@
+            @Html.ValidationMessageFor(m => m.UserName)
+        </div>
+        <div id="div_password">
+            @Html.LabelFor(m => m.Password, new { @style = "display:inline", @for = "密码" })
+            @Html.PasswordFor(m => m.Password, new {@style = "type:password",@class = "form-control", placeholder = "请输入密码", id = "password" })
+            @Html.ValidationMessageFor(m => m.Password)
+            @*<p style="display:inline">密&nbsp;&nbsp;&nbsp;码：</p>
+            <input type="password" placeholder="请输入密码！" />*@
+        </div>
+        <div id="div_LoginBtn">
+            <input id="input_btn" type="submit" value="登    录" />
+        </div>
+}
+    </div>
+</body>
+
+</html>
+<script type="text/javascript">
+    $(function ()
+    {
+        $(window).resize();
+    }); 
+    $(window).resize(function () {
+        $("#div_content").css({
+            position: "absolute",
+            left: ($(window).width() - $("#div_content").outerWidth()) / 2,
+            top: ($(window).height() - $("#div_content").outerHeight()) / 2
+        })
+    });
+</script>

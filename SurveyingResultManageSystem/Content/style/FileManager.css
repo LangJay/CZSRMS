@@ -1,0 +1,179 @@
+﻿
+#div_menu {
+    border-right: 1px solid #808080;
+    float: left;
+    width: 240px;
+    height: 100%;
+}
+
+.li_div a {
+    text-decoration: none;
+    color: black;
+    display: block;
+    padding: 5px 0px 5px 0px;
+}
+
+    .li_div a:hover {
+        background-color: #c8c8c8;
+    }
+
+    .li_div a:active {
+        scrollbar-base-color: #c8c8c8;
+    }
+
+ul li {
+    list-style-type: none;
+}
+
+    ul li h4 {
+        color: white;
+        margin: 0px;
+        padding: 15px 0px 15px 0px;
+        background-color: #0972A7;
+        width: 100%;
+        display: inline-flex;
+        text-align: center;
+        padding-top: 15px;
+    }
+
+.li_div {
+    width: 100%;
+}
+
+ul {
+    padding: 0px;
+}
+
+#div_menu_ul h4:hover {
+    background-color: #5090C7;
+}
+
+#div_menu_ul h4:checked {
+    background-color: #5090C7;
+}
+
+#span_file {
+    background: url("../../Sources/Images/file.png");
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+    margin-left: 60px;
+    margin-top: -5px;
+}
+
+#span_map {
+    background: url("../../Sources/Images/map.png");
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+    margin-left: 60px;
+    margin-top: -5px;
+}
+
+#div-filemanager {
+    padding-left: 240px;
+}
+
+#div_filemanager_pager {
+    height: 100%;
+    width: 100%;
+    border-left: none;
+    padding: 10px 10px 2px 15px;
+}
+
+#div_filemanager_list {
+    height: 100%;
+    width: 100%;
+    border-left: none;
+    border: 1px solid #d8d7d7;
+}
+
+#div_filemanager_list_header {
+    height: 50px;
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid #0972A7;
+}
+
+    #div_filemanager_list_header input {
+        height: 30px;
+    }
+
+.button {
+    background-color: #0972A7;
+    border: none;
+    color: white;
+    outline: none;
+    height: 30px;
+}
+
+    .button:before {
+        background-color: #0972A7;
+        border: none;
+        color: white;
+        outline: none;
+    }
+
+    .button:active {
+        background-color: #5090C7;
+    }
+
+#div_filemanager_list_header_search {
+    display: inline;
+    position: absolute;
+    padding-top: 10px;
+    left: 300px;
+}
+
+#div_filemanager_list_header_upload {
+    display: inline;
+    position: absolute;
+    padding-top: 12px;
+    right: 30px;
+}
+
+.table {
+    margin-bottom: 0px;
+}
+
+td, th {
+    text-align: center;
+}
+
+#div_filemanager_list_footer {
+    border-top: 1px solid #d8d7d7;
+    height: 50px;
+}
+
+#footer_left {
+    position: absolute;
+    display: inline;
+    left: 300px;
+    padding-top: 10px;
+}
+
+#footer_right {
+    position: absolute;
+    display: inline;
+    right: 30px;
+    padding-top: 10px;
+}
+
+.modal-dialog {
+    width: auto;
+}
+
+#input_file {
+    width: 100%;
+    max-width: 100%;
+    background-color: white;
+}
+
+.modal-dialog td {
+    min-width: 100px;
+}
+
+.modal-dialog .modal-header {
+    background-color: #0972A7;
+    border-bottom: 1px solid #d8d7d7;
+}

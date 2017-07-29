@@ -1,0 +1,279 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/style/FileManager.css" rel="stylesheet" />
+<div id="div_menu">
+    <ul id="div_menu_ul">
+        <li id="li_file">
+            <h4><span id="span_file"></span>文件管理</h4>
+            <div class="li_div">
+                <a>第一名</a>
+                <a>第二名</a>
+                <a>第三名</a>
+            </div>
+        </li>
+        <li id="li_map">
+            <h4><span id="span_map"></span>地图管理</h4>
+            <div class="li_div">
+                <a>第一名</a>
+                <a>第二名</a>
+                <a>第三名</a>
+            </div>
+        </li>
+    </ul>
+</div>
+·
+<div id="div-filemanager">
+    <div id="div_filemanager_pager">
+        <div id="div_filemanager_list">
+            <div id="div_filemanager_list_header">
+                <div id="div_filemanager_list_header_search">
+                    <input class="search" type="search" placeholder="输入关键字查询" />
+                    <input class="button" type="button" value="🔍搜索" />
+                </div>
+                <div id="div_filemanager_list_header_upload">
+                    <input onclick="uploadFile()" class="button" type="button" value="上传文件" />
+                </div>
+            </div>
+            <table class="table">
+                <tr>
+                    <th>
+                        选择
+                    </th>
+                    <th>
+                        文件名称
+                    </th>
+                    <th>
+                        文件大小
+                    </th>
+                    <th>
+                        上传时间
+                    </th>
+                    <th>
+                        操作
+                    </th>
+                </tr>
+                
+                @*@foreach (var num in 3)
+                {*@
+                    <tr>
+                        <td>
+                            <img src="~/Sources/Images/select.png" />
+                        </td>
+                        <td>
+                            地籍调查图.DWG
+                        </td>
+                        <td>
+                            123.1M
+                        </td>
+                        <td>
+                            2017-07-21
+                        </td>
+                        <td>
+                            删除
+                            下载
+                        </td>
+                    </tr>
+                
+                <tr>
+                    <td>
+                        <img src="~/Sources/Images/selected.png" />
+                    </td>
+                    <td>
+                        地籍调查图.DWG
+                    </td>
+                    <td>
+                        123.1M
+                    </td>
+                    <td>
+                        2017-07-21
+                    </td>
+                    <td>
+                        删除
+                        下载
+                    </td>
+                </tr>
+
+            </table>
+            <div id="div_filemanager_list_footer">
+                <div id="footer_left">
+                    <img src="~/Sources/Images/select.png" />
+                    <p>全选</p>
+                    下载删除
+                </div>
+                <div id="footer_right">
+                    <input class="button" type="button" value="首页" />
+                    <input class="button" type="button" value="上一页" />
+                    <input class="button" type="button" value="第几页" />
+                    <input class="button" type="button" value="下一页" />
+                    <input class="button" type="button" value="尾页" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <p>共3条 每页20条 第1/1页</p>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel" style="color:white">
+                    上传文件
+                </h4>
+            </div>
+            <div class="modal-body">
+                <table style="width:100%;">
+                    <tr>
+                        <td style="width:80px;">选择文件：</td>
+                        <td colspan="9"><input id="input_file" type="file" /></td>
+                    </tr>
+                    <tr>
+                        <td>坐标信息框架：</td>
+                        <td>
+                            <form>
+                                <select name="coodinatesystem">
+                                    <option value="西安1980">西安1980</option>
+                                    <option value="北京1954">北京1954</option>
+                                    <option value="国家2000">国家2000</option>
+                                    <option value="郴州独立">郴州独立</option>
+                                </select>
+                            </form>
+                        </td>
+                        <td>完成时间信息：</td>
+                        <td><input type="date" name="finishtimeinfo"/></td>
+                        <td>完成人信息：</td>
+                        <td><input maxlength="50" name="finishpersoninfo" /></td>
+                        <td>最小坐标：</td>
+                        <td><input type="number" name="mincoodinate"/></td>
+                        <td>最大坐标：</td>
+                        <td><input type="number" name="maxcoodinate"/></td>
+                    </tr>
+                    <tr>
+                        <td>文件中对象数量：</td>
+                        <td><input type="number" name="objectnum" /></td>
+                        <td>备注信息：</td>
+                        <td colspan="7" style="width:100%;max-width:100%;"><input style="width:100%;min-width:100%;" name="mark" /></td>
+                    </tr>
+                    <tr>
+                        <td>是否需要进库：</td>
+                        <td>
+                            <form>
+                                是：
+                                <input type="radio" name="warehousing" value="yes" />
+                                否：
+                                <input type="radio" checked="checked"  name="warehousing" value="no" />
+                            </form>
+                        </td>
+                        <td>所属项目名称：</td>
+                        <td><input name="projectname" /></td>
+                        
+                        <td>文件类型：</td>
+                        <td>
+                            <form>
+                                <select name="filetype">
+                                    <option value="竣工验收测绘报告">竣工验收测绘报告</option>
+                                    <option value="勘测定界报告">勘测定界报告</option>
+                                    <option value="报批红线图">报批红线图</option>
+                                    <option value="供地红线图">供地红线图</option>
+                                    <option value="宗地图">宗地图</option>
+                                    <option value="地籍图">地籍图</option>
+                                </select>
+                            </form>
+                        </td>
+                        <td>所属项目类型：</td>
+                        <td>
+                            <form>
+                                <select name="projecttype">
+                                    <option value="竣工验收">竣工验收</option>
+                                    <option value="报批">报批</option>
+                                    <option value="供地">供地</option>
+                                </select>
+                            </form>
+                        </td>
+                        <td>平面坐标系统：</td>
+                        <td>
+                            <form>
+                                <select name="pcoodinatesystem">
+                                    <option value="西安1980">西安1980</option>
+                                    <option value="北京1954">北京1954</option>
+                                    <option value="国家2000">国家2000</option>
+                                    <option value="郴州独立">郴州独立</option>
+                                </select>
+                            </form>
+                        </td>
+                    </tr>
+                 
+                    
+                    <tr>
+                        <td>中央子午线：</td>
+                        <td><input maxlength="50" name="centermeridian" /></td>
+                        <td>纵坐标偏移值：</td>
+                        <td><input type="number" name="yoffset" /></td>
+                        <td>水平坐标偏移值：</td>
+                        <td><input type="number" name="xoffset" /></td>
+                        <td>完成时间：</td>
+                        <td><input type="date" name="finishtime" /></td>
+                        <td>完成人名称：</td>
+                        <td><input maxlength="50" name="finishperson" /></td>
+                    </tr>
+                    <tr>
+                        <td>成果说明：</td>
+                        <td colspan="3"><input style="max-width:100%;width:100%;" name="explain" /></td>
+                        <td>是否公开：</td>
+                        <td>
+                            <form>
+                                是：
+                                <input type="radio" checked="checked" name="ispublic" value="yes" />
+                                否：
+                                <input type="radio" name="ispublic" value="no" />
+                            </form>
+                        </td>
+                        <td>文件大小：</td>
+                        <td><input name="filesize" /></td>
+                        <td>测绘单位名称：</td>
+                        <td>
+                            <form>
+                                <select name="surveyingunitname">
+                                    <option value="北湖区测绘队">北湖区测绘队</option>
+                                    <option value="苏仙区测绘队">苏仙区测绘队</option>
+                                    <option value="市局测绘队">市局测绘队</option>
+                                    <option value="其它">其它</option>
+                                </select>
+                            </form>
+                        </td>
+                    </tr>  
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">
+                    关闭
+                </button>
+                <button type="button" onclick="submitInfo()" class="btn btn-primary">
+                    提交
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div>
+</div>
+<script type="text/javascript">
+    function uploadFile()
+    {
+        $("#myModal").modal('show');
+    };
+    function submitInfo()
+    {
+       // var filePath = 
+        //取得所有信息
+        //var fileInfo = 
+        //    {
+        //        "FileName":
+        //    }
+    }
+</script>

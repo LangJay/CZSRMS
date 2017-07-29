@@ -1,0 +1,86 @@
+﻿#div_title {
+    background-color: #0972A7;
+    width: 100%;
+    text-align: left;
+}
+#div_title_ul {
+    list-style-type: none;
+    display: inline;
+    right: 20px;
+    top:30px;
+    position: absolute;
+}
+#div_title_ul li
+{
+    float:left;
+    padding-right:10px;
+    color:white;
+}
+#div_title_ul a
+{
+    color:white;
+    text-decoration: none;
+    outline: none;
+}
+#div_title_ul a:hover {
+    color: grey;
+}
+#div_message,#div_message_left,#div_message_right{
+    display:inline-flex;
+    text-align:center;
+}
+#div_message {
+    border-bottom: 2px inset #808080;
+    height: 40px;
+    width: 100%;
+}
+#div_message_left {
+    position:absolute;
+    margin-top: 10px;
+    display:inline;
+}
+#div_message_right {
+    position: absolute;
+    right: 20px;
+    margin-top: 10px;
+    display:inline;
+}
+#div_message_left img {
+    margin-left: 100px;
+    width: 14px;
+    height: 18px;
+    margin-top: 2px;
+    margin-right: 5px;
+    display: inline;
+}
+#div_message_right img {
+    margin-top: 2px;
+    width: 14px;
+    height: 18px;
+    margin-right: 5px;
+    display: inline;
+}
+#div_message_right a {
+    margin-left: 30px;
+    color: #0972A7;
+    text-decoration: none;
+    outline: none;
+}
+#div_message_right a:hover
+{
+    color:grey;
+}
+p {
+    margin: 0px;
+    height: 20px;
+    display: inline;
+}
+body {
+    margin:0px 2px 0px 2px;
+    padding: 0px;
+    text-align: center;
+}
+html {
+    width: 100%;
+    height:auto;
+}
