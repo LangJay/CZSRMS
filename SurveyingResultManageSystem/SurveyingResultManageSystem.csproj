@@ -256,6 +256,7 @@
     <Folder Include="Models\" />
     <Folder Include="Services\" />
     <Folder Include="Views\FileManager\" />
+    <Folder Include="Views\Layout\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

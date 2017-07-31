@@ -52,6 +52,12 @@ namespace TCPClient
                     //如果字符串是"exit"，退出while循环
                     if (input == "exit")
                     {
+                        //对data清零
+                        data = new byte[1024];
+                        //将从键盘获取的字符串转换成整型数据并存储在数组中    
+                        data = Encoding.ASCII.GetBytes(input);
+                        //发送该数组
+                        socket.Send(data, data.Length, SocketFlags.None);
                         break;
                     }
                     //对data清零
@@ -75,7 +81,7 @@ namespace TCPClient
 
                 }
                 Console.Write("断开连接...");
-                socket.Shutdown(SocketShutdown.Both);
+                //socket.Shutdown(SocketShutdown.Both);
                 socket.Close();
             }
         }

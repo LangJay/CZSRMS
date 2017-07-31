@@ -1,5 +1,6 @@
 ﻿using SurveyingResultManageSystem.App_Start;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -52,7 +53,17 @@ namespace SurveyingResultManageSystem.Controllers
         [Authentication]
         public ActionResult FileManager()
         {
-            return View();
+            string timenow = DateTime.Now.ToString("yyyy-MM-dd");
+            var info = from u in db.tb_LogInfo where u.Time.Contains(timenow) select u;
+            List<tb_LogInfo> list = new List<tb_LogInfo>();
+            foreach(tb_LogInfo item in info)
+            {
+                list.Add(item);
+            }
+            if (info.Count() > 0)
+                list.Add(info.First());
+            ViewBag.Data = list;
+            return View(ViewBag);
         }
         [Authentication]
         public ActionResult MapManager()

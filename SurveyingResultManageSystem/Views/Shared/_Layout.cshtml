@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -28,7 +29,14 @@
             </div>
             <div id="div_message_right">
                 <img src="~/Sources/Images/notice.png" />
-                <p>管理员于 2017-07-25日16：32 上传了 地籍调查图.DWG</p>
+                <div class="outer">
+                    <ul id="J_scroll">
+                       @foreach(var item in (List<tb_LogInfo>)ViewBag.Data)
+                       {
+                            <li>@item.UserName 于 @item.Time @item.Operation 了 @item.FileName</li>
+                       }
+                    </ul>
+                </div>
                 <a href="" >更  多</a>
             </div>
         </div>
@@ -50,5 +58,7 @@
 <script type="text/javascript">
     setTimeout(function () {
         document.getElementsByTagName('body')[0].style.height = window.innerHeight + 'px';
-    }, 20);   
+    }, 20);  
+    $('#J_scroll').width($('#J_scroll').width() - $('#J_scroll li:first-child').innerWidth());
+    $('#J_scroll').addClass('theanimation');
 </script>

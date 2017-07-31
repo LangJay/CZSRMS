@@ -158,7 +158,9 @@ td, th {
     right: 30px;
     padding-top: 10px;
 }
-
+.modal-content{
+    width: 600px;
+}
 .modal-dialog {
     width: auto;
 }
@@ -171,6 +173,7 @@ td, th {
 
 .modal-dialog td {
     min-width: 100px;
+    text-align:left;
 }
 
 .modal-dialog .modal-header {

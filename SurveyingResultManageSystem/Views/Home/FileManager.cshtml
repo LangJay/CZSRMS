@@ -53,28 +53,28 @@
                         操作
                     </th>
                 </tr>
-                
+
                 @*@foreach (var num in 3)
-                {*@
-                    <tr>
-                        <td>
-                            <img src="~/Sources/Images/select.png" />
-                        </td>
-                        <td>
-                            地籍调查图.DWG
-                        </td>
-                        <td>
-                            123.1M
-                        </td>
-                        <td>
-                            2017-07-21
-                        </td>
-                        <td>
-                            删除
-                            下载
-                        </td>
-                    </tr>
-                
+                    {*@
+                <tr>
+                    <td>
+                        <img src="~/Sources/Images/select.png" />
+                    </td>
+                    <td>
+                        地籍调查图.DWG
+                    </td>
+                    <td>
+                        123.1M
+                    </td>
+                    <td>
+                        2017-07-21
+                    </td>
+                    <td>
+                        删除
+                        下载
+                    </td>
+                </tr>
+
                 <tr>
                     <td>
                         <img src="~/Sources/Images/selected.png" />
@@ -127,16 +127,16 @@
                 </h4>
             </div>
             <div class="modal-body">
-                <table style="width:100%;">
+                <table>
                     <tr>
                         <td style="width:80px;">选择文件：</td>
-                        <td colspan="9"><input id="input_file" type="file" /></td>
+                        <td colspan="3"><input id="input_file" type="file" /></td>
                     </tr>
                     <tr>
                         <td>坐标信息框架：</td>
                         <td>
                             <form>
-                                <select name="coodinatesystem">
+                                <select id="coodinatesystem">
                                     <option value="西安1980">西安1980</option>
                                     <option value="北京1954">北京1954</option>
                                     <option value="国家2000">国家2000</option>
@@ -145,37 +145,43 @@
                             </form>
                         </td>
                         <td>完成时间信息：</td>
-                        <td><input type="date" name="finishtimeinfo"/></td>
-                        <td>完成人信息：</td>
-                        <td><input maxlength="50" name="finishpersoninfo" /></td>
-                        <td>最小坐标：</td>
-                        <td><input type="number" name="mincoodinate"/></td>
-                        <td>最大坐标：</td>
-                        <td><input type="number" name="maxcoodinate"/></td>
+                        <td><input type="date" id="finishtimeinfo" /></td>
                     </tr>
                     <tr>
+                        <td>完成人信息：</td>
+                        <td><input maxlength="50" id="finishpersoninfo" /></td>
+                        <td>最小坐标：</td>
+                        <td><input type="number" id="mincoodinate" /></td>
+                    </tr>
+                    <tr>
+                        <td>最大坐标：</td>
+                        <td><input type="number" id="maxcoodinate" /></td>
                         <td>文件中对象数量：</td>
-                        <td><input type="number" name="objectnum" /></td>
+                        <td><input type="number" id="objectnum" /></td>
+                    </tr>
+                    <tr>
                         <td>备注信息：</td>
-                        <td colspan="7" style="width:100%;max-width:100%;"><input style="width:100%;min-width:100%;" name="mark" /></td>
+                        <td colspan="3" style="width:100%;max-width:100%;"><textarea  style="width:100%;min-width:100%;" id="mark"></textarea></td>
                     </tr>
                     <tr>
                         <td>是否需要进库：</td>
                         <td>
                             <form>
                                 是：
-                                <input type="radio" name="warehousing" value="yes" />
+                                <input type="radio" name="warehousing" value="true" />
                                 否：
-                                <input type="radio" checked="checked"  name="warehousing" value="no" />
+                                <input type="radio" checked="checked" name="warehousing" value="false" />
                             </form>
                         </td>
                         <td>所属项目名称：</td>
-                        <td><input name="projectname" /></td>
-                        
+                        <td><input id="projectname" /></td>
+
+                    </tr>
+                    <tr>
                         <td>文件类型：</td>
                         <td>
                             <form>
-                                <select name="filetype">
+                                <select id="filetype">
                                     <option value="竣工验收测绘报告">竣工验收测绘报告</option>
                                     <option value="勘测定界报告">勘测定界报告</option>
                                     <option value="报批红线图">报批红线图</option>
@@ -188,17 +194,19 @@
                         <td>所属项目类型：</td>
                         <td>
                             <form>
-                                <select name="projecttype">
+                                <select id="projecttype">
                                     <option value="竣工验收">竣工验收</option>
                                     <option value="报批">报批</option>
                                     <option value="供地">供地</option>
                                 </select>
                             </form>
                         </td>
+                    </tr>
+                    <tr>
                         <td>平面坐标系统：</td>
                         <td>
                             <form>
-                                <select name="pcoodinatesystem">
+                                <select id="pcoodinatesystem">
                                     <option value="西安1980">西安1980</option>
                                     <option value="北京1954">北京1954</option>
                                     <option value="国家2000">国家2000</option>
@@ -206,39 +214,40 @@
                                 </select>
                             </form>
                         </td>
-                    </tr>
-                 
-                    
-                    <tr>
                         <td>中央子午线：</td>
-                        <td><input maxlength="50" name="centermeridian" /></td>
+                        <td><input maxlength="50" id="centermeridian" /></td>
+                    </tr>
+                    <tr>
                         <td>纵坐标偏移值：</td>
-                        <td><input type="number" name="yoffset" /></td>
+                        <td><input type="number" id="yoffset" /></td>
                         <td>水平坐标偏移值：</td>
-                        <td><input type="number" name="xoffset" /></td>
+                        <td><input type="number" id="xoffset" /></td>
+                    </tr>
+                    <tr>
                         <td>完成时间：</td>
-                        <td><input type="date" name="finishtime" /></td>
+                        <td><input type="date" id="finishtime" value=""/></td>
                         <td>完成人名称：</td>
-                        <td><input maxlength="50" name="finishperson" /></td>
+                        <td><input maxlength="50" id="finishperson" /></td>
                     </tr>
                     <tr>
                         <td>成果说明：</td>
-                        <td colspan="3"><input style="max-width:100%;width:100%;" name="explain" /></td>
+                        <td colspan="3"><textarea style="max-width:100%;width:100%;" id="explain"></textarea></td>
+                        
+                    </tr>
+                    <tr>
                         <td>是否公开：</td>
                         <td>
                             <form>
                                 是：
-                                <input type="radio" checked="checked" name="ispublic" value="yes" />
+                                <input type="radio" checked="checked" name="ispublic" value="true" />
                                 否：
-                                <input type="radio" name="ispublic" value="no" />
+                                <input type="radio" name="ispublic" value="false" />
                             </form>
                         </td>
-                        <td>文件大小：</td>
-                        <td><input name="filesize" /></td>
                         <td>测绘单位名称：</td>
                         <td>
                             <form>
-                                <select name="surveyingunitname">
+                                <select id="surveyingunitname">
                                     <option value="北湖区测绘队">北湖区测绘队</option>
                                     <option value="苏仙区测绘队">苏仙区测绘队</option>
                                     <option value="市局测绘队">市局测绘队</option>
@@ -246,7 +255,7 @@
                                 </select>
                             </form>
                         </td>
-                    </tr>  
+                    </tr>
                 </table>
 
             </div>
@@ -262,18 +271,91 @@
         </div><!-- /.modal-content -->
     </div>
 </div>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script type="text/javascript">
-    function uploadFile()
-    {
+    function uploadFile() {
+        var dialogwdith = $(window).width()+$(".modal-dialog").width();
+        $(".modal-content").css({
+            left: (dialogwdith - $(".modal-content").width()) / 2,
+        })
         $("#myModal").modal('show');
     };
-    function submitInfo()
-    {
-       // var filePath = 
-        //取得所有信息
-        //var fileInfo = 
-        //    {
-        //        "FileName":
-        //    }
-    }
+    function submitInfo() {
+        //声明对象
+        var file = {
+            FileName: "",
+            Directory: "",
+            CoodinateSystem: "",
+            FinishtimeInfo: "",
+            FinishPersonInfo: "",
+            MinCoodinate: "",
+            MaxCoodinate: "",
+            ObjectNum: "",
+            Mark: "",
+            Warehousing: "",
+            ProjectName: "",
+            FileType: "",
+            ProjectType: "",
+            PcoodinateSystem: "",
+            CenterMeridian: "",
+            Yoffset: "",
+            Xoffset: "",
+            Finishtime: "",
+            FinishPerson: "",
+            SurveyingUnitName: "",
+            Explain: "",
+            IsPublic: "",
+            UploadTime: "",
+            FileSize: "",
+            UserID: ""
+        };
+        file.Directory = $("#input_file").val();
+        if (file.Directory == "")
+            alert("没有选择文件！");
+        else {
+            var arr = file.Directory.split('\\');
+            file.FileName = arr[arr.length - 1];
+            file.CoodinateSystem = $("#coodinatesystem").val();
+            file.FinishtimeInfo = $("#finishtimeinfo").val();
+            file.FinishPersonInfo = $("#finishpersoninfo").val();
+            file.MinCoodinate = $("#mincoodinate").val();
+            file.MaxCoodinate = $("#maxcoodinate").val();
+            file.ObjectNum = $("#objectnum").val();
+            file.Mark = $("#mark").val();
+            file.Warehousing = $("input[name=warehousing]:checked").val();
+            file.ProjectName = $("#projectname").val();
+            file.FileType = $("#filetype").val();
+            file.ProjectType = $("#projecttype").val();
+            file.PcoodinateSystem = $("#pcoodinatesystem").val();
+            file.CenterMeridian = $("#centermeridian").val();
+            file.Yoffset = $("#yoffset").val();
+            file.Xoffset = $("#xoffset").val();
+            file.Finishtime = $("#finishtime").val();
+            file.FinishPerson = $("#finishperson").val();
+            file.SurveyingUnitName = $("#surveyingunitname").val();
+            file.Explain = $("#explain").val();
+            file.IsPublic = $("input[name=ispublic]:checked").val();
+            file.UploadTime = "";
+            var f = document.getElementById("input_file").files;
+            file.FileSize = f[0].size / 1024 / 1024;
+            file.UserID = "1";
+            $.ajax({
+                url: "/FileManager/UpLoadFile",
+                type: "post",
+                dataType: "json",
+                async: false,
+                data: JSON.stringify(file),
+                success: function (data)
+                {
+
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(XMLHttpRequest.status);
+                    //alert(XMLHttpRequest.readyState);
+                    //alert(textStatus);
+                }
+            });
+        }
+
+    };
 </script>
