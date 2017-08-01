@@ -70,8 +70,8 @@
 }
 
 #div_message_right a {
-    margin-left: 30px;
-    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-bottom: 15px;
     color: #0972A7;
     text-decoration: none;
     outline: none;
@@ -111,8 +111,7 @@ html {
         height: 20px;
         -webkit-transform: translate3d(0, 0, 0); /* 3d渲染，开启硬件加速 */
         transform: translate3d(0, 0, 0);
-        /* 使inline-block无默认间距 */
-        font-size:0px;
+        font-size: 0px; /* 使inline-block无默认间距 */
         white-space: nowrap; /* 超出不折行 */
     }
 

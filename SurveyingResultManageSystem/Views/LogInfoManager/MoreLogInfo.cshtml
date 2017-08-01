@@ -1,0 +1,51 @@
+﻿@{
+     Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/style/MoreLogInfo.css" rel="stylesheet" />
+<div id="div-filemanager">
+    <div id="div_filemanager_pager">
+        <div id="div_filemanager_list">
+            <div id="div_filemanager_list_header">
+                <div id="div_filemanager_list_header_search">
+                    <input class="search" type="search" placeholder="输入关键字查询" />
+                    <input class="button" type="button" value="🔍搜索" />
+                </div>
+            </div>
+            <table class="table">
+                <tr>
+                    <th>
+                        时间
+                    </th>
+                    <th>
+                        内容
+                    </th>
+                  
+                </tr>
+
+                @*@foreach (var num in 3)
+                    {*@
+                <tr>
+                   
+                    <td>
+                        2017-08-01 16:21
+                    </td>
+                    <td>
+                        管理员上传了地籍调查图.DWG
+                    </td>
+                    
+                </tr>
+
+            </table>
+            <div id="div_filemanager_list_footer">
+                <div id="footer_right">
+                    <input class="button" type="button" value="首页" />
+                    <input class="button" type="button" value="上一页" />
+                    <input class="button" type="button" value="第几页" />
+                    <input class="button" type="button" value="下一页" />
+                    <input class="button" type="button" value="尾页" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <p>共3条 每页20条 第1/1页</p>
+</div>

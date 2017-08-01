@@ -45,11 +45,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+    <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
@@ -152,34 +149,12 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\FileManagerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="CZModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CZModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="CZModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CZModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="CZModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CZModel.edmx</DependentUpon>
-    </Compile>
+    <Compile Include="Controllers\LogInfoManagerController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\LogOperations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="tb_FileInfo.cs">
-      <DependentUpon>CZModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="tb_LogInfo.cs">
-      <DependentUpon>CZModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="tb_UserInfo.cs">
-      <DependentUpon>CZModel.tt</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -188,16 +163,7 @@
     <Content Include="Content\style\Layout.css" />
     <Content Include="Content\style\Login.css" />
     <Content Include="Content\style\MapManager.css" />
-    <Content Include="CZModel.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>CZModel.edmx</DependentUpon>
-      <LastGenOutput>CZModel.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="CZModel.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>CZModel.edmx</DependentUpon>
-      <LastGenOutput>CZModel.cs</LastGenOutput>
-    </Content>
+    <Content Include="Content\style\MoreLogInfo.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -206,13 +172,6 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <EntityDeploy Include="CZModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>CZModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="CZModel.edmx.diagram">
-      <DependentUpon>CZModel.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -249,11 +208,11 @@
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\FileManager.cshtml" />
     <Content Include="Views\Home\MapManager.cshtml" />
+    <Content Include="Views\LogInfoManager\MoreLogInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="DAL\" />
-    <Folder Include="Models\" />
     <Folder Include="Services\" />
     <Folder Include="Views\FileManager\" />
     <Folder Include="Views\Layout\" />
@@ -275,6 +234,16 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BLL\BLL.csproj">
+      <Project>{d540c8a3-b7c3-45a1-9ad8-a34712cba6d8}</Project>
+      <Name>BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Model\Model.csproj">
+      <Project>{7FD9B3BE-FBF4-403D-B0DE-51A7A93F03E9}</Project>
+      <Name>Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

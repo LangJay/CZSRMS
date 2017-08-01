@@ -1,0 +1,56 @@
+﻿#div_filemanager_list_header_search {
+    display: inline;
+    position: absolute;
+    padding-top: 10px;
+    left: 10%;
+}
+#div_filemanager_list {
+    height: 100%;
+    width: 100%;
+    border-left: none;
+    border-bottom: 1px solid #d8d7d7;
+}
+
+#div_filemanager_list_header {
+    height: 50px;
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid #0972A7;
+}
+#div-filemanager {
+    position: fixed;
+    left: 20%;
+    width: 60%;
+}
+#div_filemanager_list_header input {
+    height: 30px;
+}
+#div_filemanager_list_footer {
+    border-top: 1px solid #d8d7d7;
+    height: 50px;
+}
+.table {
+    margin-bottom: 0px;
+}
+
+td, th {
+    text-align: center;
+}
+.button {
+    background-color: #0972A7;
+    border: none;
+    color: white;
+    outline: none;
+    height: 30px;
+}
+
+.button:before {
+    background-color: #0972A7;
+    border: none;
+    color: white;
+    outline: none;
+}
+
+.button:active {
+    background-color: #5090C7;
+}

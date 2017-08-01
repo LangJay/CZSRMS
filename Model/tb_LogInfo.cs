@@ -20,7 +20,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SurveyingResultManageSystem
+namespace Model
 {
     using System.ComponentModel.DataAnnotations;
 

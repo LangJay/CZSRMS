@@ -1,16 +1,22 @@
-﻿using SurveyingResultManageSystem.App_Start;
+﻿using BLL;
+using Model;
+using SurveyingResultManageSystem.App_Start;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Security;
 
 namespace SurveyingResultManageSystem.Controllers
 {
     public class HomeController : Controller
     {
+        private LogInfoService logInfoService;
+        private UserInfoService userInfoService;
         CZSRMS_DB db = new CZSRMS_DB();
+        public HomeController()
+        {
+            logInfoService = new LogInfoService();
+            userInfoService = new UserInfoService();
+        }
         public ActionResult Login()
         {
             return View();
@@ -20,10 +26,10 @@ namespace SurveyingResultManageSystem.Controllers
         {
             try
             {
-                var users = from u in db.tb_UserInfo where u.UserName == user.UserName select u; 
-                if (users.Count() == 0)
+                tb_UserInfo userInfo = userInfoService.FindUserInfoWithUserName(user.UserName);
+                if (userInfo == null)
                     ModelState.AddModelError("UserName", "用户名不存在");
-                else if (users.First().Password == user.Password)
+                else if (userInfo.Password == user.Password)
                 {
                     //把登陆用户名存到cookies中
                     HttpCookie cook = new HttpCookie("username", user.UserName);
@@ -33,11 +39,10 @@ namespace SurveyingResultManageSystem.Controllers
                 }
                 else
                     ModelState.AddModelError("Password", "密码错误");
-
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex.Message);
+                ModelState.AddModelError("登录", "服务器故障！");
             }
             return View();
 
@@ -53,16 +58,8 @@ namespace SurveyingResultManageSystem.Controllers
         [Authentication]
         public ActionResult FileManager()
         {
-            string timenow = DateTime.Now.ToString("yyyy-MM-dd");
-            var info = from u in db.tb_LogInfo where u.Time.Contains(timenow) select u;
-            List<tb_LogInfo> list = new List<tb_LogInfo>();
-            foreach(tb_LogInfo item in info)
-            {
-                list.Add(item);
-            }
-            if (info.Count() > 0)
-                list.Add(info.First());
-            ViewBag.Data = list;
+            //获取消息滚动条数据，取当天的数据
+            ViewBag.Data = logInfoService.FindLogListWithTime(DateTime.Now.ToString("yyyy-MM-dd"));
             return View(ViewBag);
         }
         [Authentication]

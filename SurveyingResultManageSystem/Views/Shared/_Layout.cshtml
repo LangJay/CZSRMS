@@ -1,4 +1,4 @@
-﻿
+﻿@using Model;
 <!DOCTYPE html>
 <html>
 <head>
@@ -35,9 +35,14 @@
                        {
                             <li>@item.UserName 于 @item.Time @item.Operation 了 @item.FileName</li>
                        }
+                       @if(ViewBag.Data.Count == 0)
+                       {
+                           <li>今日没有任何消息，点击更多查看过去消息。</li>
+                           <li>今日没有任何消息，点击更多查看过去消息。</li>
+                       }
                     </ul>
                 </div>
-                <a href="" >更  多</a>
+                <a href="/LogInfoManager/MoreLogInfo" >更  多</a>
             </div>
         </div>
     </div>
