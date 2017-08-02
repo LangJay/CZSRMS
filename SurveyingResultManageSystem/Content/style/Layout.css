@@ -124,8 +124,10 @@ html {
         }
 
 .theanimation {
-    animation: theanimation 20s infinite linear;
-    -webkit-animation: theanimation 20s infinite linear;
+    animation: theanimation infinite linear;
+    animation-duration: 20s;
+    -webkit-animation: theanimation infinite linear;
+    -webkit-animation-duration: 20s;
 }
 
 @keyframes theanimation {

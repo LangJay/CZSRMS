@@ -8,7 +8,6 @@
     height: 100%;
     width: 100%;
     border-left: none;
-    border-bottom: 1px solid #d8d7d7;
 }
 
 #div_filemanager_list_header {
@@ -28,6 +27,9 @@
 #div_filemanager_list_footer {
     border-top: 1px solid #d8d7d7;
     height: 50px;
+}
+#footer_right {
+    padding-top:10px;
 }
 .table {
     margin-bottom: 0px;
@@ -53,4 +55,7 @@ td, th {
 
 .button:active {
     background-color: #5090C7;
+}
+#footer-right-btn3:active {
+    background-color: #0972A7;
 }

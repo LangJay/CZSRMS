@@ -1,14 +1,17 @@
-﻿@{
+﻿@using Model;
+@model Model.PageInfo<tb_LogInfo>
+@{
      Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <link href="~/Content/style/MoreLogInfo.css" rel="stylesheet" />
 <div id="div-filemanager">
     <div id="div_filemanager_pager">
         <div id="div_filemanager_list">
             <div id="div_filemanager_list_header">
                 <div id="div_filemanager_list_header_search">
-                    <input class="search" type="search" placeholder="输入关键字查询" />
-                    <input class="button" type="button" value="🔍搜索" />
+                    <input id="search" class="search" type="search" placeholder="输入关键字查询" value="@Model.keywords"/>
+                    <input class="button" type="button" onclick="search()" value="🔍搜索" />
                 </div>
             </div>
             <table class="table">
@@ -18,34 +21,80 @@
                     </th>
                     <th>
                         内容
-                    </th>
-                  
+                    </th>               
                 </tr>
 
-                @*@foreach (var num in 3)
-                    {*@
-                <tr>
-                   
-                    <td>
-                        2017-08-01 16:21
-                    </td>
-                    <td>
-                        管理员上传了地籍调查图.DWG
-                    </td>
+                @foreach (var item in Model.pageList)
+                {
+                    <tr>
+                        <td>
+                            @item.Time
+                        </td>
+                        <td>
+                            @item.UserName @item.Operation 了 @item.FileName
+                        </td>
                     
-                </tr>
-
+                    </tr>
+                }
             </table>
             <div id="div_filemanager_list_footer">
                 <div id="footer_right">
-                    <input class="button" type="button" value="首页" />
-                    <input class="button" type="button" value="上一页" />
-                    <input class="button" type="button" value="第几页" />
-                    <input class="button" type="button" value="下一页" />
-                    <input class="button" type="button" value="尾页" />
+                    <input id="footer-right-btn1" onclick="refresh(1)"  class="button" type="button" value="首页" />
+                    <input id="footer-right-btn2" onclick="refresh(@(Model.pageIndex - 1))" class="button" type="button" value="上一页" />
+                    <input id="footer-right-btn4" onclick="refresh(@(Model.pageIndex + 1))" class="button" type="button" value="下一页" />
+                    <input id="footer-right-btn5" onclick="refresh(@Model.totalPage)" class="button" type="button" value="尾页" />
                 </div>
             </div>
         </div>
     </div>
-    <p>共3条 每页20条 第1/1页</p>
+    <p>共 @Model.totalPage 页 每页 @Model.pageSize 条 第 @Model.pageIndex 页</p>
 </div>
+<script type="text/javascript">
+    $(document).ready()
+    {
+    }
+    setTimeout(function () {
+        if (@Model.pageIndex == 1) {
+            $("#footer-right-btn2").attr("disabled", "true");
+            $("#footer-right-btn2").css("background-color", "#5090C7");
+            $("#footer-right-btn1").attr("disabled", "true");
+            $("#footer-right-btn1").css("background-color", "#5090C7");
+        }
+        else if(@Model.pageIndex == @Model.totalPage)
+        {
+            $("#footer-right-btn4").attr("disabled", "true");
+            $("#footer-right-btn4").css("background-color", "#5090C7");
+            $("#footer-right-btn5").attr("disabled", "true");
+            $("#footer-right-btn5").css("background-color", "#5090C7");
+        }
+        else
+        {
+            $("#footer-right-btn2").removeAttr("disabled");
+            $("#footer-right-btn4").removeAttr("disabled");
+            $("#footer-right-btn1").removeAttr("disabled");
+            $("#footer-right-btn5").removeAttr("disabled");
+            $("#footer-right-btn2").css("background-color", "#0972A7");
+            $("#footer-right-btn4").css("background-color", "#0972A7");
+            $("#footer-right-btn1").css("background-color", "#0972A7");
+            $("#footer-right-btn5").css("background-color", "#0972A7");
+        }
+        if (@Model.totalPage == 1)
+        {
+            $("#footer-right-btn4").attr("disabled", "true");
+            $("#footer-right-btn4").css("background-color", "#5090C7");
+            $("#footer-right-btn5").attr("disabled", "true");
+            $("#footer-right-btn5").css("background-color", "#5090C7");
+        }
+        
+    }, 21);
+    function refresh(pageIndex)
+    {
+        var keywords = $(".search").val();
+        window.location.href("/LogInfoManager/MoreLogInfo?pageIndex=" + pageIndex + "&&keywords=" + keywords);
+    }
+    function search()
+    {
+        var keywords = $(".search").val();
+        window.location.href("/LogInfoManager/MoreLogInfo?pageIndex=" + 1 + "&&keywords=" + keywords);
+    }
+</script>

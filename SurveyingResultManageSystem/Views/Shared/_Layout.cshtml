@@ -19,6 +19,7 @@
             <ul id="div_title_ul">
                 <li><a href="">账户管理</a></li>
                 <li><a href="">日志管理</a></li>
+                <li><a href="/Home/FileManager">首页</a></li>
             </ul>
         </div>
         <div id="div_message">
@@ -42,7 +43,7 @@
                        }
                     </ul>
                 </div>
-                <a href="/LogInfoManager/MoreLogInfo" >更  多</a>
+                <a id="more-btn" href="/LogInfoManager/MoreLogInfo" >更  多</a>
             </div>
         </div>
     </div>
@@ -66,4 +67,7 @@
     }, 20);  
     $('#J_scroll').width($('#J_scroll').width() - $('#J_scroll li:first-child').innerWidth());
     $('#J_scroll').addClass('theanimation');
+    $("#more-btn").removeAttr("disabled"); //移除disabled属性
+    var speed = '@(ViewBag.Data.Count * 10)' + 's';
+    document.getElementById("J_scroll").style.WebkitAnimationDuration = speed;
 </script>

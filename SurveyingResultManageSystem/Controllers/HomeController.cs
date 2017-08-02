@@ -1,6 +1,7 @@
 ﻿using BLL;
 using Model;
 using SurveyingResultManageSystem.App_Start;
+using SurveyingResultManageSystem.Models;
 using System;
 using System.Web;
 using System.Web.Mvc;
@@ -42,6 +43,10 @@ namespace SurveyingResultManageSystem.Controllers
             }
             catch (Exception ex)
             {
+                tb_LogInfo log = new tb_LogInfo();
+                log.Time = DateTime.Now.ToString();
+                log.UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value;
+                //logInfoService.Add()
                 ModelState.AddModelError("登录", "服务器故障！");
             }
             return View();

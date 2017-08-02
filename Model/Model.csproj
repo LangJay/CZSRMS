@@ -38,6 +38,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -64,6 +65,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CZSRMS_DB.edmx</DependentUpon>
     </Compile>
+    <Compile Include="PageInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="tb_FileInfo.cs">
       <DependentUpon>CZSRMS_DB.tt</DependentUpon>

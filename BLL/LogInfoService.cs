@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using DAL;
+using System.Linq.Expressions;
 
 namespace BLL
 {
@@ -23,15 +24,6 @@ namespace BLL
         public LogInfoService() : base(RepositoryFactory.LogInfoRepository) 
         {
 
-        }
-        public tb_LogInfo Add(tb_LogInfo entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Delete(tb_LogInfo entity)
-        {
-            throw new NotImplementedException();
         }
 
         public List<tb_LogInfo> FindLogListWithTime(string timeNow)
@@ -56,10 +48,16 @@ namespace BLL
             }
             return list;
         }
-
-        public bool Update(tb_LogInfo entity)
+        public List<tb_LogInfo> FindPageList(int pageIndex,int pageSize,out int totalRecord, Expression<Func<tb_LogInfo, bool>> whereLamdba, string orderName, bool isAsc)
         {
-            throw new NotImplementedException();
+            var info = CurrentRepository.FindPageList(pageIndex, pageSize,out int total, whereLamdba, orderName, isAsc);
+            List<tb_LogInfo> list = new List<tb_LogInfo>();
+            foreach (tb_LogInfo item in info)
+            {
+                list.Add(item);
+            }
+            totalRecord = total;
+            return list;
         }
     }
 }

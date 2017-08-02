@@ -212,8 +212,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="DAL\" />
-    <Folder Include="Services\" />
     <Folder Include="Views\FileManager\" />
     <Folder Include="Views\Layout\" />
   </ItemGroup>

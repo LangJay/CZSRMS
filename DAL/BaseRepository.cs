@@ -106,7 +106,8 @@ namespace DAL
                 var _list = dbContext.Set<T>().Where<T>(whereLamdba);
                 totalRecord = _list.Count();
                 _list = OrderBy(_list, orderName, isAsc).Skip<T>((pageIndex - 1) * pageSize).Take<T>(pageSize);
-                return _list; throw new NotImplementedException();
+                return _list;
+                throw new NotImplementedException();
             }
             catch(Exception e)
             {
