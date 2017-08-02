@@ -45,9 +45,8 @@ namespace Model
             [StringLength(50, MinimumLength = 0, ErrorMessage = "最多50个字符")]
             public string FileName { get; set; }
             /// <summary>
-            /// 操作说明，1000字符
+            /// 操作说明，MAX字符
             /// </summary>
-            [StringLength(1000, MinimumLength = 0, ErrorMessage = "最多1000个字符")]
             public string Explain { get; set; }
     }
 }

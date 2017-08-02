@@ -45,6 +45,7 @@
     <Compile Include="FileInfoService.cs" />
     <Compile Include="LogInfoService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tools\Log.cs" />
     <Compile Include="UserInfoService.cs" />
   </ItemGroup>
   <ItemGroup>

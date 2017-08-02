@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
@@ -17,8 +18,6 @@ namespace SurveyingResultManageSystem.Controllers
             var stream = sr.ReadToEnd();
             tb_FileInfo obj = JsonConvert.DeserializeObject<tb_FileInfo>(stream) as tb_FileInfo;
             return View();
-
-
         }
     }
 }

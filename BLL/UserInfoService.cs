@@ -15,6 +15,8 @@ using System.Web;
 using System.Web.ModelBinding;
 using IDAL;
 using DAL;
+using System;
+using BLL.Tools;
 
 namespace BLL
 {
@@ -30,9 +32,10 @@ namespace BLL
             {
                 return Find(u => u.UserName == username);
             }
-            catch
+            catch(Exception e)
             {
-                throw;
+                Log.AddRecord(e.Message);
+                return null;
             }
         }
     }

@@ -16,6 +16,7 @@ using System.Linq;
 using System;
 using DAL;
 using System.Linq.Expressions;
+using BLL.Tools;
 
 namespace BLL
 {
@@ -28,36 +29,62 @@ namespace BLL
 
         public List<tb_LogInfo> FindLogListWithTime(string timeNow)
         {
-            var info = CurrentRepository.FindList(u => u.Time.Contains(timeNow),"Time",false);
             List<tb_LogInfo> list = new List<tb_LogInfo>();
-            foreach (tb_LogInfo item in info)
+            try
             {
-                list.Add(item);
+                var info = CurrentRepository.FindList(u => u.Time.Contains(timeNow), "Time", false);
+                foreach (tb_LogInfo item in info)
+                {
+                    list.Add(item);
+                }
+                if (info.Count() > 0)
+                    list.Add(info.First());
+                return list;
+
             }
-            if (info.Count() > 0)
-                list.Add(info.First());
-            return list;
+            catch(Exception e)
+            {
+                Log.AddRecord(e.Message);
+                return list;
+            }
         }
         public List<tb_LogInfo> FinLogListWithOperation(string operation)
         {
-            var info = CurrentRepository.FindList(u => operation.Contains(u.Operation), "Time", false);
             List<tb_LogInfo> list = new List<tb_LogInfo>();
-            foreach (tb_LogInfo item in info)
+            try
             {
-                list.Add(item);
+                var info = CurrentRepository.FindList(u => operation.Contains(u.Operation), "Time", false);
+                foreach (tb_LogInfo item in info)
+                {
+                    list.Add(item);
+                }
+                return list;
             }
-            return list;
+            catch(Exception e)
+            {
+                Log.AddRecord(e.Message);
+                return list;
+            }
         }
         public List<tb_LogInfo> FindPageList(int pageIndex,int pageSize,out int totalRecord, Expression<Func<tb_LogInfo, bool>> whereLamdba, string orderName, bool isAsc)
         {
-            var info = CurrentRepository.FindPageList(pageIndex, pageSize,out int total, whereLamdba, orderName, isAsc);
             List<tb_LogInfo> list = new List<tb_LogInfo>();
-            foreach (tb_LogInfo item in info)
+            try
             {
-                list.Add(item);
+                var info = CurrentRepository.FindPageList(pageIndex, pageSize, out int total, whereLamdba, orderName, isAsc);
+                foreach (tb_LogInfo item in info)
+                {
+                    list.Add(item);
+                }
+                totalRecord = total;
+                return list;
             }
-            totalRecord = total;
-            return list;
+            catch(Exception e)
+            {
+                Log.AddRecord(e.Message);
+                totalRecord = 0;
+                return list;
+            }
         }
     }
 }

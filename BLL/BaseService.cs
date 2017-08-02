@@ -9,6 +9,7 @@
  * Copyright @ 周继良 2017. All rights reserved.
  **************************************************/
 
+using BLL.Tools;
 using IBLL;
 using IDAL;
 using System;
@@ -25,21 +26,54 @@ namespace BLL
         }
         public T Add(T entity)
         {
-            return CurrentRepository.Add(entity);
+            try
+            {
+                return CurrentRepository.Add(entity);
+            }
+            catch(Exception e)
+            {
+                Log.AddRecord(e.Message);
+                //在这里处理异常
+                return null;
+            }
         }
 
         public bool Update(T entity)
         {
-            return CurrentRepository.Update(entity);
+            try
+            {
+                return CurrentRepository.Update(entity);
+            }
+            catch(Exception e)
+            {
+                Log.AddRecord(e.Message);
+                return false;
+            }
         }
 
         public bool Delete(T entity)
         {
-            return CurrentRepository.Delete(entity);
+            try
+            {
+                return CurrentRepository.Delete(entity);
+            }
+            catch(Exception e)
+            {
+                Log.AddRecord(e.Message);
+                return false;
+            }
         }
         public T Find(Expression<Func<T, bool>> whereLamdba)
         {
-            return CurrentRepository.Find(whereLamdba);
+            try
+            {
+                return CurrentRepository.Find(whereLamdba);
+            }
+            catch(Exception e)
+            {
+                Log.AddRecord(e.Message);
+                return null;
+            }
         }
         
     }

@@ -46,8 +46,11 @@ namespace SurveyingResultManageSystem.Controllers
                 tb_LogInfo log = new tb_LogInfo();
                 log.Time = DateTime.Now.ToString();
                 log.UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value;
-                //logInfoService.Add()
-                ModelState.AddModelError("登录", "服务器故障！");
+                log.Operation = LogOperations.SystemLog();
+                log.FileName = null;
+                log.Explain = ex.Message;
+                logInfoService.Add(log);
+                Response.Write("<script>alert('服务器故障!');</script>");
             }
             return View();
 
