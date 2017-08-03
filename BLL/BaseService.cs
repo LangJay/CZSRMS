@@ -13,6 +13,7 @@ using BLL.Tools;
 using IBLL;
 using IDAL;
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace BLL
@@ -75,6 +76,25 @@ namespace BLL
                 return null;
             }
         }
-        
+        public List<T> FindPageList(int pageIndex, int pageSize, out int totalRecord, Expression<Func<T, bool>> whereLamdba, string orderName, bool isAsc)
+        {
+            List<T> list = new List<T>();
+            try
+            {
+                var info = CurrentRepository.FindPageList(pageIndex, pageSize, out int total, whereLamdba, orderName, isAsc);
+                foreach (T item in info)
+                {
+                    list.Add(item);
+                }
+                totalRecord = total;
+                return list;
+            }
+            catch (Exception e)
+            {
+                Log.AddRecord(e.Message);
+                totalRecord = 0;
+                return list;
+            }
+        }
     }
 }

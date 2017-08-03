@@ -8,6 +8,10 @@
         <EntityTypeShape EntityType="CZSRMS_DBModel.tb_FileInfo" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="CZSRMS_DBModel.tb_LogInfo" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="CZSRMS_DBModel.tb_UserInfo" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CZSRMS_DBModel.tb_CoodinateSystem" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="CZSRMS_DBModel.tb_FileType" Width="1.5" PointX="6.75" PointY="0.75" />
+        <EntityTypeShape EntityType="CZSRMS_DBModel.tb_ProjectType" Width="1.5" PointX="10.625" PointY="0.625" />
+        <EntityTypeShape EntityType="CZSRMS_DBModel.tb_Unit" Width="1.5" PointX="8.75" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -13,7 +13,7 @@ namespace SurveyingResultManageSystem.Controllers
     {
         private LogInfoService logInfoService;
         private UserInfoService userInfoService;
-        CZSRMS_DB db = new CZSRMS_DB();
+        CZSRMS_DBEntities db = new CZSRMS_DBEntities();
         public HomeController()
         {
             logInfoService = new LogInfoService();
@@ -37,6 +37,9 @@ namespace SurveyingResultManageSystem.Controllers
                     HttpCookie cook = new HttpCookie("username", user.UserName);
                     cook.Expires = DateTime.Now.AddDays(1);//一天
                     Response.Cookies.Add(cook);
+                    //更新最后登录时间
+                    userInfo.LastLogintime = DateTime.Now.ToString();
+                    userInfoService.Update(userInfo);
                     return RedirectToAction("FileManager", "Home");
                 }
                 else
@@ -68,7 +71,7 @@ namespace SurveyingResultManageSystem.Controllers
         public ActionResult FileManager()
         {
             //获取消息滚动条数据，取当天的数据
-            ViewBag.Data = logInfoService.FindLogListWithTime(DateTime.Now.ToString("yyyy-MM-dd"));
+            ViewBag.Data = logInfoService.FindLogListWithTime(DateTime.Now.ToString("d"));
             return View(ViewBag);
         }
         [Authentication]

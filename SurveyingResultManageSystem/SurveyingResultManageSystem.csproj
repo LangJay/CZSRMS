@@ -150,6 +150,7 @@
     <Compile Include="Controllers\FileManagerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogInfoManagerController.cs" />
+    <Compile Include="Controllers\UserInfoManagerController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -207,10 +208,15 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
-    <Content Include="Views\Home\FileManager.cshtml" />
-    <Content Include="Views\Home\MapManager.cshtml" />
+    <Content Include="Views\Home\FileManager.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Home\MapManager.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Views\LogInfoManager\MoreLogInfo.cshtml" />
     <Content Include="Views\LogInfoManager\LogInfoManager.cshtml" />
+    <Content Include="Views\UserInfoManager\UserManager.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\FileManager\" />

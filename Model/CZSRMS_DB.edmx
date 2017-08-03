@@ -4,7 +4,14 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="CZSRMS_DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="CZSRMS_DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tb_CoodinateSystem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Value" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="tb_FileInfo">
           <Key>
             <PropertyRef Name="ID" />
@@ -36,6 +43,14 @@
           <Property Name="FileSize" Type="float" Nullable="false" />
           <Property Name="UserID" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="tb_FileType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Type" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Value" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="tb_LogInfo">
           <Key>
             <PropertyRef Name="ID" />
@@ -45,7 +60,21 @@
           <Property Name="Time" Type="varchar" MaxLength="50" />
           <Property Name="Operation" Type="varchar" MaxLength="50" />
           <Property Name="FileName" Type="varchar" MaxLength="200" />
-          <Property Name="Explain" Type="varchar" MaxLength="1000" />
+          <Property Name="Explain" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="tb_ProjectType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Value" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_Unit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Value" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="tb_UserInfo">
           <Key>
@@ -59,12 +88,15 @@
           <Property Name="Unit" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityContainer Name="CZSRMS_DBModelStoreContainer">
+          <EntitySet Name="tb_CoodinateSystem" EntityType="Self.tb_CoodinateSystem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tb_FileInfo" EntityType="Self.tb_FileInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tb_FileType" EntityType="Self.tb_FileType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tb_LogInfo" EntityType="Self.tb_LogInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tb_ProjectType" EntityType="Self.tb_ProjectType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tb_Unit" EntityType="Self.tb_Unit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tb_UserInfo" EntityType="Self.tb_UserInfo" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CZSRMS_DBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -108,7 +140,7 @@
           <Property Name="Time" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Operation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="FileName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="Explain" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="Explain" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="tb_UserInfo">
           <Key>
@@ -125,7 +157,40 @@
           <EntitySet Name="tb_FileInfo" EntityType="Self.tb_FileInfo" />
           <EntitySet Name="tb_LogInfo" EntityType="Self.tb_LogInfo" />
           <EntitySet Name="tb_UserInfo" EntityType="Self.tb_UserInfo" />
+          <EntitySet Name="tb_CoodinateSystem" EntityType="CZSRMS_DBModel.tb_CoodinateSystem" />
+          <EntitySet Name="tb_FileType" EntityType="CZSRMS_DBModel.tb_FileType" />
+          <EntitySet Name="tb_ProjectType" EntityType="CZSRMS_DBModel.tb_ProjectType" />
+          <EntitySet Name="tb_Unit" EntityType="CZSRMS_DBModel.tb_Unit" />
         </EntityContainer>
+        <EntityType Name="tb_CoodinateSystem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Value" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="tb_FileType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Type" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Value" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="tb_ProjectType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Value" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="tb_Unit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Value" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -185,6 +250,39 @@
                 <ScalarProperty Name="LastLogintime" ColumnName="LastLogintime" />
                 <ScalarProperty Name="Levels" ColumnName="Levels" />
                 <ScalarProperty Name="Unit" ColumnName="Unit" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_CoodinateSystem">
+            <EntityTypeMapping TypeName="CZSRMS_DBModel.tb_CoodinateSystem">
+              <MappingFragment StoreEntitySet="tb_CoodinateSystem">
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_FileType">
+            <EntityTypeMapping TypeName="CZSRMS_DBModel.tb_FileType">
+              <MappingFragment StoreEntitySet="tb_FileType">
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_ProjectType">
+            <EntityTypeMapping TypeName="CZSRMS_DBModel.tb_ProjectType">
+              <MappingFragment StoreEntitySet="tb_ProjectType">
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_Unit">
+            <EntityTypeMapping TypeName="CZSRMS_DBModel.tb_Unit">
+              <MappingFragment StoreEntitySet="tb_Unit">
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

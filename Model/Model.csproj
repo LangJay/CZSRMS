@@ -67,10 +67,22 @@
     </Compile>
     <Compile Include="PageInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="tb_CoodinateSystem.cs">
+      <DependentUpon>CZSRMS_DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="tb_FileInfo.cs">
       <DependentUpon>CZSRMS_DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="tb_FileType.cs">
+      <DependentUpon>CZSRMS_DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="tb_LogInfo.cs">
+      <DependentUpon>CZSRMS_DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_ProjectType.cs">
+      <DependentUpon>CZSRMS_DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tb_Unit.cs">
       <DependentUpon>CZSRMS_DB.tt</DependentUpon>
     </Compile>
     <Compile Include="tb_UserInfo.cs">

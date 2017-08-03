@@ -12,7 +12,6 @@ namespace SurveyingResultManageSystem.Controllers
 {
     public class LogInfoManagerController : Controller
     {
-        private CZSRMS_DB db = new CZSRMS_DB();
         private LogInfoService logInfoService;
         public LogInfoManagerController()
         {
@@ -23,7 +22,7 @@ namespace SurveyingResultManageSystem.Controllers
         public ActionResult MoreLogInfo(int ? pageIndex,string keywords)
         {
             //获取消息滚动条数据
-            ViewBag.Data = logInfoService.FindLogListWithTime(DateTime.Now.ToString("yyyy-MM-dd"));
+            ViewBag.Data = logInfoService.FindLogListWithTime(DateTime.Now.ToString("d"));
 
             //-----分页内容---------//
 
@@ -42,7 +41,7 @@ namespace SurveyingResultManageSystem.Controllers
             {
                 //把keywords存到cookies中
                 HttpCookie cook = new HttpCookie("keywords", keywords);
-                cook.Expires = DateTime.Now.AddDays(365);//一年，有种你一年不关浏览器
+                //cook.Expires = DateTime.Now.AddDays(365);//一年，有种你一年不关浏览器
                 Response.Cookies.Add(cook);
                 pageInfo.keywords = keywords;
                 //重新检索记录
@@ -74,7 +73,7 @@ namespace SurveyingResultManageSystem.Controllers
         public ActionResult LogInfoManager(int? pageIndex, string keywords)
         {
             //获取消息滚动条数据
-            ViewBag.Data = logInfoService.FindLogListWithTime(DateTime.Now.ToString("yyyy-MM-dd"));
+            ViewBag.Data = logInfoService.FindLogListWithTime(DateTime.Now.ToString("d"));
 
             //-----分页内容---------//
 

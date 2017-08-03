@@ -16,12 +16,12 @@ namespace DAL
 {
     public class DBContextFactory
     {
-        public static CZSRMS_DB GetCurrentContext()
+        public static CZSRMS_DBEntities GetCurrentContext()
         {
-            CZSRMS_DB _nContext = CallContext.GetData("CZSRMS_DBEntities") as CZSRMS_DB;
+            CZSRMS_DBEntities _nContext = CallContext.GetData("CZSRMS_DBEntities") as CZSRMS_DBEntities;
             if (_nContext == null)
             {
-                _nContext = new CZSRMS_DB();
+                _nContext = new CZSRMS_DBEntities();
                 CallContext.SetData("CZSRMS_DBEntities", _nContext);
             }
             return _nContext;

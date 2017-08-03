@@ -17,6 +17,9 @@ using IDAL;
 using DAL;
 using System;
 using BLL.Tools;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace BLL
 {
@@ -38,5 +41,24 @@ namespace BLL
                 return null;
             }
         }
+        public List<tb_UserInfo> FindAll()
+        {
+            List<tb_UserInfo> list = new List<tb_UserInfo>();
+            try
+            {
+                var iq = CurrentRepository.FindList(u => u.UserName != "", "Levels", true);
+                foreach(tb_UserInfo u in iq)
+                {
+                    list.Add(u);
+                }
+                return list;
+            }
+            catch(Exception e)
+            {
+                Log.AddRecord(e.Message);
+                return list;
+            }
+        }
+       
     }
 }

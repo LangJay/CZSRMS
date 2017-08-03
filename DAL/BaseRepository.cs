@@ -19,7 +19,7 @@ namespace DAL
 {
     public class BaseRepository<T>: InterfaceBaseRepository<T> where T:class
     {
-        protected CZSRMS_DB dbContext = DBContextFactory.GetCurrentContext();
+        protected CZSRMS_DBEntities dbContext = DBContextFactory.GetCurrentContext();
 
         public T Add(T entity)
         {

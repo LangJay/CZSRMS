@@ -89,25 +89,6 @@ namespace BLL
                 return list;
             }
         }
-        public List<tb_LogInfo> FindPageList(int pageIndex,int pageSize,out int totalRecord, Expression<Func<tb_LogInfo, bool>> whereLamdba, string orderName, bool isAsc)
-        {
-            List<tb_LogInfo> list = new List<tb_LogInfo>();
-            try
-            {
-                var info = CurrentRepository.FindPageList(pageIndex, pageSize, out int total, whereLamdba, orderName, isAsc);
-                foreach (tb_LogInfo item in info)
-                {
-                    list.Add(item);
-                }
-                totalRecord = total;
-                return list;
-            }
-            catch(Exception e)
-            {
-                Log.AddRecord(e.Message);
-                totalRecord = 0;
-                return list;
-            }
-        }
+       
     }
 }

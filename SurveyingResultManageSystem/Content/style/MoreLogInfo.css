@@ -72,3 +72,14 @@ td {
     white-space:normal;
     overflow: visible;
 }
+/*用户界面*/
+.div-manager-btn
+{
+    background-color:white;
+    border:none;
+    color:#0972A7;
+}
+.div-manager-btn:active
+{
+    color:#808080;
+}

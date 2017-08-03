@@ -1,0 +1,194 @@
+﻿@using Model;
+@model Model.PageInfo<tb_UserInfo>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/style/MoreLogInfo.css" rel="stylesheet" />
+<div id="div-filemanager" style="left:10%;width:80%">
+    <div id="div_filemanager_pager">
+        <div id="div_filemanager_list">
+            <div id="div_filemanager_list_header">
+                <div id="div_filemanager_list_header_search">
+                    <input id="search" class="search" type="search" placeholder="输入关键字查询" value="@Model.keywords" />
+                    <input class="button" type="button" onclick="search()" value="🔍搜索" />
+                    <input class="button" type="button" onclick="create()" value="创建用户" />
+                </div>
+            </div>
+            <table class="table">
+                <tr>
+                    <th>
+                        用户名
+                    </th>
+                    <th>
+                        上次登录时间
+                    </th>
+                    <th>
+                        权限等级
+                    </th>
+                    <th>
+                        所属单位
+                    </th>
+                    <th>
+                        管理
+                    </th>
+                </tr>
+                @for (int i = 0; i < Model.pageList.Count(); i++)
+                {
+                    tb_UserInfo item = Model.pageList[i];
+                    <tr>
+                        <td>
+                            item.UserName
+                        </td>
+                        <td>
+                            item.LastLogintime
+                        </td>
+                        <td>
+                            item.Levels
+                        </td>
+                        <td>
+                            item.Unit
+                        </td>
+                        <td>
+                            <div id="div-manager">
+                                <input type="button" id="input-edit" onclick="edit(@i)" class="div-manager-btn" value="编辑" />|
+                                <input type="button" id="input-reset" class="div-manager-btn" value="重制密码" />
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </table>
+            <div id="div_filemanager_list_footer">
+                <div id="footer_right">
+                    <input id="footer-right-btn1" onclick="refresh(1)" class="button" type="button" value="首页" />
+                    <input id="footer-right-btn2" onclick="refresh(@(Model.pageIndex - 1))" class="button" type="button" value="上一页" />
+                    <input id="footer-right-btn4" onclick="refresh(@(Model.pageIndex + 1))" class="button" type="button" value="下一页" />
+                    <input id="footer-right-btn5" onclick="refresh(@Model.totalPage)" class="button" type="button" value="尾页" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <p>共 @Model.totalPage 页 每页 @Model.pageSize 条 第 @Model.pageIndex 页</p>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="width:600px;">
+            <div class="modal-header" style="background-color:#0972A7">
+                <button type="button" class="close"
+                        data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel" style="color:white">
+                    创建用户
+                </h4>
+            </div>
+            <div class="modal-body">
+                <table>
+                    <tr>
+                        <td style="width:80px;">用户名：</td>
+                        <td ><input id="input-username" type="text" /></td>
+                        <td style="width:80px;">初始密码：</td>
+                        <td><input id="input-password" type="text" value="123456"/></td>
+                    </tr>
+                    <tr>
+                        <td style="width:80px;">权限等级：</td>
+                        <td>
+                            <form>
+                                <select id="input-leves">
+                                    <option value="0">管理员</option>
+                                    <option value="1" selected="selected">普通账户</option>
+                                </select>
+                            </form>
+                        </td>
+                        <td style="width:80px;">所属单位：</td>
+                        <td>
+                            <form>
+                                <select id="input-unit">
+                                    <option value="北湖区测绘队">北湖区测绘队</option>
+                                    <option value="苏仙区测绘队">苏仙区测绘队</option>
+                                    <option value="市局测绘队">市局测绘队</option>
+                                    <option value="其它">其它</option>
+                                </select>
+                            </form>
+                        </td>
+                    </tr>
+
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">
+                    关闭
+                </button>
+                <button type="button" onclick="submitInfo()" class="btn btn-primary">
+                    提交
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div>
+</div>
+<script type="text/javascript">
+
+    setTimeout(function () {
+        if (@Model.pageIndex == 1) {
+            $("#footer-right-btn2").attr("disabled", "true");
+            $("#footer-right-btn2").css("background-color", "#5090C7");
+            $("#footer-right-btn1").attr("disabled", "true");
+            $("#footer-right-btn1").css("background-color", "#5090C7");
+        }
+        else if(@Model.pageIndex == @Model.totalPage)
+        {
+            $("#footer-right-btn4").attr("disabled", "true");
+            $("#footer-right-btn4").css("background-color", "#5090C7");
+            $("#footer-right-btn5").attr("disabled", "true");
+            $("#footer-right-btn5").css("background-color", "#5090C7");
+        }
+        else
+        {
+            $("#footer-right-btn2").removeAttr("disabled");
+            $("#footer-right-btn4").removeAttr("disabled");
+            $("#footer-right-btn1").removeAttr("disabled");
+            $("#footer-right-btn5").removeAttr("disabled");
+            $("#footer-right-btn2").css("background-color", "#0972A7");
+            $("#footer-right-btn4").css("background-color", "#0972A7");
+            $("#footer-right-btn1").css("background-color", "#0972A7");
+            $("#footer-right-btn5").css("background-color", "#0972A7");
+        }
+        if (@Model.totalPage == 1)
+        {
+            $("#footer-right-btn4").attr("disabled", "true");
+            $("#footer-right-btn4").css("background-color", "#5090C7");
+            $("#footer-right-btn5").attr("disabled", "true");
+            $("#footer-right-btn5").css("background-color", "#5090C7");
+        }
+
+    }, 21);
+    function refresh(pageIndex)
+    {
+        var keywords = $(".search").val();
+        window.location.href("/UserInfoManager/UserManager?pageIndex=" + pageIndex + "&&keywords=" + keywords);
+    };
+    function search()
+    {
+        var keywords = $(".search").val();
+        window.location.href("/UserInfoManager/UserManager?pageIndex=" + 1 + "&&keywords=" + keywords);
+    };
+    function create()
+    {
+        $("#myModalLabel").html("创建用户");
+        $("#myModal").modal('show');
+    };
+    function edit(index)
+    {
+        $("#myModalLabel").html("编辑用户");
+        $("#myModal").modal('show');
+        var list = @Model.pageList[0].UserName;
+        //var user = list[index];
+    };
+    function submitInfo()
+    {
+
+    };
+</script>
