@@ -157,6 +157,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\Log.txt" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\style\FileManager.css" />
@@ -209,9 +210,9 @@
     <Content Include="Views\Home\FileManager.cshtml" />
     <Content Include="Views\Home\MapManager.cshtml" />
     <Content Include="Views\LogInfoManager\MoreLogInfo.cshtml" />
+    <Content Include="Views\LogInfoManager\LogInfoManager.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Views\FileManager\" />
     <Folder Include="Views\Layout\" />
   </ItemGroup>

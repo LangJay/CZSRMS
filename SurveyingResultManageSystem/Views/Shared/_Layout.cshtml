@@ -18,7 +18,7 @@
             <h1 style="color:white;display:inline">郴州市测绘成果管理系统</h1>
             <ul id="div_title_ul">
                 <li><a href="">账户管理</a></li>
-                <li><a href="">日志管理</a></li>
+                <li><a href="/LogInfoManager/LogInfoManager">日志管理</a></li>
                 <li><a href="/Home/FileManager">首页</a></li>
             </ul>
         </div>
@@ -32,18 +32,18 @@
                 <img src="~/Sources/Images/notice.png" />
                 <div class="outer">
                     <ul id="J_scroll">
-                       @foreach(var item in (List<tb_LogInfo>)ViewBag.Data)
-                       {
+                        @foreach (var item in (List<tb_LogInfo>)ViewBag.Data)
+                        {
                             <li>@item.UserName 于 @item.Time @item.Operation 了 @item.FileName</li>
-                       }
-                       @if(ViewBag.Data.Count == 0)
-                       {
-                           <li>今日没有任何消息，点击更多查看过去消息。</li>
-                           <li>今日没有任何消息，点击更多查看过去消息。</li>
-                       }
+                        }
+                        @if (ViewBag.Data.Count == 0)
+                        {
+                            <li>今日没有任何消息，点击更多查看过去消息。</li>
+                            <li>今日没有任何消息，点击更多查看过去消息。</li>
+                        }
                     </ul>
                 </div>
-                <a id="more-btn" href="/LogInfoManager/MoreLogInfo" >更  多</a>
+                <a id="more-btn" href="/LogInfoManager/MoreLogInfo">更  多</a>
             </div>
         </div>
     </div>
@@ -68,6 +68,11 @@
     $('#J_scroll').width($('#J_scroll').width() - $('#J_scroll li:first-child').innerWidth());
     $('#J_scroll').addClass('theanimation');
     $("#more-btn").removeAttr("disabled"); //移除disabled属性
-    var speed = '@(ViewBag.Data.Count * 10)' + 's';
+    var count = @ViewBag.Data.Count;
+    if (count == 0)
+        count = 2;
+    count *= 10;
+    var speed = count + 's';
     document.getElementById("J_scroll").style.WebkitAnimationDuration = speed;
+
 </script>

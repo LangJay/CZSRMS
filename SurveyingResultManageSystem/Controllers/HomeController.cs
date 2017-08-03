@@ -1,4 +1,5 @@
 ﻿using BLL;
+using BLL.Tools;
 using Model;
 using SurveyingResultManageSystem.App_Start;
 using SurveyingResultManageSystem.Models;

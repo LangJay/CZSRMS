@@ -17,7 +17,7 @@
     border-bottom: 1px solid #0972A7;
 }
 #div-filemanager {
-    position: fixed;
+    position: absolute;
     left: 20%;
     width: 60%;
 }
@@ -33,10 +33,14 @@
 }
 .table {
     margin-bottom: 0px;
+    table-layout:fixed;
 }
 
 td, th {
     text-align: center;
+}
+td {
+   
 }
 .button {
     background-color: #0972A7;
@@ -58,4 +62,13 @@ td, th {
 }
 #footer-right-btn3:active {
     background-color: #0972A7;
+}
+#div-explain {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+#div-explain:hover { /* 鼠标滑过 */
+    white-space:normal;
+    overflow: visible;
 }
