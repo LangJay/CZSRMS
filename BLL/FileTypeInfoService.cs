@@ -17,12 +17,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IDAL;
+using DAL;
 
 namespace BLL
 {
     public class FileTypeInfoService : BaseService<tb_FileType>, InterfaceFileTypeInfoService
     {
-        public FileTypeInfoService(InterfaceBaseRepository<tb_FileType> currentRepository) : base(currentRepository)
+        public FileTypeInfoService() : base(RepositoryFactory.FileTypeRepository)
         {
         }
     }

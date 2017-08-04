@@ -18,12 +18,13 @@ using System.Threading.Tasks;
 using IBLL;
 using IDAL;
 using Model;
+using DAL;
 
 namespace BLL
 {
     public class ProjectTypeInfoService : BaseService<tb_ProjectType>, InterfaceProjectTypeInfoService
     {
-        public ProjectTypeInfoService(InterfaceBaseRepository<tb_ProjectType> currentRepository) : base(currentRepository)
+        public ProjectTypeInfoService() : base(RepositoryFactory.ProjectTypeRepository)
         {
         }
     }

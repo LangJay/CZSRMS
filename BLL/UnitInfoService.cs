@@ -17,12 +17,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IDAL;
+using DAL;
 
 namespace BLL
 {
     public class UnitInfoService : BaseService<tb_Unit>, InterfaceUnitInfoService
     {
-        public UnitInfoService(InterfaceBaseRepository<tb_Unit> currentRepository) : base(currentRepository)
+        public UnitInfoService() : base(RepositoryFactory.UnitInfoRepository)
         {
         }
     }

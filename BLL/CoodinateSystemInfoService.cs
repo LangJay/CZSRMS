@@ -17,11 +17,13 @@ using System.Threading.Tasks;
 using IBLL;
 using IDAL;
 using Model;
+using DAL;
+
 namespace BLL
 {
     public class CoodinateSystemInfoService : BaseService<tb_CoodinateSystem>, InterfaceCoodinateSystemInfoService
     {
-        public CoodinateSystemInfoService(InterfaceBaseRepository<tb_CoodinateSystem> currentRepository) : base(currentRepository)
+        public CoodinateSystemInfoService() : base(RepositoryFactory.CoodinateSystemRepository)
         {
         }
     }
