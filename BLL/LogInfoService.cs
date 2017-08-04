@@ -26,25 +26,6 @@ namespace BLL
         {
 
         }
-        public List<tb_LogInfo> FindAll()
-        {
-            List<tb_LogInfo> list = new List<tb_LogInfo>();
-            try
-            {
-                var info = CurrentRepository.FindList(u => u.Time.Contains(""), "Time", false);
-                foreach (tb_LogInfo item in info)
-                {
-                    list.Add(item);
-                }
-                return list;
-
-            }
-            catch (Exception e)
-            {
-                Log.AddRecord(e.Message);
-                return list;
-            }
-        }
         /// <summary>
         /// 循环加了第一条记录
         /// </summary>

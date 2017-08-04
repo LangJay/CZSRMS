@@ -76,6 +76,24 @@ namespace BLL
                 return null;
             }
         }
+        public List<T> FindAll(Expression<Func<T,bool>> where,string orderName,bool isArsc)
+        {
+            List<T> list = new List<T>();
+            try
+            {
+                var info = CurrentRepository.FindList(where, orderName, false);
+                foreach(T item in info)
+                {
+                    list.Add(item);
+                }
+                return list;
+            }
+            catch(Exception e)
+            {
+                Log.AddRecord(e.Message);
+                return list;
+            }
+        }
         public List<T> FindPageList(int pageIndex, int pageSize, out int totalRecord, Expression<Func<T, bool>> whereLamdba, string orderName, bool isAsc)
         {
             List<T> list = new List<T>();

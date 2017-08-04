@@ -96,7 +96,7 @@ namespace SurveyingResultManageSystem.Controllers
                 Response.Cookies.Add(cook);
                 pageInfo.keywords = keywords;
                 //重新检索记录
-                pageInfo.pageList = logInfoService.FindAll();
+                pageInfo.pageList = logInfoService.FindAll(u => u.Time.Contains(""), "Time", false);
                 List<tb_LogInfo> list = new List<tb_LogInfo>();
                 IEnumerable<tb_LogInfo> iEn = pageInfo.pageList.Where(p => p.Time.Contains(keywords)  || p.UserName.Contains(keywords) || p.Operation.Contains(keywords) || p.FileName.Contains(keywords) || p.Explain.Contains(keywords));
                 int index = 1;

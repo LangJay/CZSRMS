@@ -41,8 +41,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="InterfaceBaseRepository.cs" />
+    <Compile Include="InterfaceCoodinateSystemInfoRepository.cs" />
     <Compile Include="InterfaceFileInfoRepository.cs" />
+    <Compile Include="InterfaceFileTypeInfoRepository.cs" />
     <Compile Include="InterfaceLogInfoRepository.cs" />
+    <Compile Include="InterfaceProjectTypeInfoRepository.cs" />
+    <Compile Include="InterfaceUnitInfoRepository.cs" />
     <Compile Include="InterfaceUserInfoRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

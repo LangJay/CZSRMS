@@ -147,6 +147,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\DroplistController.cs" />
     <Compile Include="Controllers\FileManagerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogInfoManagerController.cs" />
@@ -219,6 +220,7 @@
     <Content Include="Views\UserInfoManager\UserManager.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Views\Droplist\" />
     <Folder Include="Views\FileManager\" />
     <Folder Include="Views\Layout\" />
   </ItemGroup>

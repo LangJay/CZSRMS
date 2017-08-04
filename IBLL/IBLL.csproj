@@ -41,8 +41,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="InterfaceBaseService.cs" />
+    <Compile Include="InterfaceCoodinateSystemInfoService.cs" />
     <Compile Include="InterfaceFileInfoService.cs" />
+    <Compile Include="InterfaceFileTypeInfoService.cs" />
     <Compile Include="InterfaceLogInfoService.cs" />
+    <Compile Include="InterfaceProjectTypeInfoService.cs" />
+    <Compile Include="InterfaceUnitInfoService.cs" />
     <Compile Include="InterfaceUserInfoService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

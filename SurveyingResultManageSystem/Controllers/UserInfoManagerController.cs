@@ -45,7 +45,7 @@ namespace SurveyingResultManageSystem.Controllers
                 Response.Cookies.Add(cook);
                 pageInfo.keywords = keywords;
                 //重新检索记录
-                pageInfo.pageList = userInfoService.FindAll();
+                pageInfo.pageList = userInfoService.FindAll(u => u.UserName != "", "Levels", true);
                 List<tb_UserInfo> list = new List<tb_UserInfo>();
                 // || l.Operation.Contains(keywords) || l.UserName.Contains(keywords) || l.Operation.Contains(keywords) || l.FileName.Contains(keywords)
                 IEnumerable<tb_UserInfo> iEn = pageInfo.pageList.Where(p => p.UserName.Contains(keywords) || p.LastLogintime.Contains(keywords) || p.Levels.Contains(keywords) || p.Unit.Contains(keywords));

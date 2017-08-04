@@ -44,11 +44,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseRepository.cs" />
+    <Compile Include="CoodinateSystemRepository.cs" />
     <Compile Include="DBContextFactory.cs" />
     <Compile Include="FileInfoRepository.cs" />
+    <Compile Include="FileTypeRepository.cs" />
     <Compile Include="LogInfoRepository.cs" />
+    <Compile Include="ProjectTypeInfoRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RepositoryFactory.cs" />
+    <Compile Include="UnitInfoRepository.cs" />
     <Compile Include="UserInfoRepository.cs" />
   </ItemGroup>
   <ItemGroup>

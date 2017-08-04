@@ -41,5 +41,33 @@ namespace DAL
                 return new FileInfoRepository();
             }
         }
+        public static InterfaceUnitInfoRepository UnitInfoRepository
+        {
+            get
+            {
+                return new UnitInfoRepository();
+            }
+        }
+        public static InterfaceCoodinateSystemInfoRepository CoodinateSystemRepository
+        {
+            get
+            {
+                return new CoodinateSystemRepository();
+            }
+        }
+        public static InterfaceFileTypeInfoRepository FileTypeRepository
+        {
+            get
+            {
+                return new FileTypeRepository();
+            }
+        }
+        public static InterfaceProjectTypeInfoRepository ProjectTypeRepository
+        {
+            get
+            {
+                return new ProjectTypeInfoRepository();
+            }
+        }
     }
 }
