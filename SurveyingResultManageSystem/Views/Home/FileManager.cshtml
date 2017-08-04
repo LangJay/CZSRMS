@@ -2,6 +2,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link href="~/Content/style/FileManager.css" rel="stylesheet" />
+<link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
+<link href="~/Content/themes/icon.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-2.2.4.min.js"></script>
+<script src="~/Scripts/jquery.easyui.min.js"></script>
 <div id="div_menu">
     <ul id="div_menu_ul">
         <li id="li_file">
@@ -136,12 +140,7 @@
                         <td>坐标信息框架：</td>
                         <td>
                             <form>
-                                <select id="coodinatesystem">
-                                    <option value="西安1980">西安1980</option>
-                                    <option value="北京1954">北京1954</option>
-                                    <option value="国家2000">国家2000</option>
-                                    <option value="郴州独立">郴州独立</option>
-                                </select>
+                                <select id="coodinatesystem" panelHeight="auto" class="easyui-combobox" name="dept" data-options="valueField:'Value',textField:'Value',url:'/Droplist/CoodinateSystemlist'"/>
                             </form>
                         </td>
                         <td>完成时间信息：</td>
@@ -181,23 +180,13 @@
                         <td>文件类型：</td>
                         <td>
                             <form>
-                                <select id="filetype">
-                                    <option value="竣工验收测绘报告">竣工验收测绘报告</option>
-                                    <option value="勘测定界报告">勘测定界报告</option>
-                                    <option value="报批红线图">报批红线图</option>
-                                    <option value="供地红线图">供地红线图</option>
-                                    <option value="宗地图">宗地图</option>
-                                    <option value="地籍图">地籍图</option>
-                                </select>
+                                <select id="filetype" panelHeight="auto" class="easyui-combobox" name="dept" data-options="valueField:'Value',textField:'Value',url:'/Droplist/FiltTypelist'" />
                             </form>
                         </td>
                         <td>所属项目类型：</td>
                         <td>
                             <form>
-                                <select id="projecttype">
-                                    <option value="竣工验收">竣工验收</option>
-                                    <option value="报批">报批</option>
-                                    <option value="供地">供地</option>
+                                <select id="projecttype" panelHeight="auto" class="easyui-combobox" name="dept" data-options="valueField:'Value',textField:'Value',url:'/Droplist/ProjectTypelist'">
                                 </select>
                             </form>
                         </td>
@@ -206,12 +195,7 @@
                         <td>平面坐标系统：</td>
                         <td>
                             <form>
-                                <select id="pcoodinatesystem">
-                                    <option value="西安1980">西安1980</option>
-                                    <option value="北京1954">北京1954</option>
-                                    <option value="国家2000">国家2000</option>
-                                    <option value="郴州独立">郴州独立</option>
-                                </select>
+                                <select id="pcoodinatesystem"panelHeight="auto" class="easyui-combobox" name="dept" data-options="valueField:'Value',textField:'Value',url:'/Droplist/CoodinateSystemlist'"/>
                             </form>
                         </td>
                         <td>中央子午线：</td>
@@ -247,12 +231,7 @@
                         <td>测绘单位名称：</td>
                         <td>
                             <form>
-                                <select id="surveyingunitname">
-                                    <option value="北湖区测绘队">北湖区测绘队</option>
-                                    <option value="苏仙区测绘队">苏仙区测绘队</option>
-                                    <option value="市局测绘队">市局测绘队</option>
-                                    <option value="其它">其它</option>
-                                </select>
+                                <select id="surveyingunitname" panelHeight="auto" class="easyui-combobox" name="dept" data-options="valueField:'Value',textField:'Value',url:'/Droplist/Unitlist'"/>
                             </form>
                         </td>
                     </tr>
@@ -271,7 +250,7 @@
         </div><!-- /.modal-content -->
     </div>
 </div>
-<script src="~/Scripts/jquery-3.0.0.min.js"></script>
+<script src="~/Scripts/jquery-2.2.4.min.js"></script>
 <script type="text/javascript">
     function uploadFile() {
         var dialogwdith = $(window).width()+$(".modal-dialog").width();

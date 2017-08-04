@@ -20,7 +20,6 @@ namespace SurveyingResultManageSystem.Controllers
             projectTypeInfoService = new ProjectTypeInfoService();
             fileTypeInfoService = new FileTypeInfoService();
             coodinateSystemInfoService = new CoodinateSystemInfoService();
-
         }
         // GET: Droplist
         public ActionResult Unitlist()
@@ -29,6 +28,21 @@ namespace SurveyingResultManageSystem.Controllers
             List<tb_Unit> uinitList = unitInfoService.FindAll(u => u.Value != "", "ID", true);
             //2.2返回json  
             return Json(uinitList, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult FiltTypelist()
+        { 
+            List<tb_FileType> fileTypeList = fileTypeInfoService.FindAll(u => u.Value != "", "ID", true);
+            return Json(fileTypeList, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult ProjectTypelist()
+        {
+            List<tb_ProjectType> projectTypeList = projectTypeInfoService.FindAll(u => u.Value != "", "ID", true);
+            return Json(projectTypeList, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult CoodinateSystemlist()
+        {
+            List<tb_CoodinateSystem> coodinateSystemList = coodinateSystemInfoService.FindAll(u => u.Value != "", "ID", true);
+            return Json(coodinateSystemList, JsonRequestBehavior.AllowGet);
         }
     }
 }
