@@ -103,13 +103,9 @@
                         </td>
                         <td style="width:80px;">所属单位：</td>
                         <td>
-                            <form>
-                                <select id="input-unit">
-                                    <option value="北湖区测绘队">北湖区测绘队</option>
-                                    <option value="苏仙区测绘队">苏仙区测绘队</option>
-                                    <option value="市局测绘队">市局测绘队</option>
-                                </select>
-                            </form>
+                            <span>
+                                <input id="cc" class="easyui-combobox" name="dept" data-options="valueField:'ID',textField:'Value',url:'/Droplist/Unitlist'">
+                            </span>
                         </td>
                     </tr>
 
