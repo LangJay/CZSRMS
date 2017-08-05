@@ -1,8 +1,11 @@
 ﻿using BLL;
+using BLL.Tools;
 using Model;
+using Newtonsoft.Json;
 using SurveyingResultManageSystem.App_Start;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -68,6 +71,31 @@ namespace SurveyingResultManageSystem.Controllers
             double res = (totalRecord / 1.0) / pageInfo.pageSize;
             pageInfo.totalPage = (int)Math.Ceiling(res);
             return View(pageInfo);
+        }
+        [Authentication]
+        [HttpPost]
+        public ActionResult AddUser(string userInfoJson)
+        {
+            var sr = new StreamReader(Request.InputStream);
+            var stream = sr.ReadToEnd();
+            try
+            {
+                tb_UserInfo obj = JsonConvert.DeserializeObject<tb_UserInfo>(stream) as tb_UserInfo;
+                if(obj == null)
+                {
+                    return Content("创建用户失败!");
+                }
+                else
+                {
+                    userInfoService.Add(obj);
+                }
+            }
+            catch(Exception e)
+            {
+                Log.AddRecord(e.Message);
+                return Content("创建用户失败!");
+            }
+            return Content("创建成功!");
         }
     }
 }

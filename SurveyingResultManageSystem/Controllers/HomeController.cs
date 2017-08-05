@@ -54,7 +54,8 @@ namespace SurveyingResultManageSystem.Controllers
                 log.FileName = null;
                 log.Explain = ex.Message;
                 logInfoService.Add(log);
-                Response.Write("<script>alert('服务器故障!');</script>");
+                //跳转到错误页
+                return RedirectToAction("Error", "Home");
             }
             return View();
 
@@ -76,6 +77,10 @@ namespace SurveyingResultManageSystem.Controllers
         }
         [Authentication]
         public ActionResult MapManager()
+        {
+            return View();
+        }
+        public ActionResult Error()
         {
             return View();
         }

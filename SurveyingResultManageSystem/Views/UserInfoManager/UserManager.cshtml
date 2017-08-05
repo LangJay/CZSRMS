@@ -131,6 +131,7 @@
 <script type="text/javascript">
     $(document).ready()
     {
+        
     }
     setTimeout(function () {
         if (@Model.pageIndex == 1) {
@@ -166,15 +167,38 @@
         }
 
     }, 21);
+    /*
+    刷心数据用
+    */
+    function getData(pageIndex, keywords)
+    {
+        $.ajax({
+            type: 'post', //可选get
+            url: '/UserInfoManager/UserManager', //这里是接收数据的程序
+            data: 'pageIndex=' + pageIndex + "&&keywords=" + keywords, //传给PHP的数据，多个参数用&连接
+            dataType: 'html', //服务器返回的数据类型 可选XML ,Json jsonp script html text等
+            success: function (data) {
+                //这里是ajax提交成功后，程序返回的数据处理函数。data是返回的数据，数据类型在dataType参数里定义！
+                $("body").html(data);
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown)
+            {
+                //应该跳转到ERROR页面
+                window.location.href("/Home/Error");
+            }
+        });
+    }
     function refresh(pageIndex)
     {
         var keywords = $(".search").val();
-        window.location.href("/UserInfoManager/UserManager?pageIndex=" + pageIndex + "&&keywords=" + keywords);
+        getData(pageIndex, keywords);
+        //window.location.href("/UserInfoManager/UserManager?pageIndex=" + pageIndex + "&&keywords=" + keywords);
     };
     function search()
     {
         var keywords = $(".search").val();
-        window.location.href("/UserInfoManager/UserManager?pageIndex=" + 1 + "&&keywords=" + keywords);
+        getData(1, keywords);
+       // window.location.href("/UserInfoManager/UserManager?pageIndex=" + 1 + "&&keywords=" + keywords);
     };
     function create()
     {
@@ -185,11 +209,57 @@
     {
         $("#myModalLabel").html("编辑用户");
         $("#myModal").modal('show');
-        var list = @Model.pageList[0].UserName;
+       // var list = @Model.pageList[0].UserName;
         //var user = list[index];
     };
     function submitInfo()
     {
-
+        var user = {
+            UserID: "",
+            UserName: "",
+            Password: "",
+            LastLogintime: "",
+            Levels: "",
+            Unit: ""
+        };
+        user.UserName = $("#input-username").val();
+        user.Password = $("#input-password").val();
+        user.Levels = $("#input-leves").val();
+        user.Unit = $("#input-unit").val();
+        //检查是否填写正确
+        if (user.UserName == "")
+            $("#input-username").css("border","1px solid red");
+        else if (user.Levels == "")
+            $("#input-leves").next().css("border", "1px solid red");
+        else if (user.Unit == "")
+            $("#input-unit").next().css("border", "1px solid red");
+        else
+        {
+            //Post表单
+            $.ajax({
+                url: "/UserInfoManager/AddUser",
+                type: "post",
+                dataType: "text",
+                async: false,
+                data: JSON.stringify(user),
+                success: function (data) {
+                    var a = data;
+                    $("#myModal").modal('hide');
+                    alert("创建成功！");
+                    getData(1, "");
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown)
+                {
+                    if (XMLHttpRequest.state != 200)
+                        window.location.href("/Home/Error");
+                    else
+                    {
+                        $("#myModal").modal('hide');
+                        alert("创建成功！");
+                        getData(1, "");
+                    }
+                }
+            });
+        }
     };
 </script>

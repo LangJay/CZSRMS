@@ -105,14 +105,35 @@
         }
 
     }, 21);
+    /*
+   刷心数据用
+   */
+    function getData(pageIndex, keywords) {
+        $.ajax({
+            type: 'post', //可选get
+            url: '/LogInfoManager/LogInfoManager', //这里是接收数据的程序
+            data: 'pageIndex=' + pageIndex + "&&keywords=" + keywords, //传给PHP的数据，多个参数用&连接
+            dataType: 'html', //服务器返回的数据类型 可选XML ,Json jsonp script html text等
+            success: function (data) {
+                //这里是ajax提交成功后，程序返回的数据处理函数。data是返回的数据，数据类型在dataType参数里定义！
+                $("body").html(data);
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //应该跳转到ERROR页面
+                window.location.href("/Home/Error");
+            }
+        });
+    }
     function refresh(pageIndex)
     {
         var keywords = $(".search").val();
-        window.location.href("/LogInfoManager/LogInfoManager?pageIndex=" + pageIndex + "&&keywords=" + keywords);
+        getData(pageIndex, keywords);
+        //window.location.href("/LogInfoManager/LogInfoManager?pageIndex=" + pageIndex + "&&keywords=" + keywords);
     }
     function search()
     {
         var keywords = $(".search").val();
-        window.location.href("/LogInfoManager/LogInfoManager?pageIndex=" + 1 + "&&keywords=" + keywords);
+        getData(1, keywords);
+        //window.location.href("/LogInfoManager/LogInfoManager?pageIndex=" + 1 + "&&keywords=" + keywords);
     }
 </script>
