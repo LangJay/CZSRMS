@@ -99,12 +99,11 @@ namespace BLL
             List<T> list = new List<T>();
             try
             {
-                var info = CurrentRepository.FindPageList(pageIndex, pageSize, out int total, whereLamdba, orderName, isAsc);
+                var info = CurrentRepository.FindPageList(pageIndex, pageSize, out totalRecord, whereLamdba, orderName, isAsc);
                 foreach (T item in info)
                 {
                     list.Add(item);
                 }
-                totalRecord = total;
                 return list;
             }
             catch (Exception e)
