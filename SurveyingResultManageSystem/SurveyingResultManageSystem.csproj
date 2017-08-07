@@ -151,6 +151,7 @@
     <Compile Include="Controllers\FileManagerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogInfoManagerController.cs" />
+    <Compile Include="Controllers\SetPasswordsController.cs" />
     <Compile Include="Controllers\UserInfoManagerController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -167,6 +168,7 @@
     <Content Include="Content\style\Login.css" />
     <Content Include="Content\style\MapManager.css" />
     <Content Include="Content\style\MoreLogInfo.css" />
+    <Content Include="Content\style\SerPasswordsIndex.css" />
     <Content Include="Content\themes\black\accordion.css" />
     <Content Include="Content\themes\black\calendar.css" />
     <Content Include="Content\themes\black\combo.css" />
@@ -590,6 +592,7 @@
     <Content Include="Views\LogInfoManager\MoreLogInfo.cshtml" />
     <Content Include="Views\LogInfoManager\LogInfoManager.cshtml" />
     <Content Include="Views\UserInfoManager\UserManager.cshtml" />
+    <Content Include="Views\SetPasswords\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Droplist\" />

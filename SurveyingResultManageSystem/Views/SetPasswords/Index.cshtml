@@ -1,0 +1,67 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/style/SerPasswordsIndex.css" rel="stylesheet" />
+<div id="set-content">
+    <div id="div-old" class="div-form">
+        <label>请输入旧密码：</label>
+        <input id="input-old" type="password" />
+    </div>
+    <div id="div-new" class="div-form">
+        <label>请输入新密码：</label>
+        <input id="input-new" type="password" />
+    </div>
+    <div id="div-renew" class="div-form">
+        <label>请再次输入新密码：</label>
+        <input id="input-renew" type="password" />
+    </div>
+    <div id="div-submit" class="div-form">
+        <input id="set-content-submit" type="button" onclick="submit()" value="提    交" />
+    </div>
+</div>
+
+<script>
+    function submit()
+    {
+        //判断旧密码是否正确
+        $.get("/SetPasswords/GetPassWords", function (data, status) {
+            if (status == "success") {
+                var oldpwd = "";
+                oldpwd = data;
+                if (oldpwd != $("#input-old").val()) {
+                    $("#input-old").addClass('red-border');
+                    return;
+                }
+                else {
+                    $("#input-old").removeClass('red-border');
+                }
+                //判断两次新密码是否一致
+                var newpwd = $("#input-new").val();
+                var renewpwd = $("#input-renew").val();
+                if (newpwd == "" | newpwd != renewpwd) {
+                    $("#input-renew").addClass('red-border');
+                    return;
+                }
+                else {
+                    $("#input-renew").removeClass('red-border');
+                }
+                //上传新密码
+
+                $.post("/SetPasswords/SetPasswords", $("#input-new").val(),
+                    function (data, status) {
+                        if (status == "success")
+                        {
+                            alert("修改成功，请重新登录...");
+                            window.location.href = "/Home/Login";
+                        }
+                        else {
+                            alert("服务器故障,请重试...");
+                        }
+                });
+            }
+        });
+      
+    }
+</script>

@@ -77,10 +77,11 @@ namespace SurveyingResultManageSystem.Controllers
         }
         [Authentication]
         [HttpPost]
-        public ActionResult AddUser(string userInfoJson)
+        public ActionResult AddUser()
         {
             var sr = new StreamReader(Request.InputStream);
             var stream = sr.ReadToEnd();
+            sr.Close();
             tb_LogInfo log = new tb_LogInfo();
             log.UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value;
             log.Time = DateTime.Now.ToString();
@@ -121,12 +122,11 @@ namespace SurveyingResultManageSystem.Controllers
         }
         [Authentication]
         [HttpPost]
-        public ActionResult DeleteUser(string username)
+        public ActionResult DeleteUser()
         {
             var sr = new StreamReader(Request.InputStream);
-            var stream = sr.ReadToEnd();
-            username = stream;
-
+            var username = sr.ReadToEnd();
+            sr.Close();
             tb_LogInfo log = new tb_LogInfo();
             log.UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value;
             log.Time = DateTime.Now.ToString();
@@ -161,10 +161,11 @@ namespace SurveyingResultManageSystem.Controllers
         }
         [Authentication]
         [HttpPost]
-        public ActionResult ResetPassWords(string username)
+        public ActionResult ResetPassWords()
         {
             var sr = new StreamReader(Request.InputStream);
             var stream = sr.ReadToEnd();
+            sr.Close();
             tb_LogInfo log = new tb_LogInfo();
             log.UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value;
             log.Time = DateTime.Now.ToString();
@@ -201,5 +202,6 @@ namespace SurveyingResultManageSystem.Controllers
             }
             return Content("删除成功！");
         }
+      
     }
 }
