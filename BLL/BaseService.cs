@@ -64,6 +64,24 @@ namespace BLL
                 return false;
             }
         }
+        public bool Delete(Expression<Func<T, bool>> whereLamdba)
+        {
+            try
+            {
+                T obj = Find(whereLamdba);
+                return Delete(obj);
+            }
+            catch(Exception e)
+            {
+                Log.AddRecord(e.Message);
+                return false;
+            }
+        }
+        /// <summary>
+        /// 返回查询对象的默认值
+        /// </summary>
+        /// <param name="whereLamdba"></param>
+        /// <returns></returns>
         public T Find(Expression<Func<T, bool>> whereLamdba)
         {
             try

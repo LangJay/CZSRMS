@@ -1,6 +1,7 @@
 ﻿using BLL;
 using Model;
 using SurveyingResultManageSystem.App_Start;
+using SurveyingResultManageSystem.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -21,8 +22,9 @@ namespace SurveyingResultManageSystem.Controllers
         [Authentication]
         public ActionResult MoreLogInfo(int ? pageIndex,string keywords)
         {
+            string operation = LogOperations.UploadFile() + LogOperations.DownloadFile() + LogOperations.DeleteFile();
             //获取消息滚动条数据
-            ViewBag.Data = logInfoService.FindLogListWithTime(DateTime.Now.ToString("d"));
+            ViewBag.Data = logInfoService.FindLogListAndFirst(l => l.Time.Contains(DateTime.Now.ToString("d")) && operation.Contains(l.Operation));
 
             //-----分页内容---------//
 
@@ -35,7 +37,6 @@ namespace SurveyingResultManageSystem.Controllers
             //所有的记录 pageInfo.totalRecord;
             int totalRecord;
             //获取所有的上传、下载、删除的操作记录 
-            string operation = "删除下载上传";
             pageInfo.pageList = logInfoService.FindPageList(pageInfo.pageIndex, pageInfo.pageSize, out totalRecord, u => operation.Contains(u.Operation), "Time", false);
             if (keywords != null && keywords != "")
             {
@@ -72,8 +73,9 @@ namespace SurveyingResultManageSystem.Controllers
         [Authentication]
         public ActionResult LogInfoManager(int? pageIndex, string keywords)
         {
-            //获取消息滚动条数据
-            ViewBag.Data = logInfoService.FindLogListWithTime(DateTime.Now.ToString("d"));
+            string operation = LogOperations.UploadFile() + LogOperations.DownloadFile() + LogOperations.DeleteFile();
+            //获取消息滚动条数据，取当天的数据
+            ViewBag.Data = logInfoService.FindLogListAndFirst(l => l.Time.Contains(DateTime.Now.ToString("d")) && operation.Contains(l.Operation));
 
             //-----分页内容---------//
 
@@ -86,7 +88,7 @@ namespace SurveyingResultManageSystem.Controllers
             //所有的记录 pageInfo.totalRecord;
             int totalRecord;
             //获取所有的操作记录 
-            string operation = "";
+            operation = "";
             pageInfo.pageList = logInfoService.FindPageList(pageInfo.pageIndex, pageInfo.pageSize, out totalRecord, u => u.Operation.Contains(operation), "Time", false);
             if (keywords != null && keywords != "")
             {

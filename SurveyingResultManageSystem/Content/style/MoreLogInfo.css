@@ -83,3 +83,6 @@ td {
 {
     color:#808080;
 }
+.red-border {
+    border: 1px solid red;
+}

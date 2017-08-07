@@ -3,8 +3,10 @@ using BLL.Tools;
 using Model;
 using Newtonsoft.Json;
 using SurveyingResultManageSystem.App_Start;
+using SurveyingResultManageSystem.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -25,8 +27,9 @@ namespace SurveyingResultManageSystem.Controllers
         [Authentication]
         public ActionResult UserManager(int ? pageIndex,string keywords)
         {
-            //获取消息滚动条数据
-            ViewBag.Data = logInfoService.FindLogListWithTime(DateTime.Now.ToString("d"));
+            string operation = LogOperations.UploadFile() + LogOperations.DownloadFile() + LogOperations.DeleteFile();
+            //获取消息滚动条数据，取当天的数据
+            ViewBag.Data = logInfoService.FindLogListAndFirst(l => l.Time.Contains(DateTime.Now.ToString("d")) && operation.Contains(l.Operation));
 
             //-----分页内容---------//
 
@@ -78,24 +81,125 @@ namespace SurveyingResultManageSystem.Controllers
         {
             var sr = new StreamReader(Request.InputStream);
             var stream = sr.ReadToEnd();
+            tb_LogInfo log = new tb_LogInfo();
+            log.UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value;
+            log.Time = DateTime.Now.ToString();
+            log.FileName = "";
+            log.Operation = LogOperations.CreateUser();
             try
             {
                 tb_UserInfo obj = JsonConvert.DeserializeObject<tb_UserInfo>(stream) as tb_UserInfo;
                 if(obj == null)
                 {
+                    log.Explain = "创建用户失败!";
+                    logInfoService.Add(log);
                     return Content("创建用户失败!");
                 }
                 else
                 {
+                    //检查是否存在相同用户名
+                    tb_UserInfo findUserName = userInfoService.Find(u => u.UserName == obj.UserName);
+                    if(findUserName != null)
+                    {
+                        log.Explain = "用户名已经存在！";
+                        logInfoService.Add(log);
+                        return Content("用户名已经存在！");
+                    }
+                    log.Explain = "创建用户成功!";
+                    logInfoService.Add(log);
                     userInfoService.Add(obj);
                 }
             }
             catch(Exception e)
             {
                 Log.AddRecord(e.Message);
+                log.Explain = "创建用户失败!";
+                logInfoService.Add(log);
                 return Content("创建用户失败!");
             }
             return Content("创建成功!");
+        }
+        [Authentication]
+        [HttpPost]
+        public ActionResult DeleteUser(string username)
+        {
+            var sr = new StreamReader(Request.InputStream);
+            var stream = sr.ReadToEnd();
+            username = stream;
+
+            tb_LogInfo log = new tb_LogInfo();
+            log.UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value;
+            log.Time = DateTime.Now.ToString();
+            log.FileName = "";
+            log.Operation = LogOperations.DeleteUser();
+            try
+            {
+                if (username != "")
+                {
+                    if(userInfoService.Delete(u => u.UserName == username))
+                    {
+                        log.Explain = "删除成功！";
+                        logInfoService.Add(log);
+                        return Content("删除成功！");
+                    }
+                    else
+                    {
+                        log.Explain = "删除失败！";
+                        logInfoService.Add(log);
+                        return Content("删除失败！");
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Log.AddRecord(e.Message);
+                log.Explain = "删除失败！";
+                logInfoService.Add(log);
+                return Content("删除失败！");
+            }
+            return Content("删除成功！");
+        }
+        [Authentication]
+        [HttpPost]
+        public ActionResult ResetPassWords(string username)
+        {
+            var sr = new StreamReader(Request.InputStream);
+            var stream = sr.ReadToEnd();
+            tb_LogInfo log = new tb_LogInfo();
+            log.UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value;
+            log.Time = DateTime.Now.ToString();
+            log.FileName = "";
+            log.Operation = LogOperations.ResetPasswords();
+            try
+            {
+                tb_UserInfo obj = JsonConvert.DeserializeObject<tb_UserInfo>(stream) as tb_UserInfo;
+                //根据信息找到完整用户信息
+                tb_UserInfo user = userInfoService.Find(u => u.UserName == obj.UserName);
+                user.Password = ConfigurationManager.AppSettings["DefaultPwd"];
+                if (user != null)
+                {
+                    if (userInfoService.Update(user))
+                    {
+                        log.Explain = "修改成功！";
+                        logInfoService.Add(log);
+                        return Content("修改成功！");
+                    }
+                    else
+                    {
+                        log.Explain = "修改失败！";
+                        logInfoService.Add(log);
+                        return Content("修改失败！");
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Log.AddRecord(e.Message);
+                log.Explain = "修改失败！";
+                logInfoService.Add(log);
+                return Content("修改失败！");
+            }
+            return Content("删除成功！");
         }
     }
 }

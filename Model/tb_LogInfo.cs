@@ -30,13 +30,13 @@ namespace Model
             /// <summary>
             /// 用户名
             /// </summary>
-            public string UserName { get; set; }
+            public string UserName { get; set; }    
             /// <summary>
             /// 时间 保留2012-07-21 16:21:59 格式(注意英文冒号）
             /// </summary>
             public string Time { get; set; }
             /// <summary>
-            /// 可能的操作：删除、上传、下载、创建用户、修改密码、重制密码。不能更改文字词语，影响查询。
+            /// 可能的操作：上传文件 = 1，下载文件 = 2,删除文件 = 3,创建用户 = 4,修改密码 = 5,重制密码 = 6,删除用户 = 7,系统日志 = 8.不能更改文字词语，影响查询。
             /// </summary>
             public string Operation { get; set; }
             /// <summary>

@@ -19,19 +19,19 @@ namespace SurveyingResultManageSystem.Models
     public static class LogOperations
     {
         /// <summary>
-        /// 操作类型枚举，上传 = 1，下载 = 2,删除 = 3,创建用户 = 4,修改密码 = 5,重制密码 = 6,系统日志 = 7
+        /// 操作类型枚举，上传文件 = 1，下载文件 = 2,删除文件 = 3,创建用户 = 4,修改密码 = 5,重制密码 = 6,删除用户 = 7,系统日志 = 8
         /// </summary
 
-        private static string[] operations = new string[] { "上传", "下载", "删除", "创建用户", "修改密码", "重制密码", "系统日志" };
-        public static string Upload()
+        private static string[] operations = new string[] { "上传文件", "下载文件", "删除文件", "创建用户", "修改密码", "重制密码","删除用户","系统日志" };
+        public static string UploadFile()
         {
             return operations[0];
         }
-        public static string Download()
+        public static string DownloadFile()
         {
             return operations[1];
         }
-        public static string Delete()
+        public static string DeleteFile()
         {
             return operations[2];
         }
@@ -55,9 +55,13 @@ namespace SurveyingResultManageSystem.Models
         {
             return operations[5];
         }
-        public static string SystemLog()
+        public static string DeleteUser()
         {
             return operations[6];
+        }
+        public static string SystemLog()
+        {
+            return operations[7];
         }
     }
 }

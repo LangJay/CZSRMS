@@ -55,8 +55,8 @@
                         </td>
                         <td>
                             <div id="div-manager">
-                                <input type="button" id="input-edit" onclick="edit(@i)" class="div-manager-btn" value="编辑" />|
-                                <input type="button" id="input-reset" class="div-manager-btn" value="重制密码" />
+                                <input type="button" id="input-edit" onclick="deleteUser(this)" class="div-manager-btn" value="删除" />|
+                                <input type="button" id="input-reset" onclick="Reset(this)" class="div-manager-btn" value="重制密码" />
                             </div>
                         </td>
                     </tr>
@@ -91,15 +91,15 @@
                 <table>
                     <tr>
                         <td style="width:80px;">用户名：</td>
-                        <td ><input id="input-username" type="text" /></td>
+                        <td><input id="input-username" type="text" /></td>
                         <td style="width:80px;">初始密码：</td>
-                        <td><input id="input-password" type="text" value="123456"/></td>
+                        <td><input id="input-password" type="text" value="123456" /></td>
                     </tr>
                     <tr>
                         <td style="width:80px;">权限等级：</td>
                         <td>
                             <form>
-                                <select id="input-leves" panelHeight="auto" class="easyui-combobox" name="dept">
+                                <select id="input-levels" panelHeight="auto" class="easyui-combobox" name="dept">
                                     <option value="0">管理员</option>
                                     <option value="1" selected="selected">普通账户</option>
                                 </select>
@@ -112,9 +112,7 @@
                             </span>
                         </td>
                     </tr>
-
                 </table>
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default"
@@ -129,10 +127,6 @@
     </div>
 </div>
 <script type="text/javascript">
-    $(document).ready()
-    {
-        
-    }
     setTimeout(function () {
         if (@Model.pageIndex == 1) {
             $("#footer-right-btn2").attr("disabled", "true");
@@ -187,7 +181,7 @@
                 window.location.href("/Home/Error");
             }
         });
-    }
+    };
     function refresh(pageIndex)
     {
         var keywords = $(".search").val();
@@ -204,14 +198,94 @@
     {
         $("#myModalLabel").html("创建用户");
         $("#myModal").modal('show');
+       // $("#input-unit").combobox('setValue', '0');
     };
-    function edit(index)
+    //----获取行号-----
+    function getRow(r) {
+        var i = r.parentNode.parentNode.parentNode.rowIndex;
+        return i;
+    }
+    function deleteUser(t)
     {
-        $("#myModalLabel").html("编辑用户");
-        $("#myModal").modal('show');
-       // var list = @Model.pageList[0].UserName;
-        //var user = list[index];
+        //管理员账户不能删除
+        var row = getRow(t);
+        //获取表格对象
+        var table = document.getElementsByClassName('table')[0];
+        var username = table.rows[row].cells[0].innerText;
+        var levels = table.rows[row].cells[2].innerText;
+        if (levels == 0)
+        {
+            alert("无法删除管理员账户！");
+            return;
+        }
+        if (confirm("你确定删除该用户？"))
+        {
+            //删除数据
+            //Post表单
+            $.ajax({
+                url: "/UserInfoManager/DeleteUser",
+                type: "post",
+                dataType: "text",
+                async: false,
+                data: username,
+                success: function (data) {
+                    if (data == "删除成功！") {
+                        getData(1, "");//刷新界面
+                    }
+                    else
+                    {
+                        alert(data);
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    if (XMLHttpRequest.state != 200)
+                        window.location.href("/Home/Error");
+                    else {
+                        getData(1, "");//刷新界面
+                    }
+                }
+            });
+        }
     };
+    function Reset(t)
+    {
+        //管理员账户不能删除
+        var row = getRow(t);
+        //获取表格对象
+        var table = document.getElementsByClassName('table')[0];
+        var user = {
+            UserID: "",
+            UserName: "",
+            Password: "",
+            LastLogintime: "",
+            Levels: "",
+            Unit: ""
+        };
+        user.UserName = table.rows[row].cells[0].innerText;
+        user.LastLogintime = table.rows[row].cells[1].innerText;
+        user.Password = "";
+        user.Levels = table.rows[row].cells[2].innerText;
+        user.Unit = table.rows[row].cells[3].innerText;
+        //重制密码
+        //Post表单
+        $.ajax({
+            url: "/UserInfoManager/ResetPassWords",
+            type: "post",
+            dataType: "text",
+            async: false,
+            data: JSON.stringify(user),
+            success: function (data) {
+                    alert(data);
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                if (XMLHttpRequest.state != 200)
+                    window.location.href("/Home/Error");
+                else {
+                    alert("修改成功！");
+                }
+            }
+        });
+    }
     function submitInfo()
     {
         var user = {
@@ -224,15 +298,16 @@
         };
         user.UserName = $("#input-username").val();
         user.Password = $("#input-password").val();
-        user.Levels = $("#input-leves").val();
+        user.Levels = $("#input-levels").val();
         user.Unit = $("#input-unit").val();
+        var value = $("#input-unit").val();
         //检查是否填写正确
         if (user.UserName == "")
-            $("#input-username").css("border","1px solid red");
+            $("#input-username").addClass('red-border');
         else if (user.Levels == "")
-            $("#input-leves").next().css("border", "1px solid red");
+            $("#input-levels").next().addClass('red-border');
         else if (user.Unit == "")
-            $("#input-unit").next().css("border", "1px solid red");
+            $("#input-unit").next().addClass('red-border');
         else
         {
             //Post表单
@@ -243,10 +318,15 @@
                 async: false,
                 data: JSON.stringify(user),
                 success: function (data) {
-                    var a = data;
-                    $("#myModal").modal('hide');
-                    alert("创建成功！");
-                    getData(1, "");
+                    if (data == "用户名已经存在！") {
+                        alert(data);
+                    }
+                    else
+                    {
+                        $("#myModal").modal('hide');
+                        alert(data);
+                        getData(1, "");//刷新界面
+                    }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown)
                 {
@@ -256,7 +336,7 @@
                     {
                         $("#myModal").modal('hide');
                         alert("创建成功！");
-                        getData(1, "");
+                        getData(1, "");//刷新界面
                     }
                 }
             });

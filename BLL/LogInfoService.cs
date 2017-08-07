@@ -31,12 +31,12 @@ namespace BLL
         /// </summary>
         /// <param name="timeNow"></param>
         /// <returns></returns>
-        public List<tb_LogInfo> FindLogListWithTime(string timeNow)
+        public List<tb_LogInfo> FindLogListAndFirst(Expression<Func<tb_LogInfo,bool>> whereLamdba)
         {
             List<tb_LogInfo> list = new List<tb_LogInfo>();
             try
             {
-                var info = CurrentRepository.FindList(u => u.Time.Contains(timeNow), "Time", false);
+                var info = CurrentRepository.FindList(whereLamdba, "Time", false);
                 foreach (tb_LogInfo item in info)
                 {
                     list.Add(item);
