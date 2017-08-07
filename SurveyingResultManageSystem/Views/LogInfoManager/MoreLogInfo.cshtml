@@ -54,7 +54,7 @@
     {
     }
     setTimeout(function () {
-        if (@Model.pageIndex == 1) {
+        if (@Model.pageIndex <= 1 ) {
             $("#footer-right-btn2").attr("disabled", "true");
             $("#footer-right-btn2").css("background-color", "#5090C7");
             $("#footer-right-btn1").attr("disabled", "true");
@@ -78,7 +78,7 @@
             $("#footer-right-btn1").css("background-color", "#0972A7");
             $("#footer-right-btn5").css("background-color", "#0972A7");
         }
-        if (@Model.totalPage == 1)
+        if (@Model.totalPage <= 1)
         {
             $("#footer-right-btn4").attr("disabled", "true");
             $("#footer-right-btn4").css("background-color", "#5090C7");
