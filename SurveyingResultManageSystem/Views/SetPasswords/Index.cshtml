@@ -40,7 +40,8 @@
                 //判断两次新密码是否一致
                 var newpwd = $("#input-new").val();
                 var renewpwd = $("#input-renew").val();
-                if (newpwd == "" | newpwd != renewpwd) {
+                if (newpwd == "" | newpwd != renewpwd)
+                {
                     $("#input-renew").addClass('red-border');
                     return;
                 }
