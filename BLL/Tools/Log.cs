@@ -12,6 +12,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -24,7 +25,7 @@ namespace BLL.Tools
         /// 日志文件记录   
         /// </summary>  
         /// <param name="msg">内容</param>  
-        public static void AddRecord(string msg)
+        public static void AddRecord(Exception e)
         {
             StreamWriter writer;
             string rootPath = HttpRuntime.AppDomainAppPath.ToString();//E:\项目\郴州测绘成果管理项目\郴州市测绘成果项目管理系统\SurveyingResultManageSystem\
@@ -36,16 +37,16 @@ namespace BLL.Tools
                 string logFileName = path + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + ".log";//生成日志文件  
 
                 writer = File.AppendText(logFileName);//文件中添加文件流  
-                writer.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + msg);
+                writer.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + e.Message + e.StackTrace);
                 writer.Flush();
                 writer.Close();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 // string logFileName = HttpRuntime.AppDomainAppPath.ToString();//
                 string logFileName = rootPath + "\\App_Data" + "\\" + "Log.txt";//生成日志文件  
                 writer = File.AppendText(logFileName);
-                writer.WriteLine(DateTime.Now.ToString("日志记录错误HH:mm:ss") + " " + e.Message + " " + msg);
+                writer.WriteLine(DateTime.Now.ToString("日志记录错误HH:mm:ss") + " " + ex.Message + ex.StackTrace);
                 writer.Flush();
                 writer.Close();
             }

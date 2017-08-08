@@ -35,7 +35,7 @@ namespace SurveyingResultManageSystem.Controllers
                 {
                     //把登陆用户名存到cookies中
                     HttpCookie cook = new HttpCookie("username", user.UserName);
-                    cook.Expires = DateTime.Now.AddDays(1);//一天
+                    //cook.Expires = DateTime.Now.AddDays(1);//不设置时间，离开浏览器就失效
                     Response.Cookies.Add(cook);
                     //更新最后登录时间
                     userInfo.LastLogintime = DateTime.Now.ToString();
@@ -74,7 +74,7 @@ namespace SurveyingResultManageSystem.Controllers
             string operation = LogOperations.UploadFile() + LogOperations.DownloadFile() + LogOperations.DeleteFile();
             //获取消息滚动条数据，取当天的数据
             ViewBag.Data = logInfoService.FindLogListAndFirst(l => l.Time.Contains(DateTime.Now.ToString("d")) && operation.Contains(l.Operation));
-            return View(ViewBag);
+            return View();
         }
         [Authentication]
         public ActionResult MapManager()

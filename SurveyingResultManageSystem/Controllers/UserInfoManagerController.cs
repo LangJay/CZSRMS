@@ -24,7 +24,7 @@ namespace SurveyingResultManageSystem.Controllers
             logInfoService = new LogInfoService();
         }
         // GET: UserInfoManager
-        [Authentication]
+        [AuthorityAuthentication]
         public ActionResult UserManager(int ? pageIndex,string keywords)
         {
             string operation = LogOperations.UploadFile() + LogOperations.DownloadFile() + LogOperations.DeleteFile();
@@ -75,7 +75,7 @@ namespace SurveyingResultManageSystem.Controllers
             pageInfo.totalPage = (int)Math.Ceiling(res);
             return View(pageInfo);
         }
-        [Authentication]
+        [AuthorityAuthentication]
         [HttpPost]
         public ActionResult AddUser()
         {
@@ -113,14 +113,14 @@ namespace SurveyingResultManageSystem.Controllers
             }
             catch(Exception e)
             {
-                Log.AddRecord(e.Message);
+                Log.AddRecord(e);
                 log.Explain = "创建用户失败!";
                 logInfoService.Add(log);
                 return Content("创建用户失败!");
             }
             return Content("创建成功!");
         }
-        [Authentication]
+        [AuthorityAuthentication]
         [HttpPost]
         public ActionResult DeleteUser()
         {
@@ -152,14 +152,14 @@ namespace SurveyingResultManageSystem.Controllers
             }
             catch (Exception e)
             {
-                Log.AddRecord(e.Message);
+                Log.AddRecord(e);
                 log.Explain = "删除失败！";
                 logInfoService.Add(log);
                 return Content("删除失败！");
             }
             return Content("删除成功！");
         }
-        [Authentication]
+        [AuthorityAuthentication]
         [HttpPost]
         public ActionResult ResetPassWords()
         {
@@ -195,13 +195,32 @@ namespace SurveyingResultManageSystem.Controllers
             }
             catch (Exception e)
             {
-                Log.AddRecord(e.Message);
+                Log.AddRecord(e);
                 log.Explain = "修改失败！";
                 logInfoService.Add(log);
                 return Content("修改失败！");
             }
             return Content("删除成功！");
         }
-      
+        [AuthorityAuthentication]
+        [HttpGet]
+        public string GetUserLevels()
+        {
+            string username = System.Web.HttpContext.Current.Request.Cookies["username"].Value;
+            string levels = "";
+            try
+            {
+                //根据信息找到完整用户信息
+                tb_UserInfo user = userInfoService.Find(u => u.UserName == username);
+                levels = user.Levels;
+            }
+            catch (Exception e)
+            {
+                Log.AddRecord(e);
+                RedirectToAction("Error", "Home");
+            }
+            return levels;
+        }
+
     }
 }

@@ -48,7 +48,7 @@ namespace BLL
             }
             catch(Exception e)
             {
-                Log.AddRecord(e.Message);
+                Log.AddRecord(e);
                 return list;
             }
         }
@@ -66,7 +66,7 @@ namespace BLL
             }
             catch(Exception e)
             {
-                Log.AddRecord(e.Message);
+                Log.AddRecord(e);
                 return list;
             }
         }

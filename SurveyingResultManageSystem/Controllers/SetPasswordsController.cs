@@ -61,7 +61,7 @@ namespace SurveyingResultManageSystem.Controllers
             }
             catch (Exception e)
             {
-                Log.AddRecord(e.Message);
+                Log.AddRecord(e);
                 log.Explain = "修改失败！";
                 logInfoService.Add(log);
             }
@@ -80,7 +80,7 @@ namespace SurveyingResultManageSystem.Controllers
             }
             catch(Exception e)
             {
-                Log.AddRecord(e.Message);
+                Log.AddRecord(e);
                 return pwd;
             }
             return pwd;

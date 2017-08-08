@@ -33,7 +33,7 @@ namespace BLL
             }
             catch(Exception e)
             {
-                Log.AddRecord(e.Message);
+                Log.AddRecord(e);
                 //在这里处理异常
                 return null;
             }
@@ -47,7 +47,7 @@ namespace BLL
             }
             catch(Exception e)
             {
-                Log.AddRecord(e.Message);
+                Log.AddRecord(e);
                 return false;
             }
         }
@@ -60,7 +60,7 @@ namespace BLL
             }
             catch(Exception e)
             {
-                Log.AddRecord(e.Message);
+                Log.AddRecord(e);
                 return false;
             }
         }
@@ -73,7 +73,7 @@ namespace BLL
             }
             catch(Exception e)
             {
-                Log.AddRecord(e.Message);
+                Log.AddRecord(e);
                 return false;
             }
         }
@@ -90,7 +90,7 @@ namespace BLL
             }
             catch(Exception e)
             {
-                Log.AddRecord(e.Message);
+                Log.AddRecord(e);
                 return null;
             }
         }
@@ -108,7 +108,7 @@ namespace BLL
             }
             catch(Exception e)
             {
-                Log.AddRecord(e.Message);
+                Log.AddRecord(e);
                 return list;
             }
         }
@@ -126,7 +126,7 @@ namespace BLL
             }
             catch (Exception e)
             {
-                Log.AddRecord(e.Message);
+                Log.AddRecord(e);
                 totalRecord = 0;
                 return list;
             }

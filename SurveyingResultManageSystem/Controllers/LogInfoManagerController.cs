@@ -70,7 +70,7 @@ namespace SurveyingResultManageSystem.Controllers
             pageInfo.totalPage = (int)Math.Ceiling(res);
             return View(pageInfo);
         }
-        [Authentication]
+        [AuthorityAuthentication]
         public ActionResult LogInfoManager(int? pageIndex, string keywords)
         {
             string operation = LogOperations.UploadFile() + LogOperations.DownloadFile() + LogOperations.DeleteFile();
