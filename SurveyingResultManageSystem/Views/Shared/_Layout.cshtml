@@ -24,7 +24,7 @@
         <div id="div_message">
             <div id="div_message_left">
                 <img src="~/Sources/Images/manager_small.png" />
-                <p>你好，@Request.Cookies["username"].Value！</p>
+                <p id="p-username"></p>
                 <a href="/Home/Logout">注销</a>
             </div>
             <div id="div_message_right">
@@ -71,19 +71,40 @@
     $('#J_scroll').width($('#J_scroll').width() - $('#J_scroll li:first-child').innerWidth());
     $('#J_scroll').addClass('theanimation');
     $("#more-btn").removeAttr("disabled"); //移除disabled属性
-    var count = @ViewBag.Data.Count;
+    //获取消息条数
+    var count = $("#J_scroll").children.length;
     if (count == 0)
         count = 2;
     count *= 10;
     var speed = count + 's';
     document.getElementById("J_scroll").style.WebkitAnimationDuration = speed;
     //查看用户权限，分配功能
-    $.get("/UserInfoManager/GetUserLevels", function (data, status) {
-        if (status == "success") {
+    $.get("/UserInfoManager/GetUserLevels", function (data, status)
+    {
+        if (status == "success")
+        {
             if (data == 0) {
                 $(".li-user").css("display", "none");
                 $("#li-setpwd").append("<li> <a href='/UserInfoManager/UserManager'>账户管理</a></li ><li><a href='/LogInfoManager/LogInfoManager'>日志管理</a></li>")
             }
         }
     });
+    //获取用户名
+    $.get("/Home/GetUserName", function (data, status) {
+        if (status == "success")
+        {
+            if (data != null)
+            {
+                $("#p-username").html("你好，" + data + "!");
+            }
+            else
+            {
+                window.location.href("/Home/Login");
+            }
+        }
+        else
+        {
+            window.location.href("/Home/Login");
+        }
+    })
 </script>

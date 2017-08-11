@@ -85,5 +85,19 @@ namespace SurveyingResultManageSystem.Controllers
         {
             return View();
         }
+        [HttpGet]
+        public string GetUserName()
+        {
+            try
+            {
+                string username = System.Web.HttpContext.Current.Request.Cookies["username"].Value;
+                return username;
+            }
+            catch(Exception e)
+            {
+                Log.AddRecord(e);
+                return null;
+            }
+        }
     }
 }
