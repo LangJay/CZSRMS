@@ -79,6 +79,9 @@ namespace SurveyingResultManageSystem.Controllers
         [Authentication]
         public ActionResult MapManager()
         {
+            string operation = LogOperations.UploadFile() + LogOperations.DownloadFile() + LogOperations.DeleteFile();
+            //获取消息滚动条数据，取当天的数据
+            ViewBag.Data = logInfoService.FindLogListAndFirst(l => l.Time.Contains(DateTime.Now.ToString("d")) && operation.Contains(l.Operation));
             return View();
         }
         public ActionResult Error()

@@ -1,20 +1,32 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<link href="~/Content/style/FileManager.css" rel="stylesheet" />
+<link href="~/Content/style/MapManager.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="http://localhost:8080/arcgis_js_api/library/3.21/3.21/esri/css/esri.css" />
+<script type="text/javascript" src="http://localhost:8080/arcgis_js_api/library/3.21/3.21/init.js"></script>
 <div id="div_menu">
     <ul id="div_menu_ul">
         <li id="li_file">
-            <h4><span id="span_file"></span>文件管理</h4>
-            <div class="li_div">
+            <h4 id="h-file"><span id="span_file"></span>文件浏览</h4>
+            <div id="card-file" class="card">
+                <span class="throbber-loader">
+                    Loading...
+                </span>
+            </div>
+            <div id="divlist-file" class="li_div">
                 <a>第一名</a>
                 <a>第二名</a>
                 <a>第三名</a>
             </div>
         </li>
         <li id="li_map">
-            <h4><span id="span_map"></span>地图管理</h4>
-            <div class="li_div">
+            <h4 id="h-map"><span id="span_map"></span>地图管理</h4>
+            <div id="card-map" class="card">
+                <span class="throbber-loader">
+                    Loading...
+                </span>
+            </div>
+            <div id="divlist-map" class="li_div">
                 <a>第一名</a>
                 <a>第二名</a>
                 <a>第三名</a>
@@ -22,3 +34,47 @@
         </li>
     </ul>
 </div>
+<div id="mapDiv"></div>
+<script>
+    //点击文件管理标题
+    $("#h-file").click(function () {
+        //加载动画
+        var divlist = $("#divlist-file");
+        if (divlist.css("display") == "none") {
+            $("#card-file").css("display", "block");
+            setTimeout(function () {
+                $("#card-file").css("display", "none");
+                divlist.css("display", "block");
+            }, 5000);
+            window.location.href("/Home/FileManager");
+        }
+        else {
+            divlist.css("display", "none");
+        }
+    });
+    //点击地图管理标题
+    $("#h-map").click(function () {
+        //加载地图
+        window.location.href("/Home/MapManager");
+        //加载动画
+        //var divlist = $("#divlist-map");
+        //if (divlist.css("display") == "none") {
+        //    $("#card-map").css("display", "block");
+        //    setTimeout(function () {
+        //        $("#card-map").css("display", "none");
+        //        divlist.css("display", "block");
+        //    }, 5000);
+        //}
+        //else {
+        //    divlist.css("display", "none");
+        //}
+    });
+    require(["esri/map", "esri/layers/ArcGISDynamicMapServiceLayer", "dojo/domReady!"],
+        function (Map, ArcGISDynamicMapServiceLayer) {
+            var map = new Map("mapDiv");
+            //利用url创建一个动态地图服务对象
+            var layer = new ArcGISDynamicMapServiceLayer("http://localhost:6080/arcgis/rest/services/1/MapServer");
+            //将地图服务对象添加到地图容器中
+            map.addLayer(layer);
+        });
+</script>
