@@ -73,7 +73,8 @@ namespace SurveyingResultManageSystem.Controllers
         {
             string operation = LogOperations.UploadFile() + LogOperations.DownloadFile() + LogOperations.DeleteFile();
             //获取消息滚动条数据，取当天的数据
-            ViewBag.Data = logInfoService.FindLogListAndFirst(l => l.Time.Contains(DateTime.Now.ToString("d")) && operation.Contains(l.Operation));
+            string date = DateTime.Now.ToString("d");
+            ViewBag.Data = logInfoService.FindLogListAndFirst(l => l.Time.Contains(date) && operation.Contains(l.Operation));
             return View();
         }
         [Authentication]
@@ -81,7 +82,8 @@ namespace SurveyingResultManageSystem.Controllers
         {
             string operation = LogOperations.UploadFile() + LogOperations.DownloadFile() + LogOperations.DeleteFile();
             //获取消息滚动条数据，取当天的数据
-            ViewBag.Data = logInfoService.FindLogListAndFirst(l => l.Time.Contains(DateTime.Now.ToString("d")) && operation.Contains(l.Operation));
+            string date = DateTime.Now.ToString("d");
+            ViewBag.Data = logInfoService.FindLogListAndFirst(l => l.Time.Contains(date) && operation.Contains(l.Operation));
             return View();
         }
         public ActionResult Error()

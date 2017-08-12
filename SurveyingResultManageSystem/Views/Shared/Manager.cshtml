@@ -7,14 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>郴州市测绘成果管理系统</title>
     @Styles.Render("~/Content/css")
-    @Styles.Render("~/Content/style/Layout.css")
-    @Scripts.Render("~/bundles/jquery")
+    <link href="~/Content/style/Layout.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-2.2.4.min.js"></script>
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
     <div id="div_header">
         <div id="div_title">
-            <img style="margin:10px;display:inline" src="~/Sources/Images/地球.gif"/>
+            <img style="margin:10px;display:inline" src="~/Sources/Images/地球.gif" />
             <h1 style="color:white;display:inline">郴州市测绘成果管理系统</h1>
             <ul id="div_title_ul">
                 <li id="li-setpwd"><a href="/SetPasswords/Index">设置密码</a></li>
@@ -52,10 +52,6 @@
     </div>
     <div class="container body-content" style="margin:2px 0px 0px 0px;padding:0px;height:80%;max-width:100%;">
         @RenderBody()
-        @*<hr  />
-            <footer style="display:none">
-                <p>&copy; @DateTime.Now.Year - 湖南省第一测绘院</p>
-            </footer>*@
     </div>
 
     @Scripts.Render("~/bundles/jquery")

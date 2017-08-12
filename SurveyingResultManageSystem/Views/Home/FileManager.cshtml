@@ -1,10 +1,9 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<link href="~/Content/style/FileManager.css" rel="stylesheet" />
+@Styles.Render("~/Content/style/FileManager.css")
 <link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
 <link href="~/Content/themes/icon.css" rel="stylesheet" />
-<script src="~/Scripts/jquery-2.2.4.min.js"></script>
 <script src="~/Scripts/jquery.easyui.min.js"></script>
 <div id="div_menu">
     <ul id="div_menu_ul">
@@ -356,7 +355,7 @@
                 $("#card-file").css("display", "none");
                 divlist.css("display", "block");
             }, 5000);
-            window.location.href("/Home/FileManager");
+            window.location.assign("/Home/FileManager");
         }
         else {
             divlist.css("display", "none");
@@ -365,7 +364,7 @@
     //点击地图管理标题
     $("#h-map").click(function () {
         //加载地图
-        window.location.href("/Home/MapManager");
+        window.location.assign("/Home/MapManager");
         //加载动画
         //var divlist = $("#divlist-map");
         //if (divlist.css("display") == "none") {

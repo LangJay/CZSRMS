@@ -598,6 +598,7 @@
     <Content Include="Views\LogInfoManager\LogInfoManager.cshtml" />
     <Content Include="Views\UserInfoManager\UserManager.cshtml" />
     <Content Include="Views\SetPasswords\Index.cshtml" />
+    <Content Include="Views\Shared\Manager.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Droplist\" />

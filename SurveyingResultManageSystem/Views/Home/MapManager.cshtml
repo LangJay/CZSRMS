@@ -1,7 +1,7 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<link href="~/Content/style/MapManager.css" rel="stylesheet" />
+@Styles.Render("~/Content/style/MapManager.css")
 <link rel="stylesheet" type="text/css" href="http://localhost:8080/arcgis_js_api/library/3.21/3.21/esri/css/esri.css" />
 <script type="text/javascript" src="http://localhost:8080/arcgis_js_api/library/3.21/3.21/init.js"></script>
 <div id="div_menu">
@@ -46,7 +46,7 @@
                 $("#card-file").css("display", "none");
                 divlist.css("display", "block");
             }, 5000);
-            window.location.href("/Home/FileManager");
+            window.location.assign("/Home/FileManager");
         }
         else {
             divlist.css("display", "none");
@@ -55,7 +55,7 @@
     //点击地图管理标题
     $("#h-map").click(function () {
         //加载地图
-        window.location.href("/Home/MapManager");
+        window.location.assign("/Home/MapManager");
         //加载动画
         //var divlist = $("#divlist-map");
         //if (divlist.css("display") == "none") {
