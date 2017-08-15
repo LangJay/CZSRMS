@@ -1,0 +1,168 @@
+﻿#div-side {
+    width: 60%;
+    left: 20%;
+    height: 100%;
+    position:absolute;
+}
+#div-category {
+    border: 1px solid #cdcdcd;
+    padding: 8px 7px 4px 7px;
+    width: 100%;
+    text-align: left;
+    display:inline-block;
+}
+#div-addcategory 
+{
+    text-align:left;
+}
+#div-category-left {
+    width: 50%;
+    float: left;
+}
+#div-category-right {
+    width: 50%;
+    float: right;
+}
+#all-category {
+    text-align:left;
+    border: 1px solid #cdcdcd;
+    padding: 8px 5px 8px 5px;
+    margin-top:10px;
+}
+#keywords {
+    border: 1px solid #cdcdcd;
+    padding: 8px 5px 8px 5px;
+}
+.p {
+    font-size: 12px;
+    color: grey;
+}
+.button {
+    background-color: #0972A7;
+    border: none;
+    outline: none;
+    color: white;
+    font-size:14px;
+    padding:5px;
+}
+.button:active {
+    background-color: #5090C7;
+}
+.edit {
+    display: inline-block;
+    margin: 10px 8px 10px 8px;
+    position: relative;
+}
+.edit .title:hover 
+{
+    background-color:#0972A7;
+    cursor:pointer;
+    color:white;
+}
+.edit .title{
+    text-align: center;
+    height: 24px;
+    line-height: 24px;
+    font-size: 12px;
+    color: #222;
+    background: #fff;
+    border: 1px dashed #cdcdcd;
+    padding: 0px 8px 0px 8px;
+}
+.sub {
+    display: inline-block;
+    margin: 10px 8px 10px 8px;
+    position: relative;
+}
+.sub-title,.delete-title{
+    text-align: center;
+    height: 24px;
+    line-height: 24px;
+    font-size: 12px;
+    color: #222;
+    background: #fff;
+    border: 1px dashed #cdcdcd;
+    padding: 0px 8px 0px 8px;
+    display: inline-block;
+}
+.sub-icon,.delete-icon{
+    position: absolute;
+    top: -10px;
+    right: -5px;
+    width: 15px;
+    height: 15px;
+    overflow: hidden;
+    background: url('../../Sources/Images/card_setting_c0307230.png') no-repeat -94px -25px;
+}
+.sub-title:hover+.sub-icon {
+    background: url('../../Sources/Images/card_setting_c0307230.png') no-repeat -74px -25px;
+    cursor:pointer;
+}
+.edit .title:hover + .delete-icon {
+    background: url('../../Sources/Images/card_setting_c0307230.png') no-repeat -74px -25px;
+    cursor: pointer;
+}
+
+.p-add{
+    margin-bottom:0px;
+}
+.title {
+    text-align: center;
+    height: 24px;
+    line-height: 24px;
+    font-size: 12px;
+    color: #222;
+    background: #fff;
+    border: 1px dashed #cdcdcd;
+    padding: 0px 8px 0px 8px;
+}
+.add .title {
+    padding: 0px 8px 0px 20px;
+}
+.delete,.add{
+    display: inline-block;
+    margin: 10px 8px 10px 8px;
+    position: relative;
+}
+.delete .icon {
+    position: absolute;
+    top: -6px;
+    left: -6px;
+    width: 15px;
+    height: 15px;
+    overflow: hidden;
+    background: url('../../Sources/Images/card_setting_c0307230.png') no-repeat -94px -25px;
+}
+.add .icon {
+    position: absolute;
+    top: 9px;
+    left: 9px;
+    width: 8px;
+    height: 8px;
+    overflow: hidden;
+    background: url('../../Sources/Images/card_setting_c0307230.png') no-repeat -113px -28px;
+}
+.delete .icon:hover,.delete .title:hover + .icon{
+    background: url('../../Sources/Images/card_setting_c0307230.png') no-repeat -75px -25px;
+    cursor: pointer;
+}
+.delete .title:hover, .icon:hover + .title,.sub-title:hover {
+    border: 1px dashed #0972A7;
+    cursor: pointer;
+}
+.add .title:hover + .icon {
+    background: url('../../Sources/Images/card_setting_c0307230.png') no-repeat -129px -28px;
+    cursor: pointer;
+}
+.add .title:hover {
+    background-color: #0972A7;
+    color:white;
+    cursor: pointer;
+}
+
+.red-border{
+    border:1px solid red;
+}
+.displaynone{
+    display:none;
+}

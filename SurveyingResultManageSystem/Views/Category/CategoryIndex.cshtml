@@ -1,0 +1,216 @@
+﻿@model Model.Category 
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@Styles.Render("~/Content/style/CategoryIndex.css")
+<div id="div-side">
+    <div id="div-category">
+        <div id="div-category-left">
+            <p class="p">已选择分类</p>
+            <div id="div-category-selected">
+                @foreach (var item in ViewBag.Selected)
+                {
+                    <div class="delete" onclick="removes(this)">
+                        <div class="title">@item.kind</div>
+                        <div class="icon"></div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div id="div-category-right">
+            <p class="p">未选择分类</p>
+            <div id="div-category-noselected">
+                @foreach (var item in ViewBag.NoSelected)
+                {
+                    <div class="add" onclick="add(this)">
+                        <div class="title">@item.kind</div>
+                        <div class="icon"></div>
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+    <div id="div-menu">
+        <input class="button" type="button" onclick="addCategory()" value="添加分类" />
+        <input class="button" type="button" onclick="editCategory()" value="编辑分类" />
+        <input class="button" type="button" onclick="deleteCategory()" value="删除分类" />
+    </div>
+    <div id="all-category" class="displaynone">
+        @foreach (var item in ViewBag.All)
+        {
+            <div class="edit" onclick="edit(this)">
+                <div class="title">@item.kind</div>
+                <div class="edit-icon"></div>
+            </div>
+        }
+    </div>
+    <div id="div-addcategory">
+        <p class="p-add">分类名称：</p>
+        <input id="input-typename" type="text" />
+        <p class="p-add">子类名称:</p>
+        <input id="input-keywords" type="text" placeholder="请填写关键字..." />
+        <input class="button" id="input-keywords-submit" onclick="addkeywords()" value="添加" type="submit" />
+        <div id="keywords">
+        </div>
+       
+        <br />
+        <input class="button" id="input-add-submit" onclick="submitAdd()" value="提    交" type="submit" />
+        <input class="button displaynone" id="input-edit-submit" onclick="submitEdit()" value="保    存" type="submit" />
+    </div>
+</div>
+<script>
+    //添加分类按钮
+    function addCategory()
+    {
+        $("#all-category").addClass("displaynone");
+        $("#input-edit-submit").addClass("displaynone");
+        $("#div-addcategory").removeClass("displaynone");
+        $("#input-add-submit").removeClass("displaynone");
+    }
+    //编辑分类按钮
+    function editCategory()
+    {
+        $("#all-category").removeClass("displaynone");
+        $("#input-add-submit").addClass("displaynone");
+        $("#div-addcategory").removeClass("displaynone");
+        $("#input-edit-submit").removeClass("displaynone");
+
+        //框内增加删除图标
+        $(".edit-icon").removeClass("delete-icon");
+    }
+    //删除分类按钮
+    function deleteCategory()
+    {
+        $("#all-category").removeClass("displaynone");
+        $("#input-add-submit").addClass("displaynone");
+        $("#div-addcategory").addClass("displaynone");
+        $("#input-edit-submit").addClass("displaynone");
+        //框内增加删除图标
+        $(".edit-icon").addClass("delete-icon");
+    }
+    function removes(e)
+    {
+        e.classList.remove("delete");
+        e.classList.add("add");
+        e.onclick = function () {
+            add(e);
+        };
+        e.remove();
+        $("#div-category-noselected").append(e);
+    }
+    function add(e)
+    {
+        e.classList.remove("add");
+        e.classList.add("delete");
+        e.onclick = function () {
+            removes(e);
+        };
+        e.remove;
+        $("#div-category-selected").append(e);
+    }
+    function deletes(e)
+    {
+        e.remove();
+    }
+    function addkeywords()
+    {
+        var obj = $("#input-keywords");
+
+        //判断子类不能多于50
+        var nodes = $("#keywords").children(".sub").length;
+        if (nodes > 20)
+        {
+            alert("请不要添加过多子类！");
+            return;
+        }
+        var keywords = obj.val();
+        if (keywords == "")
+            obj.addClass("red-border");
+        else
+        {
+            if (obj.hasClass("red-border"));
+                obj.removeClass("red-border");
+            var text = "<div class='sub' onclick='deletes(this)'> <div class='sub-title' >" + keywords + "</div> <div class='sub-icon'></div></div >"
+            $("#keywords").append(text);
+        }
+    }
+    function submitAdd()
+    {
+        //分类名称,名称与之前不能相同
+        var name = $("#input-typename").val();
+        if (name == "") 
+        {
+            $("#input-typename").addClass("red-border");
+            return;
+        }
+        else
+        {
+            if ($("#input-typename").hasClass("red-border"))
+                $("#input-typename").removeClass("red-border");
+        }
+        //关键字，子类
+        var nodes = $("#keywords").children(".sub").length;
+        if (nodes == 0)
+        {
+            $("#keywords").addClass("red-border");
+            return;
+        }
+        else
+        {
+            if ($("#keywords").hasClass("red-border"))
+                $("#keywords").removeClass("red-border");
+        }
+        //所有子类名
+        var list = [];
+        var jquerys = $("#keywords").find(".sub-title");
+        for (var i = 0; i < jquerys.length; i++)
+        {
+            var a = jquerys[i];
+            var title = a.innerText;
+            list.push(title);
+        }
+      
+        //上传数据
+        var category = 
+        {
+            kind: "",
+            select: "是",
+            nodes:""
+
+            }
+        category.kind = name;
+        category.nodes = list;
+        $.ajax({
+            url: "/Category/AddCategory",
+            type: "post",
+            dataType: "text",
+            async: false,
+            data: JSON.stringify(category),
+            success: function (data) {
+                if (data == "存在")
+                {
+                    alert("已经存在同名分类");
+                }
+                else
+                {
+                    //增加类名
+                    var text = "<div class='delete' onclick='removes(this)'><div class='title'>" + name + "</div><div class='icon'></div></div>";
+                    $("#div-category-selected").append(text);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                if (textStatus == 200)
+                {
+                    //增加类名
+                    var text = "<div class='delete' onclick='removes(this)'><div class='title'>" + name + "</div><div class='icon'></div></div>";
+                    $("#div-category-selected").append(text);
+                }
+                else
+                {
+                    alert("添加失败！");
+                }
+            }
+        });
+    }
+</script>

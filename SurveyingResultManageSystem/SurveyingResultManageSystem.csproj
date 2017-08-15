@@ -151,6 +151,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\DroplistController.cs" />
     <Compile Include="Controllers\FileManagerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -164,9 +165,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\FileCategory.xml" />
     <Content Include="App_Data\Log.txt" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\style\CategoryIndex.css" />
     <Content Include="Content\style\FileManager.css" />
     <Content Include="Content\style\Layout.css" />
     <Content Include="Content\style\Login.css" />
@@ -507,6 +510,7 @@
     <Content Include="Content\themes\metro\validatebox.css" />
     <Content Include="Content\themes\metro\window.css" />
     <Content Include="Content\themes\mobile.css" />
+    <Content Include="Data\FileCategory.xml" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -566,6 +570,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Sources\Images\card_setting_c0307230.png" />
     <Content Include="Sources\Images\chenzhou.png" />
     <Content Include="Sources\Images\file.png" />
     <Content Include="Sources\Images\login_bg.png" />
@@ -599,6 +604,7 @@
     <Content Include="Views\UserInfoManager\UserManager.cshtml" />
     <Content Include="Views\SetPasswords\Index.cshtml" />
     <Content Include="Views\Shared\Manager.cshtml" />
+    <Content Include="Views\Category\CategoryIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Droplist\" />
