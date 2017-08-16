@@ -63,6 +63,8 @@
     //添加分类按钮
     function addCategory()
     {
+        $("#keywords").empty();
+        $("#input-typename").val("");
         $("#all-category").addClass("displaynone");
         $("#input-edit-submit").addClass("displaynone");
         $("#div-addcategory").removeClass("displaynone");
@@ -89,30 +91,83 @@
         //框内增加删除图标
         $(".edit-icon").addClass("delete-icon");
     }
+    //取消选择分类
     function removes(e)
     {
-        e.classList.remove("delete");
-        e.classList.add("add");
-        e.onclick = function () {
-            add(e);
-        };
-        e.remove();
-        $("#div-category-noselected").append(e);
+        //更新数据
+        var k = e.children[0].innerText;
+        $.ajax({
+            url: "/Category/EditCategorySelect",
+            type: "get",
+            dataType: "text",
+            async: false,
+            data: { select:"否",kind: k },
+            success: function (data) {
+                e.classList.remove("delete");
+                e.classList.add("add");
+                e.onclick = function () {
+                    add(e);
+                };
+                e.remove();
+                $("#div-category-noselected").append(e);
+                //window.location.reload();
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                if (textStatus == 200) {
+                    e.classList.remove("delete");
+                    e.classList.add("add");
+                    e.onclick = function () {
+                        add(e);
+                    };
+                    e.remove();
+                    $("#div-category-noselected").append(e);
+                    window.location.reload();
+                }
+            }
+        });
     }
+    //选择分类
     function add(e)
     {
-        e.classList.remove("add");
-        e.classList.add("delete");
-        e.onclick = function () {
-            removes(e);
-        };
-        e.remove;
-        $("#div-category-selected").append(e);
+        //更新数据
+        var k = e.children[0].innerText;
+        $.ajax({
+            url: "/Category/EditCategorySelect",
+            type: "get",
+            dataType: "text",
+            async: false,
+            data: { select: "是", kind: k },
+            success: function (data) {
+                e.classList.remove("add");
+                e.classList.add("delete");
+                e.onclick = function () {
+                    removes(e);
+                };
+                e.remove;
+                $("#div-category-selected").append(e);
+               // window.location.reload();
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                if (textStatus == 200) {
+
+                    e.classList.remove("add");
+                    e.classList.add("delete");
+                    e.onclick = function () {
+                        removes(e);
+                    };
+                    e.remove;
+                    $("#div-category-selected").append(e);
+                    window.location.reload();
+                }
+            }
+        });
     }
+    //删除关键字
     function deletes(e)
     {
         e.remove();
     }
+    //添加关键字
     function addkeywords()
     {
         var obj = $("#input-keywords");
@@ -135,6 +190,7 @@
             $("#keywords").append(text);
         }
     }
+    //添加分类
     function submitAdd()
     {
         //分类名称,名称与之前不能相同
@@ -197,6 +253,7 @@
                     //增加类名
                     var text = "<div class='delete' onclick='removes(this)'><div class='title'>" + name + "</div><div class='icon'></div></div>";
                     $("#div-category-selected").append(text);
+                    window.location.reload();
                 }
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -205,6 +262,7 @@
                     //增加类名
                     var text = "<div class='delete' onclick='removes(this)'><div class='title'>" + name + "</div><div class='icon'></div></div>";
                     $("#div-category-selected").append(text);
+                    window.location.reload();
                 }
                 else
                 {
@@ -212,5 +270,110 @@
                 }
             }
         });
+    }
+    var kind;
+    //编辑、删除分类
+    function edit(e)
+    {
+        var k = e.children[0].innerText;
+        //什么条件下
+        var a = $("#div-addcategory").hasClass("displaynone");
+        if (!a)//编辑
+        {
+            $.ajax({
+                url: "/Category/GetCategory",
+                type: "get",
+                dataType: "json",
+                async: false,
+                data: { kind: k },
+                success: function (data)
+                {
+                    kind = k;
+                    $("#keywords").empty();
+                    if (data != null)
+                    {
+                        $("#input-typename").val(data.kind);
+                        for (var i = 0; i < data.nodes.length; i++)
+                        {
+                            var text = "<div class='sub' onclick='deletes(this)'> <div class='sub-title' >" + data.nodes[i] + "</div> <div class='sub-icon'></div></div >"
+                            $("#keywords").append(text);
+                        }
+                    }
+                },
+            })
+        }
+        else//删除
+        {
+            $.ajax({
+                url: "/Category/DeleteCategory",
+                type: "get",
+                dataType: "text",
+                async: false,
+                data: { kind: k },
+                success: function (data) {
+                    e.remove();
+                    window.location.reload();
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    if (textStatus == 200)
+                    {
+                        e.remove();
+                        window.location.reload();
+                    }
+                }
+            });
+        }
+    }
+    //保存分类编辑
+    function submitEdit()
+    {
+        var name = $("#input-typename").val();
+        if (kind != undefined)
+        {
+            //所有子类名
+            var list = [];
+            var jquerys = $("#keywords").find(".sub-title");
+            for (var i = 0; i < jquerys.length; i++) {
+                var a = jquerys[i];
+                var title = a.innerText;
+                list.push(title);
+            }
+            //post 数据
+            var category =
+                {
+                    kind: "",
+                    select: "",
+                    nodes: ""
+                }
+            category.kind = kind + "^" + name;
+            category.nodes = list;
+            $.ajax({
+                url: "/Category/EditCategory",
+                type: "post",
+                dataType: "text",
+                async: false,
+                data: JSON.stringify(category),
+                success: function (data) {
+                    if (data == "编辑成功！")
+                    {
+                        window.location.reload();
+                    }
+                    else
+                    {
+                        alert("保存失败！");
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    if (textStatus != "200")
+                    {
+                        alert("保存失败！");
+                    }
+                    else
+                    {
+                        window.location.reload();
+                    }
+                }
+            });
+        }
     }
 </script>
