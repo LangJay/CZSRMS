@@ -101,6 +101,7 @@ namespace SurveyingResultManageSystem.Controllers
             catch(Exception e)
             {
                 Log.AddRecord(e);
+
                 return null;
             }
         }

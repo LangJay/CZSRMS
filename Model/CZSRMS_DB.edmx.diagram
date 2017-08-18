@@ -4,14 +4,14 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="8c7995344f1f4424a7edb75843fca700" Name="Diagram1">
-        <EntityTypeShape EntityType="CZSRMS_DBModel.tb_FileInfo" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CZSRMS_DBModel.tb_LogInfo" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CZSRMS_DBModel.tb_UserInfo" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CZSRMS_DBModel.tb_CoodinateSystem" Width="1.5" PointX="4.75" PointY="0.75" />
-        <EntityTypeShape EntityType="CZSRMS_DBModel.tb_FileType" Width="1.5" PointX="6.75" PointY="0.75" />
-        <EntityTypeShape EntityType="CZSRMS_DBModel.tb_ProjectType" Width="1.5" PointX="10.625" PointY="0.625" />
-        <EntityTypeShape EntityType="CZSRMS_DBModel.tb_Unit" Width="1.5" PointX="8.75" PointY="0.75" />
+      <Diagram DiagramId="ec18784d11df4d76ac9958fa8e2d06ee" Name="Diagram1">
+        <EntityTypeShape EntityType="Model.tb_CoodinateSystem" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.tb_FileInfo" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.tb_FileType" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.tb_LogInfo" Width="1.5" PointX="4.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.tb_ProjectType" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.tb_Unit" Width="1.5" PointX="6.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.tb_UserInfo" Width="1.5" PointX="4.75" PointY="6.75" IsExpanded="true" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
