@@ -38,7 +38,9 @@ ul li {
 
 .li_div {
     width: 100%;
-    display: none;
+}
+#divlist-file{
+    display:none;
 }
 #li_map {
     margin-top: 1px;

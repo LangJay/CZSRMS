@@ -24,21 +24,22 @@
 ul li {
     list-style-type: none;
 }
-
-    ul li h4 {
-        color: white;
-        margin: 0px;
-        padding: 15px 0px 15px 0px;
-        background-color: #0972A7;
-        width: 100%;
-        display: inline-flex;
-        text-align: center;
-        padding-top: 15px;
-    }
-
+ul li h4 {
+    color: white;
+    margin: 0px;
+    padding: 15px 0px 15px 0px;
+    background-color: #0972A7;
+    width: 100%;
+    display: inline-flex;
+    text-align: center;
+    padding-top: 15px;
+}
+#divlist-map
+{
+    display:none;
+}
 .li_div {
     width: 100%;
-    display:none;
 }
 #li_map {
     margin-top: 1px;

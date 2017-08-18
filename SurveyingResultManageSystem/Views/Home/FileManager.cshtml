@@ -9,7 +9,7 @@
     <ul id="div_menu_ul">
         <li id="li_file">
             <h4 id="h-file"><span id="span_file"></span>文件浏览</h4>
-            <div id="card-file" class="card" >
+            <div id="card-file" class="card">
                 <span class="throbber-loader">
                     Loading...
                 </span>
@@ -347,13 +347,13 @@
     $("#h-file").click(function () {
         //加载动画
         var divlist = $("#divlist-file");
-        if (divlist.css("display") == "none") {
+        var d = divlist.css("display");
+        if (d == "none") {
             $("#card-file").css("display", "block");
             setTimeout(function () {
+                $("#divlist-file").css("display", "block");
                 $("#card-file").css("display", "none");
-                divlist.css("display", "block");
-            }, 5000);
-            window.location.assign("/Home/FileManager");
+            }, 1000);
         }
         else {
             divlist.css("display", "none");

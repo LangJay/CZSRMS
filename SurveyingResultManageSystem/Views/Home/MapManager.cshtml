@@ -42,10 +42,6 @@
         var divlist = $("#divlist-file");
         if (divlist.css("display") == "none") {
             $("#card-file").css("display", "block");
-            setTimeout(function () {
-                $("#card-file").css("display", "none");
-                divlist.css("display", "block");
-            }, 5000);
             window.location.assign("/Home/FileManager");
         }
         else {
@@ -54,20 +50,18 @@
     });
     //点击地图管理标题
     $("#h-map").click(function () {
-        //加载地图
-        window.location.assign("/Home/MapManager");
         //加载动画
-        //var divlist = $("#divlist-map");
-        //if (divlist.css("display") == "none") {
-        //    $("#card-map").css("display", "block");
-        //    setTimeout(function () {
-        //        $("#card-map").css("display", "none");
-        //        divlist.css("display", "block");
-        //    }, 5000);
-        //}
-        //else {
-        //    divlist.css("display", "none");
-        //}
+        var divlist = $("#divlist-map");
+        if (divlist.css("display") == "none") {
+            $("#card-map").css("display", "block");
+            setTimeout(function () {
+                $("#card-map").css("display", "none");
+                divlist.css("display", "block");
+            }, 5000);
+        }
+        else {
+            divlist.css("display", "none");
+        }
     });
     require(["esri/map", "esri/layers/ArcGISDynamicMapServiceLayer", "dojo/domReady!"],
         function (Map, ArcGISDynamicMapServiceLayer) {
