@@ -15,7 +15,8 @@
                 </span>
             </div>
             <div id="divlist-file" class="li_div">
-                <a>文件所属单位</a>
+                <ul id="li-div-ul">
+                </ul>
             </div>
         </li>
         <li id="li_map">
@@ -258,6 +259,25 @@
 </div>
 <script src="~/Scripts/jquery-2.2.4.min.js"></script>
 <script type="text/javascript">
+    $(document).ready(function(){
+        //加载分类
+        $.ajax({
+            url: "/FileManager/GetSelectedCategory",
+            type: "get",
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var text = "<li><a class='classheader' onclick= 'clickheader(this)'>" + data[i].kind + "</a><ul class='subclass' style='display:none'><li>";
+                    for (var j = 0; j < data[i].nodes.length; j++) {
+                        text += "<a>" + data[i].nodes[j] + "</a>";
+                    }
+                    text += "</li></ul ></li >";
+                    $("#li-div-ul").append(text);
+                }
+            }
+        });
+    });
     function uploadFile() {
         var dialogwdith = $(window).width()+$(".modal-dialog").width();
         $(".modal-content").css({
@@ -349,11 +369,29 @@
         var divlist = $("#divlist-file");
         var d = divlist.css("display");
         if (d == "none") {
+            $("#li-div-ul").html("");
             $("#card-file").css("display", "block");
-            setTimeout(function () {
-                $("#divlist-file").css("display", "block");
-                $("#card-file").css("display", "none");
-            }, 1000);
+            //加载分类
+            $.ajax({
+                url: "/FileManager/GetSelectedCategory",
+                type: "get",
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    for (var i = 0; i < data.length; i++)
+                    {
+                        var text = "<li><a class='classheader' onclick= 'clickheader(this)'>" + data[i].kind + "</a><ul class='subclass' style='display:none'><li>";
+                        for (var j = 0; j < data[i].nodes.length; j++)
+                        {
+                            text += "<a>" + data[i].nodes[j] + "</a>";
+                        }
+                        text += "</li></ul ></li >";
+                        $("#li-div-ul").append(text);
+                    }
+                }
+            });
+            $("#divlist-file").css("display", "block");
+            $("#card-file").css("display", "none");
         }
         else {
             divlist.css("display", "none");
@@ -376,4 +414,20 @@
         //    divlist.css("display", "none");
         //}
     });
+    //点击父分类
+    function clickheader(e)
+    {
+        var next = $(e).next();
+        var display = next.css("display");
+        if (display == "none")
+        {
+           // $(e).css("background-color", "grey");
+            next.css("display", "block");
+        }
+        else
+        {
+            //$(e).css("background-color", "white");
+            next.css("display", "none");
+        }
+    }
 </script>
