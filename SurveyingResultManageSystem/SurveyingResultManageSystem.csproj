@@ -528,7 +528,6 @@
     <Content Include="Scripts\jquery-2.2.4.min.js" />
     <Content Include="Scripts\jquery-2.2.4.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery.easyui-1.4.5.js" />
     <Content Include="Scripts\jquery.easyui-1.4.5.min.js" />
     <Content Include="Scripts\jquery.easyui.min.js" />
     <Content Include="Scripts\jquery.easyui.mobile-1.4.5.js" />

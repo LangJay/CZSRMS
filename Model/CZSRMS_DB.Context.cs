@@ -25,12 +25,12 @@ namespace Model
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<tb_FileInfo> tb_FileInfo { get; set; }
-        public virtual DbSet<tb_LogInfo> tb_LogInfo { get; set; }
-        public virtual DbSet<tb_UserInfo> tb_UserInfo { get; set; }
         public virtual DbSet<tb_CoodinateSystem> tb_CoodinateSystem { get; set; }
+        public virtual DbSet<tb_FileInfo> tb_FileInfo { get; set; }
         public virtual DbSet<tb_FileType> tb_FileType { get; set; }
+        public virtual DbSet<tb_LogInfo> tb_LogInfo { get; set; }
         public virtual DbSet<tb_ProjectType> tb_ProjectType { get; set; }
         public virtual DbSet<tb_Unit> tb_Unit { get; set; }
+        public virtual DbSet<tb_UserInfo> tb_UserInfo { get; set; }
     }
 }

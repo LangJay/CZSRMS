@@ -2,8 +2,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @Styles.Render("~/Content/style/MapManager.css")
-<link rel="stylesheet" type="text/css" href="http://localhost:8080/arcgis_js_api/library/3.21/3.21/esri/css/esri.css" />
-<script type="text/javascript" src="http://localhost:8080/arcgis_js_api/library/3.21/3.21/init.js"></script>
+<link rel="stylesheet" type="text/css" href="http://192.168.0.230:8080/arcgis_js_api/library/3.21/3.21/esri/css/esri.css" />
+<script type="text/javascript" src="http://192.168.0.230:8080/arcgis_js_api/library/3.21/3.21/init.js"></script>
 <div id="div_menu">
     <ul id="div_menu_ul">
         <li id="li_file">
@@ -63,12 +63,18 @@
             divlist.css("display", "none");
         }
     });
-    require(["esri/map", "esri/layers/ArcGISDynamicMapServiceLayer", "dojo/domReady!"],
-        function (Map, ArcGISDynamicMapServiceLayer) {
+    require(["esri/map", "esri/layers/ArcGISDynamicMapServiceLayer","esri/layers/FeatureLayer", "dojo/domReady!"],
+        function (Map, ArcGISDynamicMapServiceLayer,FeatureLayer) {
             var map = new Map("mapDiv");
             //利用url创建一个动态地图服务对象
-            var layer = new ArcGISDynamicMapServiceLayer("http://localhost:6080/arcgis/rest/services/1/MapServer");
+         //   var layer = new ArcGISDynamicMapServiceLayer("http://192.168.0.230:6080/arcgis/rest/services/1/MapServer");
             //将地图服务对象添加到地图容器中
-            map.addLayer(layer);
+			var fatch3 = new FeatureLayer("http://localhost:6080/arcgis/rest/services/test1/FeatureServer/1", {
+           mode: FeatureLayer.MODE_SNAPSHOT,
+           outFields: ["*"]
+           // infoTemplate: new InfoTemplate("排水管点", "<table width='100%' style='table-layout:fixed'><tr><th width='60%' align='left'>图上点号:${MapNo} <br/>地面高程:${SurfH:CustomFormat( currency: 'CAD', places: '2')}米 <br/>井底深:${WDeep:CustomFormat( currency: 'CAD', places: '2')}米 <br/> 管点类型:${Subsid} <br/> 特征:${Feature} <br/></th><th width='40%'><img src='../GTWEB/gximage/P1.jpg' width='100%' height='100'></img></th></tr></table>")
+             });
+
+          map.addLayer(fatch3);
         });
 </script>
