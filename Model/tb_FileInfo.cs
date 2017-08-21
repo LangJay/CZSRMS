@@ -107,7 +107,7 @@ namespace Model
         /// <summary>
         /// 是否公开
         /// </summary>
-        public bool IsPublic { get; set; }
+        public string PublicObjs { get; set; }
         /// <summary>
         /// 上传时间
         /// </summary>

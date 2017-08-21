@@ -10,6 +10,7 @@
     text-decoration: none;
     color: black;
     display: block;
+    border-top: 1px solid white;
 }
 
 .li_div a:hover {
@@ -76,7 +77,6 @@ ul {
 
 #div-filemanager {
     padding-left: 240px;
-    position: relative;
 }
 
 #div_filemanager_pager {
@@ -164,7 +164,7 @@ td, th {
     padding-top: 10px;
 }
 .modal-content{
-    width: 600px;
+    width: 650px;
 }
 .modal-dialog {
     width: auto;
@@ -197,6 +197,17 @@ td, th {
 .subclass a{
     padding: 5px 0px 5px 0px;
     border-bottom:1px solid white;
+}
+textarea {
+    resize: vertical;
+}
+.progress {
+    display:none;
+    z-index:100;
+    position:fixed;
+    top:50%;
+    left:45%;
+    width:10%;
 }
 /*加载动画*/
 .card{

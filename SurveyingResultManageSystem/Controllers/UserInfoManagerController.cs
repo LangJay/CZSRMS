@@ -34,16 +34,18 @@ namespace SurveyingResultManageSystem.Controllers
 
             //-----分页内容---------//
 
-            PageInfo<tb_UserInfo> pageInfo = new PageInfo<tb_UserInfo>();
-            //第几页  
-            pageInfo.pageIndex = pageIndex ?? 1;
+            PageInfo<tb_UserInfo> pageInfo = new PageInfo<tb_UserInfo>()
+            {
+                //第几页  
+                pageIndex = pageIndex ?? 1
+            };
 
             //每页显示多少条  pageInfo.pageSize
 
             //所有的记录 pageInfo.totalRecord;
-            int totalRecord;
             //获取所有的用户 
-            pageInfo.pageList = userInfoService.FindPageList(pageInfo.pageIndex,pageInfo.pageSize,out totalRecord, u => u.UserName != "","Levels",true);
+            int totalRecord;
+            pageInfo.pageList = userInfoService.FindPageList(pageInfo.pageIndex, pageInfo.pageSize, out totalRecord, u => u.UserName != "", "Levels", true);
             if (keywords != null && keywords != "")
             {
                 //把keywords存到cookies中
@@ -83,15 +85,19 @@ namespace SurveyingResultManageSystem.Controllers
             var sr = new StreamReader(Request.InputStream);
             var stream = sr.ReadToEnd();
             sr.Close();
-            tb_LogInfo log = new tb_LogInfo();
-            log.UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value;
-            log.Time = DateTime.Now.ToString();
-            log.FileName = "";
-            log.Operation = LogOperations.CreateUser();
+            tb_LogInfo log = new tb_LogInfo()
+            {
+                UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value,
+                Time = DateTime.Now.ToString(),
+                FileName = "",
+                Operation = LogOperations.CreateUser()
+            };
             try
             {
                 tb_UserInfo obj = JsonConvert.DeserializeObject<tb_UserInfo>(stream) as tb_UserInfo;
-                if(obj == null)
+                //添加一个分类设置的xml文件，以用户名命名
+                bool createxml = MyXML.CreateXML(obj.UserName);
+                if (obj == null || createxml == false)
                 {
                     log.Explain = "创建用户失败!";
                     logInfoService.Add(log);
@@ -110,6 +116,7 @@ namespace SurveyingResultManageSystem.Controllers
                     log.Explain = "创建用户成功!";
                     logInfoService.Add(log);
                     userInfoService.Add(obj);
+
                 }
             }
             catch(Exception e)
@@ -128,16 +135,19 @@ namespace SurveyingResultManageSystem.Controllers
             var sr = new StreamReader(Request.InputStream);
             var username = sr.ReadToEnd();
             sr.Close();
-            tb_LogInfo log = new tb_LogInfo();
-            log.UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value;
-            log.Time = DateTime.Now.ToString();
-            log.FileName = "";
-            log.Operation = LogOperations.DeleteUser();
+            tb_LogInfo log = new tb_LogInfo()
+            {
+                UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value,
+                Time = DateTime.Now.ToString(),
+                FileName = "",
+                Operation = LogOperations.DeleteUser()
+            };
             try
             {
                 if (username != "")
                 {
-                    if(userInfoService.Delete(u => u.UserName == username))
+                    //删除对应的xml文件
+                    if (userInfoService.Delete(u => u.UserName == username) && MyXML.DeleteXML(username))
                     {
                         log.Explain = "删除成功！";
                         logInfoService.Add(log);
@@ -167,11 +177,13 @@ namespace SurveyingResultManageSystem.Controllers
             var sr = new StreamReader(Request.InputStream);
             var stream = sr.ReadToEnd();
             sr.Close();
-            tb_LogInfo log = new tb_LogInfo();
-            log.UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value;
-            log.Time = DateTime.Now.ToString();
-            log.FileName = "";
-            log.Operation = LogOperations.ResetPasswords();
+            tb_LogInfo log = new tb_LogInfo()
+            {
+                UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value,
+                Time = DateTime.Now.ToString(),
+                FileName = "",
+                Operation = LogOperations.ResetPasswords()
+            };
             try
             {
                 tb_UserInfo obj = JsonConvert.DeserializeObject<tb_UserInfo>(stream) as tb_UserInfo;

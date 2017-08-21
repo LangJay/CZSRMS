@@ -12,6 +12,7 @@
 using Model;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,20 +23,56 @@ namespace BLL.Tools
 {
     public static class MyXML
     {
-        private static string rootPath = HttpRuntime.AppDomainAppPath.ToString();//E:\项目\郴州测绘成果管理项目\郴州市测绘成果项目管理系统\SurveyingResultManageSystem\
-        private static string path = rootPath + "/Data/FileCategory.xml";
+        private static string upath = HttpRuntime.AppDomainAppPath.ToString() + "/Data/";
+        private static string GetPath()
+        {
+            string username = HttpContext.Current.Request.Cookies["username"].Value;
+            string userpath = upath + username + ".xml";
+            return userpath;
+        }
+        public static bool CreateXML(string username)
+        {
+            string path = HttpRuntime.AppDomainAppPath.ToString() + "/Data/FileCategory.xml";
+            try
+            {
+                string userpatn = upath + username + ".xml";
+                File.Copy(path, userpatn);
+            }
+            catch (Exception e)
+            {
+                Log.AddRecord(e);
+                return false;
+            }
+            return true;
+        }
+        public static bool DeleteXML(string username)
+        {
+            try
+            {
+                string userpatn = upath + username + ".xml";
+                File.Delete(userpatn);
+            }
+            catch (Exception e)
+            {
+                Log.AddRecord(e);
+                return false;
+            }
+            return true;
+        }
         public static List<Category> GetAllCategory()
         {
             List<Category> list = new List<Category>();
             try
             {
-                XElement xm = XElement.Load(path);
+                XElement xm = XElement.Load(GetPath());
                 IEnumerable<XElement> ie = from ele in xm.Elements("kind") select ele;
                 foreach (XElement x in ie)
                 {
-                    Category category = new Category();
-                    category.kind = x.Attribute("Type").Value;
-                    category.select = x.Attribute("Select").Value;
+                    Category category = new Category()
+                    {
+                        kind = x.Attribute("Type").Value,
+                        select = x.Attribute("Select").Value
+                    };
                     //获取所有子节点
                     IEnumerable<XElement> nodes = x.Elements("node");
                     foreach (XElement n in nodes)
@@ -57,13 +94,15 @@ namespace BLL.Tools
             List<Category> list = new List<Category>();
             try
             {
-                XElement xm = XElement.Load(path);
+                XElement xm = XElement.Load(GetPath());
                 IEnumerable<XElement> ie = from ele in xm.Elements("kind") where ele.Attribute("Select").Value == "是" select ele;
                 foreach (XElement x in ie)
                 {
-                    Category category = new Category();
-                    category.kind = x.Attribute("Type").Value;
-                    category.select = x.Attribute("Select").Value;
+                    Category category = new Category()
+                    {
+                        kind = x.Attribute("Type").Value,
+                        select = x.Attribute("Select").Value
+                    };
                     //获取所有子节点
                     IEnumerable<XElement> nodes = x.Elements("node");
                     foreach (XElement n in nodes)
@@ -85,13 +124,15 @@ namespace BLL.Tools
             List<Category> list = new List<Category>();
             try
             {
-                XElement xm = XElement.Load(path);
+                XElement xm = XElement.Load(GetPath());
                 IEnumerable<XElement> ie = from ele in xm.Elements("kind") where ele.Attribute("Select").Value == "否" select ele;
                 foreach (XElement x in ie)
                 {
-                    Category category = new Category();
-                    category.kind = x.Attribute("Type").Value;
-                    category.select = x.Attribute("Select").Value;
+                    Category category = new Category()
+                    {
+                        kind = x.Attribute("Type").Value,
+                        select = x.Attribute("Select").Value
+                    };
                     //获取所有子节点
                     IEnumerable<XElement> nodes = x.Elements("node");
                     foreach (XElement n in nodes)
@@ -113,7 +154,7 @@ namespace BLL.Tools
         {
             try
             {
-                XElement xm = XElement.Load(path);
+                XElement xm = XElement.Load(GetPath());
                 XElement record = new XElement(
                     new XElement("kind", new XAttribute("Type", category.kind), new XAttribute("Select", "是"))
                 );
@@ -123,7 +164,7 @@ namespace BLL.Tools
                     record.Add(node);
                 }
                 xm.Add(record);
-                xm.Save(path);
+                xm.Save(GetPath());
             }
             catch (Exception e)
             {
@@ -136,13 +177,13 @@ namespace BLL.Tools
         {
             try
             {
-                XElement xm = XElement.Load(path);
+                XElement xm = XElement.Load(GetPath());
                 IEnumerable<XElement> elements = from ele in xm.Elements("kind") where ele.Attribute("Type").Value == kind select ele;
                 {
                     if (elements.Count() > 0)
                         elements.First().Remove();
                 }
-                xm.Save(path);
+                xm.Save(GetPath());
             }
             catch (Exception e)
             {
@@ -155,7 +196,7 @@ namespace BLL.Tools
         {
             try
             {
-                XElement xm = XElement.Load(path);
+                XElement xm = XElement.Load(GetPath());
                 IEnumerable<XElement> elements = from ele in xm.Elements("kind") where ele.Attribute("Type").Value == oldkind select ele;
                 {
                     if (elements.Count() > 0)
@@ -171,7 +212,7 @@ namespace BLL.Tools
                         }
                     }
                 }
-                xm.Save(path);
+                xm.Save(GetPath());
             }
             catch (Exception e)
             {
@@ -185,7 +226,7 @@ namespace BLL.Tools
             Category category = new Category();
             try
             {
-                XElement xm = XElement.Load(path);
+                XElement xm = XElement.Load(GetPath());
                 IEnumerable<XElement> elements = from ele in xm.Elements("kind") where ele.Attribute("Type").Value == kind select ele;
                 {
                     foreach (XElement x in elements)

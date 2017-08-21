@@ -15,8 +15,7 @@
                 </span>
             </div>
             <div id="divlist-file" class="li_div">
-                <ul id="li-div-ul">
-                </ul>
+                <ul id="li-div-ul"></ul>
             </div>
         </li>
         <li id="li_map">
@@ -137,129 +136,134 @@
                     上传文件
                 </h4>
             </div>
-            <div class="modal-body">
-                <table>
-                    <tr>
-                        <td style="width:80px;">选择文件：</td>
-                        <td colspan="3"><input id="input_file" type="file" /></td>
-                    </tr>
-                    <tr>
-                        <td>坐标信息框架：</td>
-                        <td>
-                            <form>
-                                <select id="coodinatesystem" panelHeight="auto" class="easyui-combobox" name="dept" data-options="valueField:'Value',textField:'Value',url:'/Droplist/CoodinateSystemlist'"/>
-                            </form>
-                        </td>
-                        <td>完成时间信息：</td>
-                        <td><input type="date" id="finishtimeinfo" /></td>
-                    </tr>
-                    <tr>
-                        <td>完成人信息：</td>
-                        <td><input maxlength="50" id="finishpersoninfo" /></td>
-                        <td>最小坐标：</td>
-                        <td><input type="number" id="mincoodinate" /></td>
-                    </tr>
-                    <tr>
-                        <td>最大坐标：</td>
-                        <td><input type="number" id="maxcoodinate" /></td>
-                        <td>文件中对象数量：</td>
-                        <td><input type="number" id="objectnum" /></td>
-                    </tr>
-                    <tr>
-                        <td>备注信息：</td>
-                        <td colspan="3" style="width:100%;max-width:100%;"><textarea  style="width:100%;min-width:100%;" id="mark"></textarea></td>
-                    </tr>
-                    <tr>
-                        <td>是否需要进库：</td>
-                        <td>
-                            <form>
-                                是：
-                                <input type="radio" name="warehousing" value="true" />
-                                否：
-                                <input type="radio" checked="checked" name="warehousing" value="false" />
-                            </form>
-                        </td>
-                        <td>所属项目名称：</td>
-                        <td><input id="projectname" /></td>
+            <form action="/FileManager/UpLoadFile" id="fileForm" method="post" enctype="multipart/form-data" target="fileFrame">
+                <div class="modal-body">
+                    <table>
+                        <tr>
+                            <td style="width:80px;">选择文件：</td>
+                            <td colspan="3"><input id="input_file" type="file" name="file"/></td>
+                        </tr>
+                        <tr>
+                            <td>坐标信息框架：</td>
+                            <td>
+                                <span>
+                                    <input id="coodinatesystem" panelHeight="auto" class="easyui-combobox" name="coodinatesystem" data-options="valueField:'Value',textField:'Value',url:'/Droplist/CoodinateSystemlist'" />
+                                </span>
+                            </td>
+                            <td>完成时间信息：</td>
+                            <td><input type="date" name="finishtimeinfo" id="finishtimeinfo" /></td>
+                        </tr>
+                        <tr>
+                            <td>完成人信息：</td>
+                            <td><input maxlength="50" name="finishpersoninfo" id="finishpersoninfo" /></td>
+                            <td>最小坐标：</td>
+                            <td><input type="number" name="mincoodinate" id="mincoodinate" /></td>
+                        </tr>
+                        <tr>
+                            <td>最大坐标：</td>
+                            <td><input type="number" name="maxcoodinate" id="maxcoodinate" /></td>
+                            <td>文件中对象数量：</td>
+                            <td><input type="number" name="objectnum" id="objectnum" /></td>
+                        </tr>
+                        <tr>
+                            <td>备注信息：</td>
+                            <td colspan="3" style="width:100%;max-width:100%;"><textarea style="width:100%;min-width:100%;" name="mark" id="mark"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td>是否需要进库：</td>
+                            <td>
+                                <span>
+                                    是：
+                                    <input type="radio" name="warehousing" value="true" />
+                                    否：
+                                    <input type="radio" checked="checked" name="warehousing" value="false" />
+                                </span>
+                            </td>
+                            <td>所属项目名称：</td>
+                            <td><input name="projectname" id="projectname" /></td>
 
-                    </tr>
-                    <tr>
-                        <td>文件类型：</td>
-                        <td>
-                            <form>
-                                <select id="filetype" panelHeight="auto" class="easyui-combobox" name="dept" data-options="valueField:'Value',textField:'Value',url:'/Droplist/FiltTypelist'" />
-                            </form>
-                        </td>
-                        <td>所属项目类型：</td>
-                        <td>
-                            <form>
-                                <select id="projecttype" panelHeight="auto" class="easyui-combobox" name="dept" data-options="valueField:'Value',textField:'Value',url:'/Droplist/ProjectTypelist'">
-                                </select>
-                            </form>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>平面坐标系统：</td>
-                        <td>
-                            <form>
-                                <select id="pcoodinatesystem"panelHeight="auto" class="easyui-combobox" name="dept" data-options="valueField:'Value',textField:'Value',url:'/Droplist/CoodinateSystemlist'"/>
-                            </form>
-                        </td>
-                        <td>中央子午线：</td>
-                        <td><input maxlength="50" id="centermeridian" /></td>
-                    </tr>
-                    <tr>
-                        <td>纵坐标偏移值：</td>
-                        <td><input type="number" id="yoffset" /></td>
-                        <td>水平坐标偏移值：</td>
-                        <td><input type="number" id="xoffset" /></td>
-                    </tr>
-                    <tr>
-                        <td>完成时间：</td>
-                        <td><input type="date" id="finishtime" value=""/></td>
-                        <td>完成人名称：</td>
-                        <td><input maxlength="50" id="finishperson" /></td>
-                    </tr>
-                    <tr>
-                        <td>成果说明：</td>
-                        <td colspan="3"><textarea style="max-width:100%;width:100%;" id="explain"></textarea></td>
-                        
-                    </tr>
-                    <tr>
-                        <td>是否公开：</td>
-                        <td>
-                            <form>
-                                是：
-                                <input type="radio" checked="checked" name="ispublic" value="true" />
-                                否：
-                                <input type="radio" name="ispublic" value="false" />
-                            </form>
-                        </td>
-                        <td>测绘单位名称：</td>
-                        <td>
-                            <form>
-                                <select id="surveyingunitname" panelHeight="auto" class="easyui-combobox" name="dept" data-options="valueField:'Value',textField:'Value',url:'/Droplist/Unitlist'"/>
-                            </form>
-                        </td>
-                    </tr>
-                </table>
+                        </tr>
+                        <tr>
+                            <td>文件类型：</td>
+                            <td>
+                                <span>
+                                    <input id="filetype" panelHeight="auto" class="easyui-combobox" name="filetype" data-options="valueField:'Value',textField:'Value',url:'/Droplist/FiltTypelist'" />
+                                </span>
+                            </td>
+                            <td>所属项目类型：</td>
+                            <td>
+                                <span>
+                                    <input id="projecttype" panelHeight="auto" class="easyui-combobox" name="projecttype" data-options="valueField:'Value',textField:'Value',url:'/Droplist/ProjectTypelist'" />
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>平面坐标系统：</td>
+                            <td>
+                                <span>
+                                    <input id="pcoodinatesystem" panelHeight="auto" class="easyui-combobox" name="pcoodinatesystem" data-options="valueField:'Value',textField:'Value',url:'/Droplist/CoodinateSystemlist'" />
+                                </span>
+                            </td>
+                            <td>中央子午线：</td>
+                            <td><input maxlength="50" name="centermeridian" id="centermeridian" /></td>
+                        </tr>
+                        <tr>
+                            <td>纵坐标偏移值：</td>
+                            <td><input type="number" name="yoffset" id="yoffset" /></td>
+                            <td>水平坐标偏移值：</td>
+                            <td><input type="number" name="xoffset" id="xoffset" /></td>
+                        </tr>
+                        <tr>
+                            <td>完成时间：</td>
+                            <td><input type="date" name="finishtime" id="finishtime" value="" /></td>
+                            <td>完成人名称：</td>
+                            <td><input maxlength="50" name="finishperson" id="finishperson" /></td>
+                        </tr>
+                        <tr>
+                            <td>成果说明：</td>
+                            <td colspan="3"><textarea style="max-width:100%;width:100%;" name="explain" id="explain"></textarea></td>
 
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default"
-                        data-dismiss="modal">
-                    关闭
-                </button>
-                <button type="button" onclick="submitInfo()" class="btn btn-primary">
-                    提交
-                </button>
-            </div>
+                        </tr>
+                        <tr>
+                            <td>选择公开对象：</td>
+                            <td>
+                                <span>
+                                    <input id="selectobjs" class="easyui-combobox"
+                                           name="selectobjs"
+                                           data-options="url:'/Droplist/Unitlist',method:'get',valueField:'Value',textField:'Value',multiple:true,panelHeight:'auto'">
+                                </span>
+                            </td>
+                            <td>测绘单位名称：</td>
+                            <td>
+                                <span>
+                                    <input id="surveyingunitname" panelHeight="auto" class="easyui-combobox" name="surveyingunitname" data-options="valueField:'Value',textField:'Value',url:'/Droplist/Unitlist'" />
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"
+                            data-dismiss="modal">
+                        关闭
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        提交
+                    </button>
+                </div>
+            </form>
         </div><!-- /.modal-content -->
+    </div>
+</div>
+<div class="progress">
+    <div class="progress-bar" role="progressbar" aria-valuenow="0"
+         aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
     </div>
 </div>
 <script src="~/Scripts/jquery-2.2.4.min.js"></script>
 <script type="text/javascript">
-    $(document).ready(function(){
+    $(document).ready(function () {
         //加载分类
         $.ajax({
             url: "/FileManager/GetSelectedCategory",
@@ -279,7 +283,7 @@
         });
     });
     function uploadFile() {
-        var dialogwdith = $(window).width()+$(".modal-dialog").width();
+        var dialogwdith = $(window).width() + $(".modal-dialog").width();
         $(".modal-content").css({
             left: (dialogwdith - $(".modal-content").width()) / 2,
         })
@@ -309,17 +313,19 @@
             FinishPerson: "",
             SurveyingUnitName: "",
             Explain: "",
-            IsPublic: "",
+            PublicObjs: "",
             UploadTime: "",
             FileSize: "",
             UserID: ""
         };
-        file.Directory = $("#input_file").val();
-        if (file.Directory == "")
+        var directory = $("#input_file").val();
+        if (directory == "")
             alert("没有选择文件！");
         else {
-            var arr = file.Directory.split('\\');
+            var arr = directory.split('\\');
+            file.Directory = "";
             file.FileName = arr[arr.length - 1];
+            var obj = $("#coodinatesystem");
             file.CoodinateSystem = $("#coodinatesystem").val();
             file.FinishtimeInfo = $("#finishtimeinfo").val();
             file.FinishPersonInfo = $("#finishpersoninfo").val();
@@ -339,7 +345,7 @@
             file.FinishPerson = $("#finishperson").val();
             file.SurveyingUnitName = $("#surveyingunitname").val();
             file.Explain = $("#explain").val();
-            file.IsPublic = $("input[name=ispublic]:checked").val();
+            file.PublicObjs = $("#selectobjs").val().replace(",", "|");
             file.UploadTime = "";
             var f = document.getElementById("input_file").files;
             file.FileSize = f[0].size / 1024 / 1024;
@@ -347,21 +353,48 @@
             $.ajax({
                 url: "/FileManager/UpLoadFile",
                 type: "post",
-                dataType: "json",
+                dataType: "text",
                 async: false,
                 data: JSON.stringify(file),
-                success: function (data)
-                {
-
+                success: function (data) {
+                    alert(data);
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert(XMLHttpRequest.status);
-                    //alert(XMLHttpRequest.readyState);
-                    //alert(textStatus);
+                    if (textStatus != 200)
+                        alert("上传失败！");
                 }
             });
+            $.ajax({
+                url: "/FileManager/Upload",
+                type: "post",
+                xhr: function () {  // custom xhr
+                    myXhr = $.ajaxSettings.xhr();
+                    if (myXhr.upload) { // check if upload property exists
+                        myXhr.upload.addEventListener('.progress', function () {
+                            var p = e.total / e.loaded + "%";
+                            $(".progress-bar").css("width", p);
+                        }, false); // for handling the progress of the upload
+                    }
+                    return myXhr;
+                },
+                //Ajax事件
+                beforeSend: function () {
+                    alert("开始");
+                },
+                success: function () {
+                    alert("成功");
+                },
+                error: function () {
+                    alert("错误");
+                },
+                // Form数据
+                data: "multipart/form-data",
+                //Options to tell JQuery not to process data or worry about content-type
+                cache: false,
+                contentType: false,
+                processData: false
+            });
         }
-
     };
     //点击文件管理标题
     $("#h-file").click(function () {
@@ -378,11 +411,9 @@
                 dataType: "json",
                 async: false,
                 success: function (data) {
-                    for (var i = 0; i < data.length; i++)
-                    {
+                    for (var i = 0; i < data.length; i++) {
                         var text = "<li><a class='classheader' onclick= 'clickheader(this)'>" + data[i].kind + "</a><ul class='subclass' style='display:none'><li>";
-                        for (var j = 0; j < data[i].nodes.length; j++)
-                        {
+                        for (var j = 0; j < data[i].nodes.length; j++) {
                             text += "<a>" + data[i].nodes[j] + "</a>";
                         }
                         text += "</li></ul ></li >";
@@ -415,17 +446,14 @@
         //}
     });
     //点击父分类
-    function clickheader(e)
-    {
+    function clickheader(e) {
         var next = $(e).next();
         var display = next.css("display");
-        if (display == "none")
-        {
-           // $(e).css("background-color", "grey");
+        if (display == "none") {
+            // $(e).css("background-color", "grey");
             next.css("display", "block");
         }
-        else
-        {
+        else {
             //$(e).css("background-color", "white");
             next.css("display", "none");
         }

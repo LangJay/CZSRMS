@@ -47,12 +47,14 @@ namespace SurveyingResultManageSystem.Controllers
             }
             catch (Exception ex)
             {
-                tb_LogInfo log = new tb_LogInfo();
-                log.Time = DateTime.Now.ToString();
-                log.UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value;
-                log.Operation = LogOperations.SystemLog();
-                log.FileName = null;
-                log.Explain = ex.Message;
+                tb_LogInfo log = new tb_LogInfo()
+                {
+                    Time = DateTime.Now.ToString(),
+                    UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value,
+                    Operation = LogOperations.SystemLog(),
+                    FileName = null,
+                    Explain = ex.Message
+                };
                 logInfoService.Add(log);
                 //跳转到错误页
                 return RedirectToAction("Error", "Home");
@@ -63,8 +65,10 @@ namespace SurveyingResultManageSystem.Controllers
         [Authentication]
         public ActionResult Logout()
         {
-            HttpCookie cookie = new HttpCookie("username", string.Empty);
-            cookie.Expires = DateTime.Now.AddMonths(-1);
+            HttpCookie cookie = new HttpCookie("username", string.Empty)
+            {
+                Expires = DateTime.Now.AddMonths(-1)
+            };
             Response.Cookies.Add(cookie);
             return RedirectToAction("Login", "Home");
         }

@@ -11,4 +11,12 @@
     <node name="国家2000" />
     <node name="郴州独立" />
   </kind>
+  <kind Type="123456" Select="是">
+    <node name="1" />
+    <node name="2" />
+    <node name="3" />
+    <node name="4" />
+    <node name="5" />
+    <node name="6" />
+  </kind>
 </category>

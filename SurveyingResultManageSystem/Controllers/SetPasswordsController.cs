@@ -36,11 +36,13 @@ namespace SurveyingResultManageSystem.Controllers
             sr.Close();
             //从cookie取得用户信息，更改后更新用户信息，重新登录
             string username = System.Web.HttpContext.Current.Request.Cookies["username"].Value;
-            tb_LogInfo log = new tb_LogInfo();
-            log.UserName = username;
-            log.Time = DateTime.Now.ToString();
-            log.FileName = "";
-            log.Operation = LogOperations.SetPasswords();
+            tb_LogInfo log = new tb_LogInfo()
+            {
+                UserName = username,
+                Time = DateTime.Now.ToString(),
+                FileName = "",
+                Operation = LogOperations.SetPasswords()
+            };
             try
             {
                 //根据信息找到完整用户信息

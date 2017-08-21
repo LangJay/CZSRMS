@@ -29,15 +29,17 @@ namespace SurveyingResultManageSystem.Controllers
 
             //-----分页内容---------//
 
-            PageInfo<tb_LogInfo> pageInfo = new PageInfo<tb_LogInfo>();
-            //第几页  
-            pageInfo.pageIndex = pageIndex ?? 1;
+            PageInfo<tb_LogInfo> pageInfo = new PageInfo<tb_LogInfo>()
+            {
+                //第几页  
+                pageIndex = pageIndex ?? 1
+            };
 
             //每页显示多少条  pageInfo.pageSize
 
             //所有的记录 pageInfo.totalRecord;
-            int totalRecord;
             //获取所有的上传、下载、删除的操作记录 
+            int totalRecord;
             pageInfo.pageList = logInfoService.FindPageList(pageInfo.pageIndex, pageInfo.pageSize, out totalRecord, u => operation.Contains(u.Operation), "Time", false);
             if (keywords != null && keywords != "")
             {
@@ -81,22 +83,26 @@ namespace SurveyingResultManageSystem.Controllers
 
             //-----分页内容---------//
 
-            PageInfo<tb_LogInfo> pageInfo = new PageInfo<tb_LogInfo>();
-            //第几页  
-            pageInfo.pageIndex = pageIndex ?? 1;
+            PageInfo<tb_LogInfo> pageInfo = new PageInfo<tb_LogInfo>()
+            {
+                //第几页  
+                pageIndex = pageIndex ?? 1
+            };
 
             //每页显示多少条  pageInfo.pageSize
 
             //所有的记录 pageInfo.totalRecord;
-            int totalRecord;
             //获取所有的操作记录 
             operation = "";
+            int totalRecord;
             pageInfo.pageList = logInfoService.FindPageList(pageInfo.pageIndex, pageInfo.pageSize, out totalRecord, u => u.Operation.Contains(operation), "Time", false);
             if (keywords != null && keywords != "")
             {
                 //把keywords存到cookies中
-                HttpCookie cook = new HttpCookie("keywords", keywords);
-                cook.Expires = DateTime.Now.AddDays(365);//一年，有种你一年不关浏览器
+                HttpCookie cook = new HttpCookie("keywords", keywords)
+                {
+                    Expires = DateTime.Now.AddDays(365)//一年，有种你一年不关浏览器
+                };
                 Response.Cookies.Add(cook);
                 pageInfo.keywords = keywords;
                 //重新检索记录
