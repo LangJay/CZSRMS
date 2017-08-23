@@ -24,6 +24,10 @@ namespace BLL.Tools
     public static class MyXML
     {
         private static string upath = HttpRuntime.AppDomainAppPath.ToString() + "/Data/";
+        private static UnitInfoService unitInfoService = new UnitInfoService();
+        private static  ProjectTypeInfoService projectTypeInfoService = new ProjectTypeInfoService();
+        private static  FileTypeInfoService fileTypeInfoService = new FileTypeInfoService();
+        private static  CoodinateSystemInfoService coodinateSystemInfoService = new CoodinateSystemInfoService();
         private static string GetPath()
         {
             string username = HttpContext.Current.Request.Cookies["username"].Value;
@@ -74,11 +78,8 @@ namespace BLL.Tools
                         select = x.Attribute("Select").Value
                     };
                     //获取所有子节点
-                    IEnumerable<XElement> nodes = x.Elements("node");
-                    foreach (XElement n in nodes)
-                    {
-                        category.nodes.Add(n.Attribute("name").Value);
-                    }
+
+                    category.nodes = GetListByKind(category.kind);
                     list.Add(category);
                 }
             }
@@ -104,11 +105,8 @@ namespace BLL.Tools
                         select = x.Attribute("Select").Value
                     };
                     //获取所有子节点
-                    IEnumerable<XElement> nodes = x.Elements("node");
-                    foreach (XElement n in nodes)
-                    {
-                        category.nodes.Add(n.Attribute("name").Value);
-                    }
+
+                    category.nodes = GetListByKind(category.kind);
                     list.Add(category);
                 }
             }
@@ -134,12 +132,8 @@ namespace BLL.Tools
                         select = x.Attribute("Select").Value
                     };
                     //获取所有子节点
-                    IEnumerable<XElement> nodes = x.Elements("node");
-                    foreach (XElement n in nodes)
-                    {
-                        string value = n.Attribute("name").Value;
-                        category.nodes.Add(n.Attribute("name").Value);
-                    }
+
+                    category.nodes = GetListByKind(category.kind);
                     list.Add(category);
                 }
             }
@@ -158,11 +152,6 @@ namespace BLL.Tools
                 XElement record = new XElement(
                     new XElement("kind", new XAttribute("Type", category.kind), new XAttribute("Select", "是"))
                 );
-                foreach (string n in category.nodes)
-                {
-                    XElement node = new XElement(new XElement("node", new XAttribute("name", n)));
-                    record.Add(node);
-                }
                 xm.Add(record);
                 xm.Save(GetPath());
             }
@@ -205,11 +194,6 @@ namespace BLL.Tools
                         x.Attribute("Type").Value = category.kind;
                         x.Attribute("Select").Value = category.select;
                         x.RemoveNodes();
-                        foreach (string n in category.nodes)
-                        {
-                            XElement node = new XElement(new XElement("node", new XAttribute("name", n)));
-                            x.Add(node);
-                        }
                     }
                 }
                 xm.Save(GetPath());
@@ -234,12 +218,7 @@ namespace BLL.Tools
                         category.kind = x.Attribute("Type").Value;
                         category.select = x.Attribute("Select").Value;
                         //获取所有子节点
-                        IEnumerable<XElement> nodes = x.Elements("node");
-                        foreach (XElement n in nodes)
-                        {
-                            string value = n.Attribute("name").Value;
-                            category.nodes.Add(n.Attribute("name").Value);
-                        }
+                        category.nodes = GetListByKind(category.kind);
                         return category;
                     }
                 }
@@ -250,6 +229,43 @@ namespace BLL.Tools
                 return null;
             }
             return null;
+        }
+        private static List<string> GetListByKind(string kind)
+        {
+            List<string> list = new List<string>();
+            if (kind == "测绘单位")
+            {
+                List<tb_Unit> unit = unitInfoService.FindAll(u => u.Value != "", "ID", true);
+                foreach(var item in unit)
+                {
+                    list.Add(item.Value);
+                }
+            }
+            else if (kind == "文件类型")
+            {
+                List<tb_FileType> file = fileTypeInfoService.FindAll(u => u.Value != "", "ID", true);
+                foreach (var item in file)
+                {
+                    list.Add(item.Value);
+                }
+            }
+            else if (kind == "项目类型")
+            {
+                List<tb_ProjectType> projec = projectTypeInfoService.FindAll(u => u.Value != "", "ID", true);
+                foreach (var item in projec)
+                {
+                    list.Add(item.Value);
+                }
+            }
+            else
+            {
+                List<tb_CoodinateSystem> coodinateSystem = coodinateSystemInfoService.FindAll(u => u.Value != "", "ID", true);
+                foreach (var item in coodinateSystem)
+                {
+                    list.Add(item.Value);
+                }
+            }
+            return list;
         }
     }
 }

@@ -53,12 +53,10 @@
     </div>
     <div class="container body-content" style="margin:2px 0px 0px 0px;padding:0px;height:80%;max-width:100%;min-width:900px;position:relative">
         @RenderBody()
-        @*<hr  />
-            <footer style="display:none">
-                <p>&copy; @DateTime.Now.Year - 湖南省第一测绘院</p>
-            </footer>*@
     </div>
-
+    <div id="loading">
+        <img src="~/Sources/Images/loading.gif" />
+    </div>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)

@@ -102,6 +102,17 @@ html {
     width: 100%;
     height: auto;
 }
+#loading{
+    position:relative;
+    display:none;
+}
+#loading img
+{
+    position: fixed;
+    top: 35%;
+    left: 37%;
+    z-index:1000;
+}
 /*通知轮播*/
 .outer {
     margin-top: 5px;

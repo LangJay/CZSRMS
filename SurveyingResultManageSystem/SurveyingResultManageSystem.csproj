@@ -564,13 +564,16 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Sources\Images\bottom.png" />
     <Content Include="Sources\Images\card_setting_c0307230.png" />
     <Content Include="Sources\Images\chenzhou.png" />
     <Content Include="Sources\Images\file.png" />
+    <Content Include="Sources\Images\loading.gif" />
     <Content Include="Sources\Images\login_bg.png" />
     <Content Include="Sources\Images\manager_small.png" />
     <Content Include="Sources\Images\map.png" />
     <Content Include="Sources\Images\notice.png" />
+    <Content Include="Sources\Images\right.png" />
     <Content Include="Sources\Images\search.png" />
     <Content Include="Sources\Images\select.png" />
     <Content Include="Sources\Images\selected.png" />
@@ -599,6 +602,7 @@
     <Content Include="Views\SetPasswords\Index.cshtml" />
     <Content Include="Views\Shared\Manager.cshtml" />
     <Content Include="Views\Category\CategoryIndex.cshtml" />
+    <Content Include="Views\Home\GetFileView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Droplist\" />

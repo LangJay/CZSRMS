@@ -41,5 +41,6 @@ namespace SurveyingResultManageSystem.Controllers
             List<tb_CoodinateSystem> coodinateSystemList = coodinateSystemInfoService.FindAll(u => u.Value != "", "ID", true);
             return Json(coodinateSystemList, JsonRequestBehavior.AllowGet);
         }
+      
     }
 }
