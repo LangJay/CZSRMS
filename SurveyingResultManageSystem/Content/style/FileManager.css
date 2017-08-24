@@ -136,11 +136,11 @@ ul {
     right: 30px;
 }
 
-.table {
+.modal .table {
     margin-bottom: 0px;
 }
 
-td, th {
+.modal td,.modal th {
     text-align: center;
 }
 

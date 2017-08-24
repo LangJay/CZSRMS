@@ -1,9 +1,14 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@Styles.Render("~/Content/style/MapManager.css")
+
 <link rel="stylesheet" type="text/css" href="http://192.168.0.230:8080/arcgis_js_api/library/3.21/3.21/esri/css/esri.css" />
 <script type="text/javascript" src="http://192.168.0.230:8080/arcgis_js_api/library/3.21/3.21/init.js"></script>
+@Styles.Render("~/Content/style/MapManager.css")
+@Styles.Render("~/Content/style/FileManager.css")
+<link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
+<link href="~/Content/themes/icon.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.easyui.min.js"></script>
 <div id="div_menu">
     <ul id="div_menu_ul">
         <li id="li_file">
@@ -35,11 +40,144 @@
     </ul>
 </div>
 <div id="mapDiv"></div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel" style="color:white">
+                    修改红线属性
+                </h4>
+            </div>
+            <div class="modal-body">
+                <table>
+                    
+                    <tr>
+                        <td>坐标信息框架：</td>
+                        <td>
+                            <form>
+                                <select id="coodinatesystem" panelHeight="auto" class="easyui-combobox" name="dept" data-options="valueField:'Value',textField:'Value',url:'/Droplist/CoodinateSystemlist'"/>
+                            </form>
+                        </td>
+                        <td>完成时间信息：</td>
+                        <td><input type="date" id="finishtimeinfo" /></td>
+                    </tr>
+                    <tr>
+                        <td>完成人信息：</td>
+                        <td><input maxlength="50" id="finishpersoninfo" /></td>
+                        <td>最小坐标：</td>
+                        <td><input type="number" id="mincoodinate" /></td>
+                    </tr>
+                    <tr>
+                        <td>最大坐标：</td>
+                        <td><input type="number" id="maxcoodinate" /></td>
+                        <td>文件中对象数量：</td>
+                        <td><input type="number" id="objectnum" /></td>
+                    </tr>
+                    <tr>
+                        <td>备注信息：</td>
+                        <td colspan="3" style="width:100%;max-width:100%;"><textarea  style="width:100%;min-width:100%;" id="mark"></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>是否需要进库：</td>
+                        <td>
+                            <form>
+                                是：
+                                <input type="radio" name="warehousing" value="true" />
+                                否：
+                                <input type="radio" checked="checked" name="warehousing" value="false" />
+                            </form>
+                        </td>
+                        <td>所属项目名称：</td>
+                        <td><input id="projectname" /></td>
+
+                    </tr>
+                    <tr>
+                        <td>文件类型：</td>
+                        <td>
+                            <form>
+                                <select id="filetype" panelHeight="auto" class="easyui-combobox" name="dept" data-options="valueField:'Value',textField:'Value',url:'/Droplist/FiltTypelist'" />
+                            </form>
+                        </td>
+                        <td>所属项目类型：</td>
+                        <td>
+                            <form>
+                                <select id="projecttype" panelHeight="auto" class="easyui-combobox" name="dept" data-options="valueField:'Value',textField:'Value',url:'/Droplist/ProjectTypelist'">
+                                </select>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>平面坐标系统：</td>
+                        <td>
+                            <form>
+                                <select id="pcoodinatesystem"panelHeight="auto" class="easyui-combobox" name="dept" data-options="valueField:'Value',textField:'Value',url:'/Droplist/CoodinateSystemlist'"/>
+                            </form>
+                        </td>
+                        <td>中央子午线：</td>
+                        <td><input maxlength="50" id="centermeridian" /></td>
+                    </tr>
+                    <tr>
+                        <td>纵坐标偏移值：</td>
+                        <td><input type="number" id="yoffset" /></td>
+                        <td>水平坐标偏移值：</td>
+                        <td><input type="number" id="xoffset" /></td>
+                    </tr>
+                    <tr>
+                        <td>完成时间：</td>
+                        <td><input type="date" id="finishtime" value=""/></td>
+                        <td>完成人名称：</td>
+                        <td><input maxlength="50" id="finishperson" /></td>
+                    </tr>
+                    <tr>
+                        <td>成果说明：</td>
+                        <td colspan="3"><textarea style="max-width:100%;width:100%;" id="explain"></textarea></td>
+                        
+                    </tr>
+                    <tr>
+                        <td>是否公开：</td>
+                        <td>
+                            <form>
+                                是：
+                                <input type="radio" checked="checked" name="ispublic" value="true" />
+                                否：
+                                <input type="radio" name="ispublic" value="false" />
+                            </form>
+                        </td>
+                        <td>测绘单位名称：</td>
+                        <td>
+                            <form>
+                                <select id="surveyingunitname" panelHeight="auto" class="easyui-combobox" name="dept" data-options="valueField:'Value',textField:'Value',url:'/Droplist/Unitlist'"/>
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">
+                    关闭
+                </button>
+                <button type="button" onclick="submitInfo()" class="btn btn-primary">
+                    提交
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div>
+</div>
 <script>
+    var fatch3;
+	var map;
     //点击文件管理标题
     $("#h-file").click(function () {
         //加载动画
         var divlist = $("#divlist-file");
+		
         if (divlist.css("display") == "none") {
             $("#card-file").css("display", "block");
             window.location.assign("/Home/FileManager");
@@ -63,18 +201,106 @@
             divlist.css("display", "none");
         }
     });
-    require(["esri/map", "esri/layers/ArcGISDynamicMapServiceLayer","esri/layers/FeatureLayer", "dojo/domReady!"],
-        function (Map, ArcGISDynamicMapServiceLayer,FeatureLayer) {
-            var map = new Map("mapDiv");
+    require(["esri/map", "esri/layers/ArcGISDynamicMapServiceLayer","esri/layers/FeatureLayer","esri/InfoTemplate", "dojo/domReady!"],
+        function (Map, ArcGISDynamicMapServiceLayer,FeatureLayer,InfoTemplate) {
+            map = new Map("mapDiv",{ logo: false});
             //利用url创建一个动态地图服务对象
          //   var layer = new ArcGISDynamicMapServiceLayer("http://192.168.0.230:6080/arcgis/rest/services/1/MapServer");
             //将地图服务对象添加到地图容器中
-			var fatch3 = new FeatureLayer("http://localhost:6080/arcgis/rest/services/test1/FeatureServer/1", {
+			fatch3 = new FeatureLayer("http://localhost:6080/arcgis/rest/services/fwx1g/FeatureServer/0", {
            mode: FeatureLayer.MODE_SNAPSHOT,
-           outFields: ["*"]
-           // infoTemplate: new InfoTemplate("排水管点", "<table width='100%' style='table-layout:fixed'><tr><th width='60%' align='left'>图上点号:${MapNo} <br/>地面高程:${SurfH:CustomFormat( currency: 'CAD', places: '2')}米 <br/>井底深:${WDeep:CustomFormat( currency: 'CAD', places: '2')}米 <br/> 管点类型:${Subsid} <br/> 特征:${Feature} <br/></th><th width='40%'><img src='../GTWEB/gximage/P1.jpg' width='100%' height='100'></img></th></tr></table>")
+           outFields: ["*"],
+            infoTemplate: new InfoTemplate("范围红线", "<table width='100%' style='table-layout:fixed'><tr height='15%' width='100%'><th width='60%' align='left'>文件名:${FileName} </th><th width='40%' align='left'>完成人:${FshPerson} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>坐标信息:${CoodSystem} </th><th width='40%' align='left'>完成时间:${FinishTime} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>中央子午线:${CenterMed} </th><th width='40%' align='left'>上传时间:${UploadTime} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>文件类型:${FileType} </th><th width='40%' align='left'>文件大小:${FileSize} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>项目名称:${ProName} </th><th width='40%' align='left' id='tdid'>图形ID:${OBJECTID} </th></tr><tr height='15%' width='100%'><th width='100%' align='left'>备注:${Memo} </th></tr></table><button style='margin:5px 8px' type='button' onclick='SYT()' class='btn btn-primary btn-xs'>缩略图</button><button style='margin:5px 8px' type='button' onclick='Change()' class='btn btn-primary btn-xs'>修  改</button><button style='margin:5px 8px' type='button' onclick='dele()' class='btn btn-primary btn-xs'>删  除</button><button style='margin:5px 0px 5px 8px' type='button' onclick='Down()' class='btn btn-primary btn-xs'>下  载</button>")
+           
+			 });
+			var username=getCookie("username");
+			var userinfo="";
+		    $.ajax({
+                url: "/Home/GetUserinfo",
+                type: "post",
+                dataType: "text",
+                async: false,
+                data: username,
+                success: function (data)
+                {
+				   userinfo=data;
+				   
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(XMLHttpRequest.status);
+                    //alert(XMLHttpRequest.readyState);
+                    //alert(textStatus);
+                }
+            });
+		    var ss=userinfo.split(',');
+		    if(ss[1].trim()!="0")
+			{
+			
+			fatch3.setDefinitionExpression("FileName like '%"+ss[0].trim()+"%'");
+			
+			}
+			
+		
+		
+		  // fatch3.setDefinitionExpression("FileName='ss03'");
+            map.addLayer(fatch3);
+		    function getCookie(name) {
+                var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+                 if (arr = document.cookie.match(reg))
+                     return unescape(arr[2]);
+                 else
+                     return null;
+               };
+			    
+        });
+		function Change() {
+               var id = document.getElementById("tdid").innerHTML; 
+			   var idh=id.split(':');
+			//   console.log(idh[1]);
+			    map.infoWindow.hide();
+			   var dialogwdith = $(window).width()+$(".modal-dialog").width();
+               $(".modal-content").css({
+                 left: (dialogwdith - $(".modal-content").width()) / 2,
+                })
+                $("#myModal").modal('show');
+               };
+	    function dele() {
+               var id = document.getElementById("tdid").innerHTML; 
+			   var idh=id.split(':');
+			   id=idh[1];
+			   var info;
+			    $.ajax({
+              url: "/Home/delefeature",
+              type: "post",
+              dataType: "text",
+              async: false,
+              data: id,
+               success: function (data)
+                {
+				   info=data;
+				   
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(XMLHttpRequest.status);
+                    //alert(XMLHttpRequest.readyState);
+                    //alert(textStatus);
+                }
              });
 
-          map.addLayer(fatch3);
-        });
+			 if(info){
+			  map.infoWindow.hide();
+			 }
+              fatch3.refresh();
+		 };
+	    function Down() {
+               var id = document.getElementById("tdid").innerHTML; 
+			   var idh=id.split(':');
+			   console.log(idh[1]);
+               };
+	    function SYT() {
+               var id = document.getElementById("tdid").innerHTML; 
+			   var idh=id.split(':');
+			   console.log(idh[1]);
+               };
+		
 </script>

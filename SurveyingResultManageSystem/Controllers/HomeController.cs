@@ -6,6 +6,8 @@ using SurveyingResultManageSystem.Models;
 using System;
 using System.Web;
 using System.Web.Mvc;
+using System.IO;
+using ArcServer;
 
 namespace SurveyingResultManageSystem.Controllers
 {
@@ -98,12 +100,43 @@ namespace SurveyingResultManageSystem.Controllers
                 string username = System.Web.HttpContext.Current.Request.Cookies["username"].Value;
                 return username;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Log.AddRecord(e);
 
                 return null;
             }
         }
+        [Authentication]
+        [HttpPost]//王军军增加8.23
+        public string GetUserinfo()
+        {
+            var sr = new StreamReader(Request.InputStream);
+            var stream = sr.ReadToEnd();
+            sr.Close();
+            tb_UserInfo user = userInfoService.Find(u => u.UserName == stream);
+            string str1="";
+            if (user!=null)
+            {
+                str1 = str1 + user.Unit+",";
+                str1 = str1 + user.Levels;
+            }
+            return str1;
+        }
+        [Authentication]
+        [HttpPost]//王军军增加8.23
+        public bool delefeature()
+        {
+            FeatureItem1 item1 = new FeatureItem1();
+            
+            
+            var sr = new StreamReader(Request.InputStream);
+            var stream = sr.ReadToEnd();
+            sr.Close();
+            item1.url = "http://localhost:6080/arcgis/rest/services/fwx1g/FeatureServer/0";
+            bool tt = openauto.DeleFeature(item1.url, stream);
+            return tt;
+        }
+
     }
 }
