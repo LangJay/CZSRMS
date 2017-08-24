@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<category>
+  <kind Type="测绘单位" Select="是" />
+  <kind Type="坐标系统" Select="否" />
+  <kind Type="项目类型" Select="是" />
+  <kind Type="文件类型" Select="否"></kind>
+</category>

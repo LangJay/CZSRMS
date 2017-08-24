@@ -16,7 +16,6 @@ namespace Model
 
     public partial class tb_UserInfo
     {
-
         public int ID { set; get; }
         /// <summary>
         /// 用户名
@@ -24,7 +23,7 @@ namespace Model
         [Required(ErrorMessage = "必填")]
         [DisplayName("用户名：")]
         public string UserName { set; get; }
-        
+
 
         /// <summary>
         /// 登录密码，管理员创建时设置初始密码，后来可更改

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="tb_CoodinateSystem">
           <Key>
             <PropertyRef Name="ID" />
@@ -38,7 +38,7 @@
           <Property Name="FinishPerson" Type="varchar" MaxLength="50" />
           <Property Name="SurveyingUnitName" Type="varchar" MaxLength="50" />
           <Property Name="Explain" Type="varchar(max)" />
-          <Property Name="IsPublic" Type="bit" Nullable="false" />
+          <Property Name="PublicOjbs" Type="varchar(max)" Nullable="false" />
           <Property Name="UploadTime" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="FileSize" Type="float" Nullable="false" />
           <Property Name="UserID" Type="int" Nullable="false" />
@@ -96,8 +96,7 @@
           <EntitySet Name="tb_Unit" EntityType="Self.tb_Unit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tb_UserInfo" EntityType="Self.tb_UserInfo" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -134,7 +133,7 @@
           <Property Name="FinishPerson" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="SurveyingUnitName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Explain" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="IsPublic" Type="Boolean" Nullable="false" />
+          <Property Name="PublicObjs" Type="String" Nullable="false" />
           <Property Name="UploadTime" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="FileSize" Type="Double" Nullable="false" />
           <Property Name="UserID" Type="Int32" Nullable="false" />
@@ -209,6 +208,7 @@
           <EntitySetMapping Name="tb_FileInfo">
             <EntityTypeMapping TypeName="Model.tb_FileInfo">
               <MappingFragment StoreEntitySet="tb_FileInfo">
+                <ScalarProperty Name="PublicObjs" ColumnName="PublicOjbs" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="FileName" ColumnName="FileName" />
                 <ScalarProperty Name="Directory" ColumnName="Directory" />
@@ -231,7 +231,6 @@
                 <ScalarProperty Name="FinishPerson" ColumnName="FinishPerson" />
                 <ScalarProperty Name="SurveyingUnitName" ColumnName="SurveyingUnitName" />
                 <ScalarProperty Name="Explain" ColumnName="Explain" />
-                <ScalarProperty Name="IsPublic" ColumnName="IsPublic" />
                 <ScalarProperty Name="UploadTime" ColumnName="UploadTime" />
                 <ScalarProperty Name="FileSize" ColumnName="FileSize" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />

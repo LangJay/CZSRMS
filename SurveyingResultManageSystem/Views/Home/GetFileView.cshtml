@@ -1,0 +1,108 @@
+﻿@using Model;
+@model Model.PageInfo<tb_FileInfo>
+<div id="div_filemanager_pager">
+    <div id="div_filemanager_list">
+        <div id="div_filemanager_list_header">
+            <div id="div_filemanager_list_header_search">
+                <input class="search" type="search" placeholder="输入关键字查询" value="@Model.keywords" />
+                <input class="button" onclick="search()" type="button" value="🔍搜索" />
+            </div>
+            <div id="div_filemanager_list_header_upload">
+                <input onclick="uploadFile()" class="button"  type="button" value="上传文件" />
+            </div>
+        </div>
+        <table class="table">
+            <tr>
+                <th>
+                    选择
+                </th>
+                <th>
+                    文件名称
+                </th>
+                <th>
+                    文件大小
+                </th>
+                <th>
+                    上传时间
+                </th>
+                <th>
+                    操作
+                </th>
+            </tr>
+
+            @foreach (var item in Model.pageList)
+            {
+                <tr id="@item.ID">
+                    <td>
+                        <img class="select_img" onclick="selectimg(this)" src="~/Sources/Images/select.png" />
+                    </td>
+                    <td id="file_@item.ID">
+                        @item.FileName
+                    </td>
+                    <td>
+                        @(item.FileSize.ToString("f3") + " M")
+                    </td>
+                    <td>
+                        @(item.UploadTime.Split(' ')[0])
+                    </td>
+                    <td>
+                        <a onclick="deleteFile(@item.ID)">
+                            删除
+                        </a>
+                        <a href="/Home/Download?fileId=@item.ID">
+                            下载
+                        </a>
+                    </td>
+                </tr>
+            }
+        </table>
+        <div id="div_filemanager_list_footer">
+            <div id="footer_left">
+                <img class="select_img" src="~/Sources/Images/select.png" onclick="selectallimg(this)" />
+                <p style="display:inline">全选</p>
+                下载删除
+            </div>
+            <div id="footer_right">
+                <input id="footer-right-btn1" onclick="refresh(1)" class="button" type="button" value="首页" />
+                <input id="footer-right-btn2" onclick="refresh(@(Model.pageIndex - 1))" class="button" type="button" value="上一页" />
+                <input id="footer-right-btn4" onclick="refresh(@(Model.pageIndex + 1))" class="button" type="button" value="下一页" />
+                <input id="footer-right-btn5" onclick="refresh(@Model.totalPage)" class="button" type="button" value="尾页" />
+            </div>
+        </div>
+    </div>
+</div>
+<p>共 @Model.totalPage 页 每页 @Model.pageSize 条 第 @Model.pageIndex 页</p>
+<script>
+    $(document).ready(function () {
+        if (@Model.pageIndex <= 1) {
+            $("#footer-right-btn2").attr("disabled", "true");
+            $("#footer-right-btn2").css("background-color", "#5090C7");
+            $("#footer-right-btn1").attr("disabled", "true");
+            $("#footer-right-btn1").css("background-color", "#5090C7");
+        }
+        else if (@Model.pageIndex == @Model.totalPage)
+        {
+            $("#footer-right-btn4").attr("disabled", "true");
+            $("#footer-right-btn4").css("background-color", "#5090C7");
+            $("#footer-right-btn5").attr("disabled", "true");
+            $("#footer-right-btn5").css("background-color", "#5090C7");
+        }
+        else {
+            $("#footer-right-btn2").removeAttr("disabled");
+            $("#footer-right-btn4").removeAttr("disabled");
+            $("#footer-right-btn1").removeAttr("disabled");
+            $("#footer-right-btn5").removeAttr("disabled");
+            $("#footer-right-btn2").css("background-color", "#0972A7");
+            $("#footer-right-btn4").css("background-color", "#0972A7");
+            $("#footer-right-btn1").css("background-color", "#0972A7");
+            $("#footer-right-btn5").css("background-color", "#0972A7");
+        }
+        if (@Model.totalPage <= 1) {
+            $("#footer-right-btn4").attr("disabled", "true");
+            $("#footer-right-btn4").css("background-color", "#5090C7");
+            $("#footer-right-btn5").attr("disabled", "true");
+            $("#footer-right-btn5").css("background-color", "#5090C7");
+        }
+    });
+
+</script>

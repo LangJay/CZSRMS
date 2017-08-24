@@ -53,12 +53,10 @@
     </div>
     <div class="container body-content" style="margin:2px 0px 0px 0px;padding:0px;height:80%;max-width:100%;">
         @RenderBody()
-        @*<hr  />
-            <footer style="display:none">
-                <p>&copy; @DateTime.Now.Year - 湖南省第一测绘院</p>
-            </footer>*@
     </div>
-
+    <div id="loading">
+        <img src="~/Sources/Images/loading.gif" />
+    </div>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
@@ -73,12 +71,13 @@
     $('#J_scroll').addClass('theanimation');
     $("#more-btn").removeAttr("disabled"); //移除disabled属性
     //获取消息条数
-    var count = $("#J_scroll").children.length;
+    var count = $("#J_scroll").children().length;
     if (count == 0)
         count = 2;
     count *= 10;
     var speed = count + 's';
     document.getElementById("J_scroll").style.WebkitAnimationDuration = speed;
+    document.getElementById("J_scroll").style.animationDuration = speed;
     //查看用户权限，分配功能
     $.get("/UserInfoManager/GetUserLevels", function (data, status)
     {

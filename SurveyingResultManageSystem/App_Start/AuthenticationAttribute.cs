@@ -18,7 +18,7 @@ namespace SurveyingResultManageSystem.App_Start
             base.OnActionExecuting(filterContext);
         }
     }
-    public class AuthorityAuthenticationAttribute:ActionFilterAttribute
+    public class AuthorityAuthenticationAttribute : ActionFilterAttribute
     {
         private UserInfoService userInfoService;
         public AuthorityAuthenticationAttribute()
@@ -30,7 +30,12 @@ namespace SurveyingResultManageSystem.App_Start
         {
             try
             {
-                string username = HttpContext.Current.Request.Cookies["username"].Value;
+                var cook = HttpContext.Current.Request.Cookies["username"];
+                if(cook == null)
+                {
+                    filterContext.Result = new RedirectResult("/Home/Login");
+                }
+                string username = cook.Value;
                 tb_UserInfo user = userInfoService.Find(u => u.UserName == username);
                 if(user == null)
                 {

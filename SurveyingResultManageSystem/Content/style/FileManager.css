@@ -7,19 +7,23 @@
 }
 
 .li_div a {
+    text-align: left;
+    padding-left: 40px;
     text-decoration: none;
     color: black;
     display: block;
-    padding: 5px 0px 5px 0px;
+    border-top: 1px solid #00486d;
 }
-
-    .li_div a:hover {
-        background-color: #c8c8c8;
-    }
-
-    .li_div a:active {
-        scrollbar-base-color: #c8c8c8;
-    }
+.li_div a:hover {
+    cursor: pointer;
+    background-color: #c8c8c8;
+}
+.checked {
+    background-color: #c8c8c8;
+}
+.li_div a:active {
+    scrollbar-base-color: #c8c8c8;
+}
 
 ul li {
     list-style-type: none;
@@ -39,6 +43,7 @@ ul li h4 {
     display:none;
 }
 .li_div {
+    background-color: #b5b5b5;
     width: 100%;
 }
 #li_map {
@@ -47,9 +52,12 @@ ul li h4 {
 ul {
     padding: 0px;
 }
-
+.select_img:hover{
+    cursor:pointer;
+}
 #div_menu_ul h4:hover {
     background-color: #5090C7;
+    cursor: pointer;
 }
 
 #div_menu_ul h4:checked {
@@ -61,7 +69,7 @@ ul {
     width: 25px;
     height: 25px;
     margin-right: 10px;
-    margin-left: 60px;
+    margin-left: 20px;
     margin-top: -5px;
 }
 
@@ -70,7 +78,7 @@ ul {
     width: 25px;
     height: 25px;
     margin-right: 10px;
-    margin-left: 60px;
+    margin-left: 20px;
     margin-top: -5px;
 }
 
@@ -99,10 +107,9 @@ ul {
     border-bottom: 1px solid #0972A7;
 }
 
-    #div_filemanager_list_header input {
-        height: 30px;
-    }
-
+#div_filemanager_list_header input {
+    height: 30px;
+}
 .button {
     background-color: #0972A7;
     border: none;
@@ -110,17 +117,16 @@ ul {
     outline: none;
     height: 30px;
 }
+.button:before {
+    background-color: #0972A7;
+    border: none;
+    color: white;
+    outline: none;
+}
 
-    .button:before {
-        background-color: #0972A7;
-        border: none;
-        color: white;
-        outline: none;
-    }
-
-    .button:active {
-        background-color: #5090C7;
-    }
+.button:active {
+    background-color: #5090C7;
+}
 
 #div_filemanager_list_header_search {
     display: inline;
@@ -163,7 +169,7 @@ ul {
     padding-top: 10px;
 }
 .modal-content{
-    width: 600px;
+    width: 650px;
 }
 .modal-dialog {
     width: auto;
@@ -183,6 +189,19 @@ ul {
 .modal-dialog .modal-header {
     background-color: #0972A7;
     border-bottom: 1px solid #d8d7d7;
+}
+.classheader {
+    height: 40px;
+    font-size: 16px;
+    padding-top: 10px;
+}
+.subclass {
+    background-color: #ececec;
+    display:none;
+}
+.subclass a{
+    padding: 5px 0px 5px 0px;
+    border-bottom:1px solid white;
 }
 /*加载动画*/
 .card{

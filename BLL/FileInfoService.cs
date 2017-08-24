@@ -18,7 +18,7 @@ using System.Text;
 using System.Threading.Tasks;
 using IDAL;
 using DAL;
-
+using BLL.Tools;
 namespace BLL
 {
     public class FileInfoService : BaseService<tb_FileInfo>, InterfaceFileInfoService

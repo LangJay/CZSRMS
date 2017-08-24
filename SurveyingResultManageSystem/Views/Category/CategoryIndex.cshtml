@@ -31,12 +31,12 @@
         </div>
 
     </div>
-    <div id="div-menu">
+    <div id="div-menu" style="display:none">
         <input class="button" type="button" onclick="addCategory()" value="添加分类" />
         <input class="button" type="button" onclick="editCategory()" value="编辑分类" />
         <input class="button" type="button" onclick="deleteCategory()" value="删除分类" />
     </div>
-    <div id="all-category" class="displaynone">
+    <div id="all-category" class="displaynone" style="display:none">
         @foreach (var item in ViewBag.All)
         {
             <div class="edit" onclick="edit(this)">
@@ -45,7 +45,7 @@
             </div>
         }
     </div>
-    <div id="div-addcategory">
+    <div id="div-addcategory" style="display:none">
         <p class="p-add">分类名称：</p>
         <input id="input-typename" type="text" />
         <p class="p-add">子类名称:</p>

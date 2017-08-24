@@ -1,6 +1,8 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@using Model;
+@model Model.PageInfo<tb_FileInfo>
 @Styles.Render("~/Content/style/FileManager.css")
 <link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
 <link href="~/Content/themes/icon.css" rel="stylesheet" />
@@ -15,7 +17,7 @@
                 </span>
             </div>
             <div id="divlist-file" class="li_div">
-                <a>文件所属单位</a>
+                <ul id="li-div-ul"></ul>
             </div>
         </li>
         <li id="li_map">
@@ -33,95 +35,9 @@
         </li>
     </ul>
 </div>
+
 <div id="div-filemanager">
-    <div id="div_filemanager_pager">
-        <div id="div_filemanager_list">
-            <div id="div_filemanager_list_header">
-                <div id="div_filemanager_list_header_search">
-                    <input class="search" type="search" placeholder="输入关键字查询" />
-                    <input class="button" type="button" value="🔍搜索" />
-                </div>
-                <div id="div_filemanager_list_header_upload">
-                    <input onclick="uploadFile()" class="button" type="button" value="上传文件" />
-                </div>
-            </div>
-            <table class="table">
-                <tr>
-                    <th>
-                        选择
-                    </th>
-                    <th>
-                        文件名称
-                    </th>
-                    <th>
-                        文件大小
-                    </th>
-                    <th>
-                        上传时间
-                    </th>
-                    <th>
-                        操作
-                    </th>
-                </tr>
-
-                @*@foreach (var num in 3)
-                    {*@
-                <tr>
-                    <td>
-                        <img src="~/Sources/Images/select.png" />
-                    </td>
-                    <td>
-                        地籍调查图.DWG
-                    </td>
-                    <td>
-                        123.1M
-                    </td>
-                    <td>
-                        2017-07-21
-                    </td>
-                    <td>
-                        删除
-                        下载
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        <img src="~/Sources/Images/selected.png" />
-                    </td>
-                    <td>
-                        地籍调查图.DWG
-                    </td>
-                    <td>
-                        123.1M
-                    </td>
-                    <td>
-                        2017-07-21
-                    </td>
-                    <td>
-                        删除
-                        下载
-                    </td>
-                </tr>
-
-            </table>
-            <div id="div_filemanager_list_footer">
-                <div id="footer_left">
-                    <img src="~/Sources/Images/select.png" />
-                    <p>全选</p>
-                    下载删除
-                </div>
-                <div id="footer_right">
-                    <input class="button" type="button" value="首页" />
-                    <input class="button" type="button" value="上一页" />
-                    <input class="button" type="button" value="第几页" />
-                    <input class="button" type="button" value="下一页" />
-                    <input class="button" type="button" value="尾页" />
-                </div>
-            </div>
-        </div>
-    </div>
-    <p>共3页 每页20条 第1页</p>
+    @Html.Action("GetFileView")
 </div>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel" aria-hidden="true">
@@ -136,143 +52,168 @@
                     上传文件
                 </h4>
             </div>
-            <div class="modal-body">
-                <table>
-                    <tr>
-                        <td style="width:80px;">选择文件：</td>
-                        <td colspan="3"><input id="input_file" type="file" /></td>
-                    </tr>
-                    <tr>
-                        <td>坐标信息框架：</td>
-                        <td>
-                            <form>
-                                <select id="coodinatesystem" panelHeight="auto" class="easyui-combobox" name="dept" data-options="valueField:'Value',textField:'Value',url:'/Droplist/CoodinateSystemlist'"/>
-                            </form>
-                        </td>
-                        <td>完成时间信息：</td>
-                        <td><input type="date" id="finishtimeinfo" /></td>
-                    </tr>
-                    <tr>
-                        <td>完成人信息：</td>
-                        <td><input maxlength="50" id="finishpersoninfo" /></td>
-                        <td>最小坐标：</td>
-                        <td><input type="number" id="mincoodinate" /></td>
-                    </tr>
-                    <tr>
-                        <td>最大坐标：</td>
-                        <td><input type="number" id="maxcoodinate" /></td>
-                        <td>文件中对象数量：</td>
-                        <td><input type="number" id="objectnum" /></td>
-                    </tr>
-                    <tr>
-                        <td>备注信息：</td>
-                        <td colspan="3" style="width:100%;max-width:100%;"><textarea  style="width:100%;min-width:100%;" id="mark"></textarea></td>
-                    </tr>
-                    <tr>
-                        <td>是否需要进库：</td>
-                        <td>
-                            <form>
-                                是：
-                                <input type="radio" name="warehousing" value="true" />
-                                否：
-                                <input type="radio" checked="checked" name="warehousing" value="false" />
-                            </form>
-                        </td>
-                        <td>所属项目名称：</td>
-                        <td><input id="projectname" /></td>
+            <form id="fileForm">
+                <div class="modal-body">
+                    <table>
+                        <tr>
+                            <td style="width:80px;">选择文件：</td>
+                            <td colspan="3"><input id="input_file" type="file" name="file" /></td>
+                        </tr>
+                        <tr>
+                            <td>坐标信息框架：</td>
+                            <td>
+                                <span>
+                                    <input id="CoodinateSystem" width="160" panelHeight="auto" class="easyui-combobox" name="coodinatesystem" data-options="valueField:'Value',textField:'Value',url:'/Droplist/CoodinateSystemlist'" />
+                                </span>
+                            </td>
+                            <td>完成时间信息：</td>
+                            <td><input type="date" name="FinishtimeInfo" id="finishtimeinfo" /></td>
+                        </tr>
+                        <tr>
+                            <td>完成人信息：</td>
+                            <td><input maxlength="50" name="FinishPersonInfo" id="finishpersoninfo" /></td>
+                            <td>最小坐标：</td>
+                            <td><input type="number" name="MinCoodinate" id="mincoodinate" /></td>
+                        </tr>
+                        <tr>
+                            <td>最大坐标：</td>
+                            <td><input type="number" name="MaxCoodinate" id="maxcoodinate" /></td>
+                            <td>文件中对象数量：</td>
+                            <td><input type="number" name="ObjectNum" id="objectnum" /></td>
+                        </tr>
+                        <tr>
+                            <td>备注信息：</td>
+                            <td colspan="3" style="width:100%;max-width:100%;"><textarea style="width:100%;min-width:100%;" name="Mark" id="mark"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td>是否需要进库：</td>
+                            <td>
+                                <span>
+                                    是：
+                                    <input type="radio" name="Warehousing" value="true" />
+                                    否：
+                                    <input type="radio" checked="checked" name="Warehousing" value="false" />
+                                </span>
+                            </td>
+                            <td>所属项目名称：</td>
+                            <td><input name="ProjectName" id="projectname" /></td>
 
-                    </tr>
-                    <tr>
-                        <td>文件类型：</td>
-                        <td>
-                            <form>
-                                <select id="filetype" panelHeight="auto" class="easyui-combobox" name="dept" data-options="valueField:'Value',textField:'Value',url:'/Droplist/FiltTypelist'" />
-                            </form>
-                        </td>
-                        <td>所属项目类型：</td>
-                        <td>
-                            <form>
-                                <select id="projecttype" panelHeight="auto" class="easyui-combobox" name="dept" data-options="valueField:'Value',textField:'Value',url:'/Droplist/ProjectTypelist'">
-                                </select>
-                            </form>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>平面坐标系统：</td>
-                        <td>
-                            <form>
-                                <select id="pcoodinatesystem"panelHeight="auto" class="easyui-combobox" name="dept" data-options="valueField:'Value',textField:'Value',url:'/Droplist/CoodinateSystemlist'"/>
-                            </form>
-                        </td>
-                        <td>中央子午线：</td>
-                        <td><input maxlength="50" id="centermeridian" /></td>
-                    </tr>
-                    <tr>
-                        <td>纵坐标偏移值：</td>
-                        <td><input type="number" id="yoffset" /></td>
-                        <td>水平坐标偏移值：</td>
-                        <td><input type="number" id="xoffset" /></td>
-                    </tr>
-                    <tr>
-                        <td>完成时间：</td>
-                        <td><input type="date" id="finishtime" value=""/></td>
-                        <td>完成人名称：</td>
-                        <td><input maxlength="50" id="finishperson" /></td>
-                    </tr>
-                    <tr>
-                        <td>成果说明：</td>
-                        <td colspan="3"><textarea style="max-width:100%;width:100%;" id="explain"></textarea></td>
-                        
-                    </tr>
-                    <tr>
-                        <td>是否公开：</td>
-                        <td>
-                            <form>
-                                是：
-                                <input type="radio" checked="checked" name="ispublic" value="true" />
-                                否：
-                                <input type="radio" name="ispublic" value="false" />
-                            </form>
-                        </td>
-                        <td>测绘单位名称：</td>
-                        <td>
-                            <form>
-                                <select id="surveyingunitname" panelHeight="auto" class="easyui-combobox" name="dept" data-options="valueField:'Value',textField:'Value',url:'/Droplist/Unitlist'"/>
-                            </form>
-                        </td>
-                    </tr>
-                </table>
+                        </tr>
+                        <tr>
+                            <td>文件类型：</td>
+                            <td>
+                                <span>
+                                    <input id="filetype" panelHeight="auto" class="easyui-combobox" name="FileType" data-options="valueField:'Value',textField:'Value',url:'/Droplist/FiltTypelist'" />
+                                </span>
+                            </td>
+                            <td>所属项目类型：</td>
+                            <td>
+                                <span>
+                                    <input id="projecttype" panelHeight="auto" class="easyui-combobox" name="ProjectType" data-options="valueField:'Value',textField:'Value',url:'/Droplist/ProjectTypelist'" />
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>平面坐标系统：</td>
+                            <td>
+                                <span>
+                                    <input id="pcoodinateSystem" panelHeight="auto" class="easyui-combobox" name="Pcoodinatesystem" data-options="valueField:'Value',textField:'Value',url:'/Droplist/CoodinateSystemlist'" />
+                                </span>
+                            </td>
+                            <td>中央子午线：</td>
+                            <td><input maxlength="50" name="CenterMeridian" id="centermeridian" /></td>
+                        </tr>
+                        <tr>
+                            <td>纵坐标偏移值：</td>
+                            <td><input type="number" name="Yoffset" id="yoffset" /></td>
+                            <td>水平坐标偏移值：</td>
+                            <td><input type="number" name="Xoffset" id="xoffset" /></td>
+                        </tr>
+                        <tr>
+                            <td>完成时间：</td>
+                            <td><input type="date" name="Finishtime" id="finishtime" value="" /></td>
+                            <td>完成人名称：</td>
+                            <td><input maxlength="50" name="FinishPerson" id="finishperson" /></td>
+                        </tr>
+                        <tr>
+                            <td>成果说明：</td>
+                            <td colspan="3"><textarea style="max-width:100%;width:100%;" name="Explain" id="explain"></textarea></td>
 
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default"
-                        data-dismiss="modal">
-                    关闭
-                </button>
-                <button type="button" onclick="submitInfo()" class="btn btn-primary">
-                    提交
-                </button>
-            </div>
+                        </tr>
+                        <tr>
+                            <td>选择公开对象：</td>
+                            <td>
+                                <span>
+                                    <input id="selectObjs" class="easyui-combobox"
+                                           name="PublicObjs"
+                                           data-options="url:'/Droplist/Unitlist',method:'get',valueField:'Value',textField:'Value',multiple:true,panelHeight:'auto'">
+                                </span>
+                            </td>
+                            <td>测绘单位名称：</td>
+                            <td>
+                                <span>
+                                    <input id="surveyingunitname" panelHeight="auto" class="easyui-combobox" name="SurveyingUnitName" data-options="valueField:'Value',textField:'Value',url:'/Droplist/Unitlist'" />
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="0"
+                         aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                        99%
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"
+                            data-dismiss="modal">
+                        关闭
+                    </button>
+                    <button type="button" onclick="submitInfo()" class="btn btn-primary">
+                        提交
+                    </button>
+                </div>
+            </form>
+            <iframe style="display:none" name="fileFrame" id="fileFrame"></iframe>
         </div><!-- /.modal-content -->
     </div>
 </div>
 <script src="~/Scripts/jquery-2.2.4.min.js"></script>
 <script type="text/javascript">
+    $(document).ready(function () {
+        //加载分类
+        $.ajax({
+            url: "/FileManager/GetSelectedCategory",
+            type: "get",
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var text = "<li><a class='classheader' onclick= 'clickheader(this)'>" + data[i].kind + "</a><ul class='subclass' style='display:none'><li>";
+                    for (var j = 0; j < data[i].nodes.length; j++) {
+                        text += "<a onclick= 'clickclass(this)'>" + data[i].nodes[j] + "</a>";
+                    }
+                    text += "</li></ul ></li >";
+                    $("#li-div-ul").append(text);
+                }
+            }
+        });
+
+    });
     function uploadFile() {
-        var dialogwdith = $(window).width()+$(".modal-dialog").width();
+        var dialogwdith = $(window).width() + $(".modal-dialog").width();
         $(".modal-content").css({
             left: (dialogwdith - $(".modal-content").width()) / 2,
-        })
-		
-	
-        $("#myModal").modal('show');
-			//$("#finishtimeinfo").val()="dsfadsfa";
-			
+        });
+        $(".progress-bar").css("width", "0%");
+        $(".progress-bar").html("");
 
+        $("#myModal").modal('show');
     };
     function submitInfo() {
         //声明对象
-        var file = {
+        var fileinfo = {
             FileName: "",
             Directory: "",
             CoodinateSystem: "",
@@ -294,71 +235,119 @@
             FinishPerson: "",
             SurveyingUnitName: "",
             Explain: "",
-            IsPublic: "",
+            PublicObjs: "",
             UploadTime: "",
             FileSize: "",
             UserID: ""
         };
-        file.Directory = $("#input_file").val();
-        if (file.Directory == "")
+        var directory = $("#input_file").val();
+        if (directory == "")
             alert("没有选择文件！");
         else {
-            var arr = file.Directory.split('\\');
-            file.FileName = arr[arr.length - 1];
-            file.CoodinateSystem = $("#coodinatesystem").val();
-            file.FinishtimeInfo = $("#finishtimeinfo").val();
-            file.FinishPersonInfo = $("#finishpersoninfo").val();
-            file.MinCoodinate = $("#mincoodinate").val();
-            file.MaxCoodinate = $("#maxcoodinate").val();
-            file.ObjectNum = $("#objectnum").val();
-            file.Mark = $("#mark").val();
-            file.Warehousing = $("input[name=warehousing]:checked").val();
-            file.ProjectName = $("#projectname").val();
-            file.FileType = $("#filetype").val();
-            file.ProjectType = $("#projecttype").val();
-            file.PcoodinateSystem = $("#pcoodinatesystem").val();
-            file.CenterMeridian = $("#centermeridian").val();
-            file.Yoffset = $("#yoffset").val();
-            file.Xoffset = $("#xoffset").val();
-            file.Finishtime = $("#finishtime").val();
-            file.FinishPerson = $("#finishperson").val();
-            file.SurveyingUnitName = $("#surveyingunitname").val();
-            file.Explain = $("#explain").val();
-            file.IsPublic = $("input[name=ispublic]:checked").val();
-            file.UploadTime = "";
+            var arr = directory.split('\\');
+            fileinfo.Directory = "";
+            fileinfo.FileName = arr[arr.length - 1];
+            var obj = $("#CoodinateSystem");
+            fileinfo.CoodinateSystem = $("#CoodinateSystem").val();
+            fileinfo.FinishtimeInfo = $("#finishtimeinfo").val();
+            fileinfo.FinishPersonInfo = $("#finishpersoninfo").val();
+            fileinfo.MinCoodinate = $("#mincoodinate").val();
+            fileinfo.MaxCoodinate = $("#maxcoodinate").val();
+            fileinfo.ObjectNum = $("#objectnum").val();
+            fileinfo.Mark = $("#mark").val();
+            fileinfo.Warehousing = $("input[name=Warehousing]:checked").val();
+            fileinfo.ProjectName = $("#projectname").val();
+            fileinfo.FileType = $("#filetype").val();
+            fileinfo.ProjectType = $("#projecttype").val();
+            fileinfo.PcoodinateSystem = $("#pcoodinateSystem").val();
+            fileinfo.CenterMeridian = $("#centermeridian").val();
+            fileinfo.Yoffset = $("#yoffset").val();
+            fileinfo.Xoffset = $("#xoffset").val();
+            fileinfo.Finishtime = $("#finishtime").val();
+            fileinfo.FinishPerson = $("#finishperson").val();
+            fileinfo.SurveyingUnitName = $("#surveyingunitname").val();
+            fileinfo.Explain = $("#explain").val();
+            fileinfo.PublicObjs = $("#selectObjs").val();
+            fileinfo.UploadTime = "";
             var f = document.getElementById("input_file").files;
-            file.FileSize = f[0].size / 1024 / 1024;
-            file.UserID = "1";
+            fileinfo.FileSize = f[0].size / 1024 / 1024;
+            fileinfo.UserID = "0";
+            //获取文件信息
+            var file = $("#input_file").get(0).files[0];
+            var formData = new FormData();
+            formData.append("file", file);
+            formData.append("fileinfo", JSON.stringify(fileinfo));
             $.ajax({
                 url: "/FileManager/UpLoadFile",
                 type: "post",
-                dataType: "json",
-                async: false,
-                data: JSON.stringify(file),
-                success: function (data)
-                {
-
+                // Form数据
+                data: formData,
+                dataType: "text",
+                processData: false,
+                //Options to tell JQuery not to process data or worry about content-type
+                contentType: false,
+                xhr: function () {
+                    var xhr = $.ajaxSettings.xhr();
+                    console.log(xhr.status);
+                    if (onmyprogress && xhr.upload) {
+                        xhr.upload.addEventListener("progress", onmyprogress, false);
+                        return xhr;
+                    }
+                },
+                success: function (data) {
+                    $(".progress-bar").css("width", "100%");
+                    $(".progress-bar").html("100%");
+                    $("#myModal").modal('hide');
+                    getDate(1, "", "");
+                    console.log("=====" + data +"======");
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert(XMLHttpRequest.status);
-                    //alert(XMLHttpRequest.readyState);
-                    //alert(textStatus);
+                    console.log(textStatus);
                 }
             });
         }
-
     };
+    //进度条事件
+    /**
+      * 侦查附件上传情况 ,这个方法大概0.05-0.1秒执行一次
+      */
+    function onmyprogress(evt) {
+        var loaded = evt.loaded;     //已经上传大小情况
+        var tot = evt.total;      //附件总大小
+        var per = Math.floor(100 * loaded / tot);  //已经上传的百分比
+        if (per == 100)
+            per = 99;
+        console.log(per + "%");
+        $(".progress-bar").css("width", per + "%");
+        $(".progress-bar").html(per + "%");
+    }
     //点击文件管理标题
     $("#h-file").click(function () {
         //加载动画
         var divlist = $("#divlist-file");
         var d = divlist.css("display");
         if (d == "none") {
+            $("#li-div-ul").html("");
             $("#card-file").css("display", "block");
-            setTimeout(function () {
-                $("#divlist-file").css("display", "block");
-                $("#card-file").css("display", "none");
-            }, 1000);
+            //加载分类
+            $.ajax({
+                url: "/FileManager/GetSelectedCategory",
+                type: "get",
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        var text = "<li><a class='classheader' onclick= 'clickheader(this)'>" + data[i].kind + "</a><ul class='subclass' style='display:none'><li>";
+                        for (var j = 0; j < data[i].nodes.length; j++) {
+                            text += "<a>" + data[i].nodes[j] + "</a>";
+                        }
+                        text += "</li></ul ></li >";
+                        $("#li-div-ul").append(text);
+                    }
+                }
+            });
+            $("#divlist-file").css("display", "block");
+            $("#card-file").css("display", "none");
         }
         else {
             divlist.css("display", "none");
@@ -368,17 +357,131 @@
     $("#h-map").click(function () {
         //加载地图
         window.location.assign("/Home/MapManager");
-        //加载动画
-        //var divlist = $("#divlist-map");
-        //if (divlist.css("display") == "none") {
-        //    $("#card-map").css("display", "block");
-        //    setTimeout(function () {
-        //        $("#card-map").css("display", "none");
-        //        divlist.css("display", "block");
-        //    }, 5000);
-        //}
-        //else {
-        //    divlist.css("display", "none");
-        //}
     });
+    //点击父分类
+    function clickheader(e) {
+        var next = $(e).next();
+        var display = next.css("display");
+        if (display == "none") {
+            // $(e).css("background-color", "grey");
+            next.css("display", "block");
+        }
+        else {
+            //$(e).css("background-color", "white");
+            next.css("display", "none");
+        }
+    };
+
+    //获取数据
+    function getDate(pageIndex, category, keywords) {
+        $("#loading").css("display", "block");
+        //获取文件数据
+        $.ajax({
+            url: 'GetFileView',
+            type: "get",
+            dataType: "html",
+            data: { category: category, pageIndex: pageIndex, keywords: keywords },
+            async: false,
+            success: function (data) {
+                //这里是ajax提交成功后，程序返回的数据处理函数。data是返回的数据，数据类型在dataType参数里定义！
+                $("#div-filemanager").html(data);
+                $("#loading").css("display", "none");
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(textStatus);
+                $("#loading").css("display", "none");
+            }
+        });
+    };
+    //点击子分类
+    function clickclass(e) {
+        //获得分类名
+        var kind = e.innerText;
+        var pageIndex = 1;
+        getDate(pageIndex, kind, "");
+        //获取所有子分类，将点击的背景深色
+        var a = $(".subclass").find("a");
+        for (var i = 0; i < a.length; i++)
+        {
+            $(a[i]).removeClass("checked");
+        }
+        $(e).addClass("checked");
+    };
+
+    //选择
+    function selectimg(e) {
+        var src = $(e)[0].src;
+        var arr = src.split("/");
+        var img = arr[arr.length - 1];
+
+        if (img == "select.png") {
+            var selectedimg = src.replace("select.png", "selected.png");
+            $(e).attr('src', selectedimg);
+        }
+        else {
+            var selectimg = src.replace("selected.png", "select.png");
+            $(e).attr('src', selectimg);
+        }
+    }
+    function selectallimg(e)
+    {
+        //将当前页所有img换颜色
+        var src = $(e)[0].src;
+        var arr = src.split("/");
+        var img = arr[arr.length - 1];
+        var f = $(".table").find(".select_img");
+        if (img == "select.png")
+        {
+            var selectedimg = src.replace("select.png", "selected.png");
+            for (var i = 0; i < f.length; i++)
+            {
+                $(f[i]).attr('src', selectedimg);
+            }
+            $(e).attr('src', selectedimg);
+        }
+        else
+        {
+            var selectimg = src.replace("selected.png", "select.png");
+            for (var i = 0; i < f.length; i++) {
+                $(f[i]).attr('src', selectimg);
+            }
+            $(e).attr('src', selectimg);
+        }
+    }
+    //搜索
+    function search() {
+        var keywords = $(".search").val();
+        var pageIndex = 1;
+        getDate(pageIndex,"", keywords);
+    }
+    //翻页
+    function refresh(pageIndex)
+    {
+        var a = $(".subclass").find(".checked")[0];
+        var category = "";
+        if (a != undefined)
+        {
+            category = a.innerText;
+            if (category == undefined)
+                category = "";
+        }
+        var keywords = $(".search").val();
+        getDate(pageIndex, category, keywords);
+    }
+    //删除
+    function deleteFile(fileId) {
+        //获取文件名
+        var obj = $("#" + fileId).children("#file_" + fileId)[0];
+        var filename = obj.innerText;
+        if (confirm("你确定要删除" + filename + "吗？")) {
+            $.getJSON("/Home/Delete?fileId=" + fileId, function (data) {
+                console.log(data.code);
+                if (data.code == 4) {
+                    $("#" + fileId).remove();
+                    getDate(1, "", "");
+                };
+
+            });
+        }
+    };
 </script>
