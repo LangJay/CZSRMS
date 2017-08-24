@@ -52,7 +52,7 @@
                     上传文件
                 </h4>
             </div>
-            <form action="UpLoadFile" id="fileForm" method="post" enctype="multipart/form-data" target="fileFrame">
+            <form id="fileForm">
                 <div class="modal-body">
                     <table>
                         <tr>
@@ -63,7 +63,7 @@
                             <td>坐标信息框架：</td>
                             <td>
                                 <span>
-                                    <input id="CoodinateSystem" panelHeight="auto" class="easyui-combobox" name="coodinatesystem" data-options="valueField:'Value',textField:'Value',url:'/Droplist/CoodinateSystemlist'" />
+                                    <input id="CoodinateSystem" width="160" panelHeight="auto" class="easyui-combobox" name="coodinatesystem" data-options="valueField:'Value',textField:'Value',url:'/Droplist/CoodinateSystemlist'" />
                                 </span>
                             </td>
                             <td>完成时间信息：</td>
@@ -159,23 +159,24 @@
                     </table>
 
                 </div>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="0"
+                         aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                        99%
+                    </div>
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default"
                             data-dismiss="modal">
                         关闭
                     </button>
-                    <button type="submit" class="btn btn-primary">
+                    <button type="button" onclick="submitInfo()" class="btn btn-primary">
                         提交
                     </button>
                 </div>
             </form>
             <iframe style="display:none" name="fileFrame" id="fileFrame"></iframe>
         </div><!-- /.modal-content -->
-    </div>
-</div>
-<div class="progress">
-    <div class="progress-bar" role="progressbar" aria-valuenow="0"
-         aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
     </div>
 </div>
 <script src="~/Scripts/jquery-2.2.4.min.js"></script>
@@ -204,12 +205,15 @@
         var dialogwdith = $(window).width() + $(".modal-dialog").width();
         $(".modal-content").css({
             left: (dialogwdith - $(".modal-content").width()) / 2,
-        })
+        });
+        $(".progress-bar").css("width", "0%");
+        $(".progress-bar").html("");
+
         $("#myModal").modal('show');
     };
     function submitInfo() {
         //声明对象
-        var file = {
+        var fileinfo = {
             FileName: "",
             Directory: "",
             CoodinateSystem: "",
@@ -241,79 +245,82 @@
             alert("没有选择文件！");
         else {
             var arr = directory.split('\\');
-            file.Directory = "";
-            file.FileName = arr[arr.length - 1];
-            var obj = $("#coodinatesystem");
-            file.CoodinateSystem = $("#coodinatesystem").val();
-            file.FinishtimeInfo = $("#finishtimeinfo").val();
-            file.FinishPersonInfo = $("#finishpersoninfo").val();
-            file.MinCoodinate = $("#mincoodinate").val();
-            file.MaxCoodinate = $("#maxcoodinate").val();
-            file.ObjectNum = $("#objectnum").val();
-            file.Mark = $("#mark").val();
-            file.Warehousing = $("input[name=warehousing]:checked").val();
-            file.ProjectName = $("#projectname").val();
-            file.FileType = $("#filetype").val();
-            file.ProjectType = $("#projecttype").val();
-            file.PcoodinateSystem = $("#pcoodinatesystem").val();
-            file.CenterMeridian = $("#centermeridian").val();
-            file.Yoffset = $("#yoffset").val();
-            file.Xoffset = $("#xoffset").val();
-            file.Finishtime = $("#finishtime").val();
-            file.FinishPerson = $("#finishperson").val();
-            file.SurveyingUnitName = $("#surveyingunitname").val();
-            file.Explain = $("#explain").val();
-            file.PublicObjs = $("#selectobjs").val().replace(",", "|");
-            file.UploadTime = "";
+            fileinfo.Directory = "";
+            fileinfo.FileName = arr[arr.length - 1];
+            var obj = $("#CoodinateSystem");
+            fileinfo.CoodinateSystem = $("#CoodinateSystem").val();
+            fileinfo.FinishtimeInfo = $("#finishtimeinfo").val();
+            fileinfo.FinishPersonInfo = $("#finishpersoninfo").val();
+            fileinfo.MinCoodinate = $("#mincoodinate").val();
+            fileinfo.MaxCoodinate = $("#maxcoodinate").val();
+            fileinfo.ObjectNum = $("#objectnum").val();
+            fileinfo.Mark = $("#mark").val();
+            fileinfo.Warehousing = $("input[name=Warehousing]:checked").val();
+            fileinfo.ProjectName = $("#projectname").val();
+            fileinfo.FileType = $("#filetype").val();
+            fileinfo.ProjectType = $("#projecttype").val();
+            fileinfo.PcoodinateSystem = $("#pcoodinateSystem").val();
+            fileinfo.CenterMeridian = $("#centermeridian").val();
+            fileinfo.Yoffset = $("#yoffset").val();
+            fileinfo.Xoffset = $("#xoffset").val();
+            fileinfo.Finishtime = $("#finishtime").val();
+            fileinfo.FinishPerson = $("#finishperson").val();
+            fileinfo.SurveyingUnitName = $("#surveyingunitname").val();
+            fileinfo.Explain = $("#explain").val();
+            fileinfo.PublicObjs = $("#selectObjs").val();
+            fileinfo.UploadTime = "";
             var f = document.getElementById("input_file").files;
-            file.FileSize = f[0].size / 1024 / 1024;
-            file.UserID = "1";
+            fileinfo.FileSize = f[0].size / 1024 / 1024;
+            fileinfo.UserID = "0";
+            //获取文件信息
+            var file = $("#input_file").get(0).files[0];
+            var formData = new FormData();
+            formData.append("file", file);
+            formData.append("fileinfo", JSON.stringify(fileinfo));
             $.ajax({
                 url: "/FileManager/UpLoadFile",
                 type: "post",
+                // Form数据
+                data: formData,
                 dataType: "text",
-                async: false,
-                data: JSON.stringify(file),
+                processData: false,
+                //Options to tell JQuery not to process data or worry about content-type
+                contentType: false,
+                xhr: function () {
+                    var xhr = $.ajaxSettings.xhr();
+                    console.log(xhr.status);
+                    if (onmyprogress && xhr.upload) {
+                        xhr.upload.addEventListener("progress", onmyprogress, false);
+                        return xhr;
+                    }
+                },
                 success: function (data) {
-                    alert(data);
+                    $(".progress-bar").css("width", "100%");
+                    $(".progress-bar").html("100%");
+                    $("#myModal").modal('hide');
+                    getDate(1, "", "");
+                    console.log("=====" + data +"======");
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    if (textStatus != 200)
-                        alert("上传失败！");
+                    console.log(textStatus);
                 }
-            });
-            $.ajax({
-                url: "/FileManager/Upload",
-                type: "post",
-                xhr: function () {  // custom xhr
-                    myXhr = $.ajaxSettings.xhr();
-                    if (myXhr.upload) { // check if upload property exists
-                        myXhr.upload.addEventListener('.progress', function () {
-                            var p = e.total / e.loaded + "%";
-                            $(".progress-bar").css("width", p);
-                        }, false); // for handling the progress of the upload
-                    }
-                    return myXhr;
-                },
-                //Ajax事件
-                beforeSend: function () {
-                    alert("开始");
-                },
-                success: function () {
-                    alert("成功");
-                },
-                error: function () {
-                    alert("错误");
-                },
-                // Form数据
-                data: "multipart/form-data",
-                //Options to tell JQuery not to process data or worry about content-type
-                cache: false,
-                contentType: false,
-                processData: false
             });
         }
     };
+    //进度条事件
+    /**
+      * 侦查附件上传情况 ,这个方法大概0.05-0.1秒执行一次
+      */
+    function onmyprogress(evt) {
+        var loaded = evt.loaded;     //已经上传大小情况
+        var tot = evt.total;      //附件总大小
+        var per = Math.floor(100 * loaded / tot);  //已经上传的百分比
+        if (per == 100)
+            per = 99;
+        console.log(per + "%");
+        $(".progress-bar").css("width", per + "%");
+        $(".progress-bar").html(per + "%");
+    }
     //点击文件管理标题
     $("#h-file").click(function () {
         //加载动画
@@ -447,4 +454,34 @@
         var pageIndex = 1;
         getDate(pageIndex,"", keywords);
     }
+    //翻页
+    function refresh(pageIndex)
+    {
+        var a = $(".subclass").find(".checked")[0];
+        var category = "";
+        if (a != undefined)
+        {
+            category = a.innerText;
+            if (category == undefined)
+                category = "";
+        }
+        var keywords = $(".search").val();
+        getDate(pageIndex, category, keywords);
+    }
+    //删除
+    function deleteFile(fileId) {
+        //获取文件名
+        var obj = $("#" + fileId).children("#file_" + fileId)[0];
+        var filename = obj.innerText;
+        if (confirm("你确定要删除" + filename + "吗？")) {
+            $.getJSON("/Home/Delete?fileId=" + fileId, function (data) {
+                console.log(data.code);
+                if (data.code == 4) {
+                    $("#" + fileId).remove();
+                    getDate(1, "", "");
+                };
+
+            });
+        }
+    };
 </script>

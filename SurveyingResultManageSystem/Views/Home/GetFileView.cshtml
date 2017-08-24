@@ -36,20 +36,19 @@
                     <td>
                         <img class="select_img" onclick="selectimg(this)" src="~/Sources/Images/select.png" />
                     </td>
-                    <td>
+                    <td id="file_@item.ID">
                         @item.FileName
                     </td>
                     <td>
-                        @(item.FileSize.ToString("f2") + " M")
+                        @(item.FileSize.ToString("f3") + " M")
                     </td>
                     <td>
                         @(item.UploadTime.Split(' ')[0])
                     </td>
                     <td>
-                        <a href="/Home/Delete?fileId=@item.ID">
+                        <a onclick="deleteFile(@item.ID)">
                             删除
                         </a>
-
                         <a href="/Home/Download?fileId=@item.ID">
                             下载
                         </a>
@@ -105,4 +104,5 @@
             $("#footer-right-btn5").css("background-color", "#5090C7");
         }
     });
+
 </script>

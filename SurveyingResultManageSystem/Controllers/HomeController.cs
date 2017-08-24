@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 
 namespace SurveyingResultManageSystem.Controllers
 {
@@ -121,6 +122,8 @@ namespace SurveyingResultManageSystem.Controllers
                 HttpCookie cook = new HttpCookie("keywords", keywords);
                 Response.Cookies.Add(cook);
                 pageInfo.keywords = keywords;
+                //重新检索
+                pageInfo.pageList = fileInfoService.FindAll(u => u.FileName != "", "id", false);
                 List<tb_FileInfo> list = new List<tb_FileInfo>();
                 IEnumerable<tb_FileInfo> iEn = pageInfo.pageList.Where(f => f.FileName.Contains(keywords) || f.Directory.Contains(keywords) ||
                 f.CoodinateSystem.Contains(keywords) || f.FinishtimeInfo.Contains(keywords) || f.FinishPersonInfo.Contains(keywords) ||
@@ -146,6 +149,8 @@ namespace SurveyingResultManageSystem.Controllers
             if (category != "" && category != null)
             {
                 List<tb_FileInfo> list = new List<tb_FileInfo>();
+                //重新检索
+                pageInfo.pageList = fileInfoService.FindAll(u => u.FileName != "", "id", false);
                 IEnumerable<tb_FileInfo> iEn = pageInfo.pageList.Where(f => f.CoodinateSystem.Contains(category) || f.ProjectType.Contains(category)
                 || f.FileType.Contains(category) || f.PublicObjs.Contains(category));
                 int index = 1;
@@ -183,61 +188,7 @@ namespace SurveyingResultManageSystem.Controllers
             }
         }
 
-        [Authentication]
-        [HttpPost]
-        public void UpLoadFile()
-        {
-            var files = Request.Files;
-            if (files.Count > 0)
-            {
-                var file = files[0];
-                string fileName = file.FileName.Split('\\').Last();
-                Stream inputStream = file.InputStream;
-                string fileSaveFolder = HttpRuntime.AppDomainAppPath.ToString() + "/Data/File/";
-                //如果目标不存在，则创建
-                if (!Directory.Exists(fileSaveFolder))
-                {
-                    Directory.CreateDirectory(fileSaveFolder);
-
-                }
-                long lenth = inputStream.Length;
-                byte[] buffer = new byte[lenth];
-                inputStream.Read(buffer, 0, buffer.Length);
-                //string strFileMd5 = MD5Helper.GetMD5FromFile(buffer);
-                string fileSavePath = Path.Combine(fileSaveFolder, fileName);
-                file.SaveAs(fileSavePath);
-                inputStream.Close();
-                tb_FileInfo fileInfo = FormClass.FormToClass<tb_FileInfo>(Request.Form);
-                //tb_FileInfo obj = JsonConvert.DeserializeObject<tb_FileInfo>(stream) as tb_FileInfo;
-                fileInfo.Directory = fileSavePath;
-                fileInfo.FileName = fileName;
-                var username = System.Web.HttpContext.Current.Request.Cookies["username"].Value;
-                fileInfo.UserID = userInfoService.Find(u => u.UserName == username).ID;
-                fileInfo.UploadTime = DateTime.Now.ToString();
-                fileInfo.FileSize = lenth / 1024.00 / 1024.00;
-                fileInfo.PublicObjs = fileInfo.PublicObjs.Replace(",", "|");
-
-                if (fileInfoService.Add(fileInfo) != null)
-                {
-                    LogInfoService logInfoService = new LogInfoService();
-                    tb_LogInfo log = new tb_LogInfo()
-                    {
-                        UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value,
-                        Time = DateTime.Now.ToString(),
-                        Operation = LogOperations.UploadFile(),
-                        FileName = fileInfo.FileName,
-                        Explain = fileInfo.Explain
-                    };
-                    logInfoService.Add(log);
-                    AlertMsg("上传成功！");
-                }
-                else
-                {
-                    AlertMsg("上传失败！");
-                }
-            }
-
-        }
+       
         [Authentication]
         public void Delete(string fileId)
         {
@@ -249,15 +200,45 @@ namespace SurveyingResultManageSystem.Controllers
             {
                 int id = Convert.ToInt32(fileId);
                 var file = fileInfoService.Find(u => u.ID == id);
+
+                //记录下载
+                tb_LogInfo log = new tb_LogInfo
+                {
+                    UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value,
+                    Time = DateTime.Now.ToString(),
+                    Operation = LogOperations.DeleteFile()
+                };
+                logInfoService.Add(log);
                 if (file == null)
                 {
+                    log.FileName = null;
+                    log.Explain = "文件不存在";
                     AlertMsg("文件不存在");
                     return;
                 }
                 System.IO.File.Delete(file.Directory);
+                bool success = fileInfoService.Delete(file);
+                if (success)
+                {
+                    log.FileName = file.FileName;
+                    log.Explain = "删除成功！";
+                    logInfoService.Add(log);
+                    var response = new { code = 4, fileId = file.ID };
+                    Response.Write(new JavaScriptSerializer().Serialize(response));
+                }
             }
             catch(Exception e)
             {
+                //记录下载
+                tb_LogInfo log = new tb_LogInfo
+                {
+                    UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value,
+                    FileName = null,
+                    Explain = e.Message,
+                    Time = DateTime.Now.ToString(),
+                    Operation = LogOperations.DeleteFile()
+                };
+                logInfoService.Add(log);
                 Log.AddRecord(e);
                 AlertMsg("删除失败！");
             }
@@ -277,18 +258,44 @@ namespace SurveyingResultManageSystem.Controllers
                 AlertMsg("文件不存在");
                 return;
             }
-            string filePath = Request.MapPath(file.Directory);
-            //以字符流的形式下载文件
-            FileStream fs = new FileStream(filePath, FileMode.Open);
-            byte[] bytes = new byte[(int)fs.Length];
-            fs.Read(bytes, 0, bytes.Length);
-            fs.Close();
-            Response.ContentType = "application/octet-stream";
-            //通知浏览器下载文件而不是打开
-            Response.AddHeader("Content-Disposition", "attachment; filename=" + HttpUtility.UrlEncode(file.FileName, System.Text.Encoding.UTF8));
-            Response.BinaryWrite(bytes);
-            Response.Flush();
-            Response.End();
+            try
+            {
+                //记录下载
+                tb_LogInfo log = new tb_LogInfo
+                {
+                    UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value,
+                    FileName = file.FileName,
+                    Explain = "请求下载文件！",
+                    Time = DateTime.Now.ToString(),
+                    Operation = LogOperations.DownloadFile()
+                };
+                logInfoService.Add(log);
+                //以字符流的形式下载文件
+                FileStream fs = new FileStream(file.Directory, FileMode.Open, FileAccess.ReadWrite);
+                byte[] bytes = new byte[(int)fs.Length];
+                fs.Read(bytes, 0, bytes.Length);
+                fs.Close();
+                Response.ContentType = "application/octet-stream";
+                //通知浏览器下载文件而不是打开
+                Response.AddHeader("Content-Disposition", "attachment; filename=" + HttpUtility.UrlEncode(file.FileName, System.Text.Encoding.UTF8));
+                Response.BinaryWrite(bytes);
+                Response.Flush();
+                Response.End();
+            }
+            catch(Exception e)
+            {
+                //记录下载
+                tb_LogInfo log = new tb_LogInfo
+                {
+                    UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value,
+                    FileName = file.FileName,
+                    Explain = "下载失败！",
+                    Time = DateTime.Now.ToString(),
+                    Operation = LogOperations.DownloadFile()
+                };
+                logInfoService.Add(log);
+                Log.AddRecord(e);
+            }
         }
         private void AlertMsg(string msg)
         {

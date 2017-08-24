@@ -522,11 +522,21 @@
     </Content>
     <Content Include="Content\themes\material\images\Thumbs.db" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
-    <None Include="Scripts\jquery-2.2.4.intellisense.js" />
+    <Content Include="Scripts\dist\store.everything.js" />
+    <Content Include="Scripts\dist\store.everything.min.js" />
+    <Content Include="Scripts\dist\store.legacy.js" />
+    <Content Include="Scripts\dist\store.legacy.min.js" />
+    <Content Include="Scripts\dist\store.modern.js" />
+    <Content Include="Scripts\dist\store.modern.min.js" />
+    <Content Include="Scripts\dist\store.tests.js" />
+    <Content Include="Scripts\dist\store.tests.min.js" />
+    <Content Include="Scripts\dist\store.v1-backcompat.js" />
+    <Content Include="Scripts\dist\store.v1-backcompat.min.js" />
     <Content Include="Scripts\easyloader.js" />
-    <Content Include="Scripts\jquery-2.2.4.js" />
-    <Content Include="Scripts\jquery-2.2.4.min.js" />
-    <Content Include="Scripts\jquery-2.2.4.min.map" />
+    <None Include="Scripts\jquery-1.11.3.intellisense.js" />
+    <Content Include="Scripts\jquery-1.11.3.js" />
+    <Content Include="Scripts\jquery-1.11.3.min.js" />
+    <Content Include="Scripts\jquery-1.11.3.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.easyui-1.4.5.min.js" />
     <Content Include="Scripts\jquery.easyui.min.js" />
@@ -578,7 +588,9 @@
     <Content Include="Sources\Images\select.png" />
     <Content Include="Sources\Images\selected.png" />
     <Content Include="Sources\Images\地球.gif" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>

@@ -137,7 +137,7 @@ namespace SurveyingResultManageSystem.Controllers
             sr.Close();
             tb_LogInfo log = new tb_LogInfo()
             {
-                UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value,
+                UserName = username,
                 Time = DateTime.Now.ToString(),
                 FileName = "",
                 Operation = LogOperations.DeleteUser()
@@ -219,10 +219,10 @@ namespace SurveyingResultManageSystem.Controllers
         [HttpGet]
         public string GetUserLevels()
         {
-            string username = System.Web.HttpContext.Current.Request.Cookies["username"].Value;
             string levels = "";
             try
             {
+                string username = System.Web.HttpContext.Current.Request.Cookies["username"].Value;
                 //根据信息找到完整用户信息
                 tb_UserInfo user = userInfoService.Find(u => u.UserName == username);
                 levels = user.Levels;

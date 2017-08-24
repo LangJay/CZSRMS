@@ -206,13 +206,12 @@ td, th {
 textarea {
     resize: vertical;
 }
-.progress {
-    display:none;
-    z-index:100;
-    position:fixed;
-    top:50%;
-    left:45%;
-    width:10%;
+.progress-bar {
+    text-align:right;
+}
+.combo
+{
+    min-width:160px;
 }
 /*加载动画*/
 .card{

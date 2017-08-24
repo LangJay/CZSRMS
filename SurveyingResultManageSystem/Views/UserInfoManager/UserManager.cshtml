@@ -305,9 +305,15 @@
         if (user.UserName == "")
             $("#input-username").addClass('red-border');
         else if (user.Levels == "")
-            $("#input-levels").next().addClass('red-border');
+        {
+            var next = $("#input-levels").next(".textbox")[0];
+            $(next).css('border', "1px solid red");
+        }
         else if (user.Unit == "")
-            $("#input-unit").next().addClass('red-border');
+        {
+            var next = $("#input-unit").next(".textbox")[0];
+            $(next).css('border',"1px solid red");
+        }
         else
         {
             //Post表单
