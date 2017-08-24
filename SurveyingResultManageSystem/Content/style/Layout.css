@@ -1,11 +1,7 @@
-﻿body{
-    min-width:900px;
-}
-#div_title {
+﻿#div_title {
     background-color: #0972A7;
     width: 100%;
     text-align: left;
-    position: relative;
 }
 
 #div_title_ul {
@@ -16,21 +12,21 @@
     position: absolute;
 }
 
-#div_title_ul li {
-    float: left;
-    padding-right: 10px;
-    color: white;
-}
+    #div_title_ul li {
+        float: left;
+        padding-right: 10px;
+        color: white;
+    }
 
-#div_title_ul a {
-    color: white;
-    text-decoration: none;
-    outline: none;
-}
+    #div_title_ul a {
+        color: white;
+        text-decoration: none;
+        outline: none;
+    }
 
-#div_title_ul a:hover {
-    color: grey;
-}
+        #div_title_ul a:hover {
+            color: grey;
+        }
 
 #div_message, #div_message_left, #div_message_right {
     display: inline-flex;
@@ -41,7 +37,6 @@
     border-bottom: 2px inset #808080;
     height: 40px;
     width: 100%;
-    position: relative;
 }
 
 #div_message_left {
@@ -70,7 +65,7 @@
     width: 14px;
     height: 18px;
     margin-right: 5px;
-    margin-bottom: 10px;
+    margin-bottom:10px;
     display: inline;
 }
 
@@ -82,9 +77,9 @@
     outline: none;
 }
 
-#div_message_right a:hover {
-    color: grey;
-}
+    #div_message_right a:hover {
+        color: grey;
+    }
 
 #div_message p {
     margin: 0px;
@@ -122,22 +117,22 @@ html {
     overflow: hidden;
 }
 
-.outer ul {
-    display: inline-block;
-    height: 20px;
-    -webkit-transform: translate3d(0, 0, 0); /* 3d渲染，开启硬件加速 */
-    transform: translate3d(0, 0, 0);
-    font-size: 0px; /* 使inline-block无默认间距 */
-    white-space: nowrap; /* 超出不折行 */
-}
+    .outer ul {
+        display: inline-block;
+        height: 20px;
+        -webkit-transform: translate3d(0, 0, 0); /* 3d渲染，开启硬件加速 */
+        transform: translate3d(0, 0, 0);
+        font-size: 0px; /* 使inline-block无默认间距 */
+        white-space: nowrap; /* 超出不折行 */
+    }
 
-.outer ul li {
-    display: inline-block;
-    padding-right: 50px;
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
-    font-size: 14px;
-}
+        .outer ul li {
+            display: inline-block;
+            padding-right: 50px;
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+            font-size:14px;
+        }
 
 .theanimation {
     animation: theanimation infinite linear;
