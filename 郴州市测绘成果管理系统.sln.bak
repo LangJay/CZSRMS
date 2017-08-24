@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{7FD9B3BE-FBF4-403D-B0DE-51A7A93F03E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArcServer", "ArcServer\ArcServer.csproj", "{0ADDE955-C55F-4F3C-896C-BA113721DB94}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArcServer", "ClassLibrary1\ArcServer.csproj", "{0ADDE955-C55F-4F3C-896C-BA113721DB94}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

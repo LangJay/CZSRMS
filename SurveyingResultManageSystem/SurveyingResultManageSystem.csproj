@@ -637,6 +637,10 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ArcServer\ArcServer.csproj">
+      <Project>{0adde955-c55f-4f3c-896c-ba113721db94}</Project>
+      <Name>ArcServer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BLL\BLL.csproj">
       <Project>{d540c8a3-b7c3-45a1-9ad8-a34712cba6d8}</Project>
       <Name>BLL</Name>
