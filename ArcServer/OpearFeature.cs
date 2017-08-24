@@ -273,6 +273,39 @@ namespace ArcServer
                        
             return false;
         }
+        public static string QueryFeature(string layerUrl, string idh)
+        {
+            string data1 = "f=json";
+            string url1 = layerUrl + "/query";
+            string features1 = string.Format("objectIds={0}&", idh);
+
+            data1 = features1 + data1;
+
+            string res1 = PostData(url1, data1);
+            if (res1.Contains("error"))
+                return "";
+            Dictionary<string, List<Dictionary<string, object>>> resDic
+                = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, List<Dictionary<string, object>>>>(res1);
+            if (resDic.ContainsKey("queryResults"))
+            {
+                List<Dictionary<string, object>> addRes = resDic["queryResults"];
+                foreach (Dictionary<string, object> dic in addRes)
+                {
+                    if (dic.ContainsKey("success"))
+                    {
+                        if (dic["success"].ToString().ToLower() == "true")
+                        { 
+                            return "ss";
+                        }
+                        else return "";
+                    }
+                }
+            }
+
+            return "";
+
+           
+        }
         static string PostData(string url, string data)
         {
             HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
@@ -378,19 +411,10 @@ namespace ArcServer
             fi2.Attributes.Add("PublicOB ", "");// 公开单位
 
 
-            string url = "http://localhost:6080/arcgis/rest/services/fwx1g/FeatureServer/0";
-            fi2.url = url;
-            string cc=readshpfile("E:\\wff.shp", fi2);
-            var tt=DeleFeature(fi2.url, cc);
-            if(tt)
-            {
-                Console.WriteLine("删除成功"); 
-            }
-            var tt1 = UpdateFeature(fi2.url, "288,13",fi2);
-            if (tt1)
-            {
-                Console.WriteLine("更新成功");
-            }
+
+            fi2.url = "http://localhost:6080/arcgis/rest/services/fwx1g/FeatureServer/0";
+            string sff=QueryFeature(fi2.url, "5");
+
         }
 
     }

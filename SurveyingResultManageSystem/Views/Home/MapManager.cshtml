@@ -163,8 +163,8 @@
                         data-dismiss="modal">
                     关闭
                 </button>
-                <button type="button" onclick="submitInfo()" class="btn btn-primary">
-                    提交
+                <button type="button" onclick="changeInfo()" class="btn btn-primary">
+                    修改
                 </button>
             </div>
         </div><!-- /.modal-content -->
@@ -179,6 +179,7 @@
         var divlist = $("#divlist-file");
 		
         if (divlist.css("display") == "none") {
+            $("#card-file").css("display", "block");
             window.location.assign("/Home/FileManager");
         }
         else {
@@ -262,7 +263,42 @@
                  left: (dialogwdith - $(".modal-content").width()) / 2,
                 })
                 $("#myModal").modal('show');
+				
+				$("#finishpersoninfo").val('test');
+			    $("#finishtimeinfo").val("2017-12-12");
                };
+	    function changeInfo(){
+		   var file = {
+            FileName: "",
+            Directory: "",
+            CoodinateSystem: "",
+            FinishtimeInfo: "",
+            FinishPersonInfo: "",
+            MinCoodinate: "",
+            MaxCoodinate: "",
+            ObjectNum: "",
+            Mark: "",
+            Warehousing: "",
+            ProjectName: "",
+            FileType: "",
+            ProjectType: "",
+            PcoodinateSystem: "",
+            CenterMeridian: "",
+            Yoffset: "",
+            Xoffset: "",
+            Finishtime: "",
+            FinishPerson: "",
+            SurveyingUnitName: "",
+            Explain: "",
+            IsPublic: "",
+            UploadTime: "",
+            FileSize: "",
+            UserID: ""
+        };
+		file.FinishtimeInfo = $("#finishtimeinfo").val();
+		console.log(file.FinishtimeInfo);
+		
+		};
 	    function dele() {
                var id = document.getElementById("tdid").innerHTML; 
 			   var idh=id.split(':');
