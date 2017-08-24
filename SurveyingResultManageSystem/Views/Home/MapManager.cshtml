@@ -256,14 +256,32 @@
 		function Change() {
                var id = document.getElementById("tdid").innerHTML; 
 			   var idh=id.split(':');
-			//   console.log(idh[1]);
+			   console.log(idh[1]);
 			    map.infoWindow.hide();
 			   var dialogwdith = $(window).width()+$(".modal-dialog").width();
                $(".modal-content").css({
                  left: (dialogwdith - $(".modal-content").width()) / 2,
                 })
                 $("#myModal").modal('show');
-				
+			    var info;
+				$.ajax({
+                  url: "/Home/getfileinfo",
+                  type: "post",
+                  dataType: "text",
+                  async: false,
+                  data: idh[1],
+                  success: function (data)
+                 {
+				    info=data;
+				   
+                  },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(XMLHttpRequest.status);
+                    //alert(XMLHttpRequest.readyState);
+                    //alert(textStatus);
+                }
+             });
+			    console.log(info);
 				$("#finishpersoninfo").val('test');
 			    $("#finishtimeinfo").val("2017-12-12");
                };

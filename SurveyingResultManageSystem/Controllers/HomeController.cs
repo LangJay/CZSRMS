@@ -15,11 +15,13 @@ namespace SurveyingResultManageSystem.Controllers
     {
         private LogInfoService logInfoService;
         private UserInfoService userInfoService;
+        private FileInfoService fileInfoService;
         CZSRMS_DBEntities db = new CZSRMS_DBEntities();
         public HomeController()
         {
             logInfoService = new LogInfoService();
             userInfoService = new UserInfoService();
+            fileInfoService = new FileInfoService();
         }
         public ActionResult Login()
         {
@@ -137,6 +139,17 @@ namespace SurveyingResultManageSystem.Controllers
             bool tt = openauto.DeleFeature(item1.url, stream);
             return tt;
         }
-
+        [Authentication]
+        [HttpPost]//王军军增加8.23
+        public string getfileinfo()
+        {
+            var sr = new StreamReader(Request.InputStream);
+            var stream = sr.ReadToEnd();
+            sr.Close();
+            int idh = int.Parse(stream);
+            tb_FileInfo user = fileInfoService.Find(u => u.UserID == idh);
+            string tt=Newtonsoft.Json.JsonConvert.SerializeObject(user);
+            return tt;
+        }
     }
 }
