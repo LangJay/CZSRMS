@@ -6,7 +6,8 @@
 @Styles.Render("~/Content/style/FileManager.css")
 <link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
 <link href="~/Content/themes/icon.css" rel="stylesheet" />
-<script src="~/Scripts/jquery.easyui.min.js"></script>
+<script src="~/Scripts/jquery.easyui-1.4.5.min.js"></script>
+<script src="~/Scripts/dist/store.legacy.min.js"></script>
 <div id="div_menu">
     <ul id="div_menu_ul">
         <li id="li_file">
@@ -179,7 +180,6 @@
         </div><!-- /.modal-content -->
     </div>
 </div>
-<script src="~/Scripts/jquery-1.11.3.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         //加载分类
@@ -244,6 +244,12 @@
         if (directory == "")
             alert("没有选择文件！");
         else {
+            var file = document.getElementById("input_file").files[0];
+            if (file.size > 2147480000)//
+            {
+                alert("文件不得大于2GB!");
+                return;
+            }
             var arr = directory.split('\\');
             fileinfo.Directory = "";
             fileinfo.FileName = arr[arr.length - 1];
@@ -269,11 +275,9 @@
             fileinfo.Explain = $("#explain").val();
             fileinfo.PublicObjs = $("#selectObjs").val();
             fileinfo.UploadTime = "";
-            var f = document.getElementById("input_file").files;
-            fileinfo.FileSize = f[0].size / 1024 / 1024;
+            fileinfo.FileSize = file.size / 1024 / 1024;
             fileinfo.UserID = "0";
             //获取文件信息
-            var file = $("#input_file").get(0).files[0];
             var formData = new FormData();
             formData.append("file", file);
             formData.append("fileinfo", JSON.stringify(fileinfo));
@@ -422,6 +426,9 @@
             var selectimg = src.replace("selected.png", "select.png");
             $(e).attr('src', selectimg);
         }
+        //记录选择
+        var store = require('store');
+        store.set('selectimg', { name: 'Marcus' });
     }
     function selectallimg(e)
     {
