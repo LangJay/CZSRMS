@@ -10,6 +10,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using ArcServer;
 
 namespace SurveyingResultManageSystem.Controllers
 {
@@ -301,6 +302,37 @@ namespace SurveyingResultManageSystem.Controllers
         {
             Response.ContentType = "text/html";
             Response.Write("<script>alert('" + msg + "');</script>");
+        }
+        [Authentication]
+        [HttpPost]//王军军增加8.23
+        public bool delefeature()
+        {
+            FeatureItem1 item1 = new FeatureItem1();
+
+
+            var sr = new StreamReader(Request.InputStream);
+            var stream = sr.ReadToEnd();
+            sr.Close();
+            item1.url = "http://localhost:6080/arcgis/rest/services/fwx1g/FeatureServer/0";
+            bool tt = openauto.DeleFeature(item1.url, stream);
+            return tt;
+        }
+
+        [Authentication]
+        [HttpPost]//王军军增加8.23
+        public string GetUserinfo()
+        {
+            var sr = new StreamReader(Request.InputStream);
+            var stream = sr.ReadToEnd();
+            sr.Close();
+            tb_UserInfo user = userInfoService.Find(u => u.UserName == stream);
+            string str1 = "";
+            if (user != null)
+            {
+                str1 = str1 + user.Unit + ",";
+                str1 = str1 + user.Levels;
+            }
+            return str1;
         }
         [Authentication]
         [HttpPost]//王军军增加8.23
