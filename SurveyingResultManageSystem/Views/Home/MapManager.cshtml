@@ -8,7 +8,7 @@
 @Styles.Render("~/Content/style/FileManager.css")
 <link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
 <link href="~/Content/themes/icon.css" rel="stylesheet" />
-<script src="~/Scripts/jquery.easyui.min.js"></script>
+<script src="~/Scripts/jquery.easyui-1.4.5.min.js"></script>
 <div id="div_menu">
     <ul id="div_menu_ul">
         <li id="li_file">
@@ -39,7 +39,7 @@
         </li>
     </ul>
 </div>
-<div id="mapDiv"></div>
+<div id="mapDiv"><div id="search"></div></div>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -55,106 +55,103 @@
             </div>
             <div class="modal-body">
                 <table>
-                    
-                    <tr>
-                        <td>坐标信息框架：</td>
-                        <td>
-                            <form>
-                                <select id="coodinatesystem" panelHeight="auto" class="easyui-combobox" name="dept" data-options="valueField:'Value',textField:'Value',url:'/Droplist/CoodinateSystemlist'"/>
-                            </form>
-                        </td>
-                        <td>完成时间信息：</td>
-                        <td><input type="date" id="finishtimeinfo" /></td>
-                    </tr>
-                    <tr>
-                        <td>完成人信息：</td>
-                        <td><input maxlength="50" id="finishpersoninfo" /></td>
-                        <td>最小坐标：</td>
-                        <td><input type="number" id="mincoodinate" /></td>
-                    </tr>
-                    <tr>
-                        <td>最大坐标：</td>
-                        <td><input type="number" id="maxcoodinate" /></td>
-                        <td>文件中对象数量：</td>
-                        <td><input type="number" id="objectnum" /></td>
-                    </tr>
-                    <tr>
-                        <td>备注信息：</td>
-                        <td colspan="3" style="width:100%;max-width:100%;"><textarea  style="width:100%;min-width:100%;" id="mark"></textarea></td>
-                    </tr>
-                    <tr>
-                        <td>是否需要进库：</td>
-                        <td>
-                            <form>
-                                是：
-                                <input type="radio" name="warehousing" value="true" />
-                                否：
-                                <input type="radio" checked="checked" name="warehousing" value="false" />
-                            </form>
-                        </td>
-                        <td>所属项目名称：</td>
-                        <td><input id="projectname" /></td>
+                     <tr>
+                            <td>坐标信息框架：</td>
+                            <td>
+                                <span>
+                                    <input id="CoodinateSystem" width="160" panelHeight="auto" class="easyui-combobox" name="coodinatesystem" data-options="valueField:'Value',textField:'Value',url:'/Droplist/CoodinateSystemlist'" />
+                                </span>
+                            </td>
+                            <td>完成时间信息：</td>
+                            <td><input type="date" name="FinishtimeInfo" id="finishtimeinfo" /></td>
+                        </tr>
+                        <tr>
+                            <td>完成人信息：</td>
+                            <td><input maxlength="50" name="FinishPersonInfo" id="finishpersoninfo" /></td>
+                            <td>最小坐标：</td>
+                            <td><input type="number" name="MinCoodinate" id="mincoodinate" /></td>
+                        </tr>
+                        <tr>
+                            <td>最大坐标：</td>
+                            <td><input type="number" name="MaxCoodinate" id="maxcoodinate" /></td>
+                            <td>文件中对象数量：</td>
+                            <td><input type="number" name="ObjectNum" id="objectnum" /></td>
+                        </tr>
+                        <tr>
+                            <td>备注信息：</td>
+                            <td colspan="3" style="width:100%;max-width:100%;"><textarea style="width:100%;min-width:100%;" name="Mark" id="mark"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td>是否需要进库：</td>
+                            <td>
+                                <span>
+                                    是：
+                                    <input type="radio" name="Warehousing" value="true" />
+                                    否：
+                                    <input type="radio" checked="checked" name="Warehousing" value="false" />
+                                </span>
+                            </td>
+                            <td>所属项目名称：</td>
+                            <td><input name="ProjectName" id="projectname" /></td>
 
-                    </tr>
-                    <tr>
-                        <td>文件类型：</td>
-                        <td>
-                            <form>
-                                <select id="filetype" panelHeight="auto" class="easyui-combobox" name="dept" data-options="valueField:'Value',textField:'Value',url:'/Droplist/FiltTypelist'" />
-                            </form>
-                        </td>
-                        <td>所属项目类型：</td>
-                        <td>
-                            <form>
-                                <select id="projecttype" panelHeight="auto" class="easyui-combobox" name="dept" data-options="valueField:'Value',textField:'Value',url:'/Droplist/ProjectTypelist'">
-                                </select>
-                            </form>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>平面坐标系统：</td>
-                        <td>
-                            <form>
-                                <select id="pcoodinatesystem"panelHeight="auto" class="easyui-combobox" name="dept" data-options="valueField:'Value',textField:'Value',url:'/Droplist/CoodinateSystemlist'"/>
-                            </form>
-                        </td>
-                        <td>中央子午线：</td>
-                        <td><input maxlength="50" id="centermeridian" /></td>
-                    </tr>
-                    <tr>
-                        <td>纵坐标偏移值：</td>
-                        <td><input type="number" id="yoffset" /></td>
-                        <td>水平坐标偏移值：</td>
-                        <td><input type="number" id="xoffset" /></td>
-                    </tr>
-                    <tr>
-                        <td>完成时间：</td>
-                        <td><input type="date" id="finishtime" value=""/></td>
-                        <td>完成人名称：</td>
-                        <td><input maxlength="50" id="finishperson" /></td>
-                    </tr>
-                    <tr>
-                        <td>成果说明：</td>
-                        <td colspan="3"><textarea style="max-width:100%;width:100%;" id="explain"></textarea></td>
-                        
-                    </tr>
-                    <tr>
-                        <td>是否公开：</td>
-                        <td>
-                            <form>
-                                是：
-                                <input type="radio" checked="checked" name="ispublic" value="true" />
-                                否：
-                                <input type="radio" name="ispublic" value="false" />
-                            </form>
-                        </td>
-                        <td>测绘单位名称：</td>
-                        <td>
-                            <form>
-                                <select id="surveyingunitname" panelHeight="auto" class="easyui-combobox" name="dept" data-options="valueField:'Value',textField:'Value',url:'/Droplist/Unitlist'"/>
-                            </form>
-                        </td>
-                    </tr>
+                        </tr>
+                        <tr>
+                            <td>文件类型：</td>
+                            <td>
+                                <span>
+                                    <input id="filetype" panelHeight="auto" class="easyui-combobox" name="FileType" data-options="valueField:'Value',textField:'Value',url:'/Droplist/FiltTypelist'" />
+                                </span>
+                            </td>
+                            <td>所属项目类型：</td>
+                            <td>
+                                <span>
+                                    <input id="projecttype" panelHeight="auto" class="easyui-combobox" name="ProjectType" data-options="valueField:'Value',textField:'Value',url:'/Droplist/ProjectTypelist'" />
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>平面坐标系统：</td>
+                            <td>
+                                <span>
+                                    <input id="pcoodinateSystem" panelHeight="auto" class="easyui-combobox" name="Pcoodinatesystem" data-options="valueField:'Value',textField:'Value',url:'/Droplist/CoodinateSystemlist'" />
+                                </span>
+                            </td>
+                            <td>中央子午线：</td>
+                            <td><input maxlength="50" name="CenterMeridian" id="centermeridian" /></td>
+                        </tr>
+                        <tr>
+                            <td>纵坐标偏移值：</td>
+                            <td><input type="number" name="Yoffset" id="yoffset" /></td>
+                            <td>水平坐标偏移值：</td>
+                            <td><input type="number" name="Xoffset" id="xoffset" /></td>
+                        </tr>
+                        <tr>
+                            <td>完成时间：</td>
+                            <td><input type="date" name="Finishtime" id="finishtime" value="" /></td>
+                            <td>完成人名称：</td>
+                            <td><input maxlength="50" name="FinishPerson" id="finishperson" /></td>
+                        </tr>
+                        <tr>
+                            <td>成果说明：</td>
+                            <td colspan="3"><textarea style="max-width:100%;width:100%;" name="Explain" id="explain"></textarea></td>
+
+                        </tr>
+                        <tr>
+                            <td>选择公开对象：</td>
+                            <td>
+                                <span>
+                                    <input id="selectObjs" class="easyui-combobox"
+                                           name="PublicObjs"
+                                           data-options="url:'/Droplist/Unitlist',method:'get',valueField:'Value',textField:'Value',multiple:true,panelHeight:'auto'">
+                                </span>
+                            </td>
+                            <td>测绘单位名称：</td>
+                            <td>
+                                <span>
+                                    <input id="surveyingunitname" panelHeight="auto" class="easyui-combobox" name="SurveyingUnitName" data-options="valueField:'Value',textField:'Value',url:'/Droplist/Unitlist'" />
+                                </span>
+                            </td>
+                        </tr>
                 </table>
 
             </div>
@@ -173,6 +170,7 @@
 <script>
     var fatch3;
 	var map;
+	var search;
     //点击文件管理标题
     $("#h-file").click(function () {
         //加载动画
@@ -201,8 +199,9 @@
             divlist.css("display", "none");
         }
     });
-    require(["esri/map", "esri/layers/ArcGISDynamicMapServiceLayer","esri/layers/FeatureLayer","esri/InfoTemplate", "dojo/domReady!"],
-        function (Map, ArcGISDynamicMapServiceLayer,FeatureLayer,InfoTemplate) {
+    require(["esri/map", "esri/layers/ArcGISDynamicMapServiceLayer","esri/layers/FeatureLayer","esri/InfoTemplate", "esri/dijit/Search","dojo/dom",
+          "dojo/on","dojo/domReady!"],
+        function (Map, ArcGISDynamicMapServiceLayer,FeatureLayer,InfoTemplate,Search,dom,on) {
             map = new Map("mapDiv",{ logo: false});
             //利用url创建一个动态地图服务对象
          //   var layer = new ArcGISDynamicMapServiceLayer("http://192.168.0.230:6080/arcgis/rest/services/1/MapServer");
@@ -244,6 +243,39 @@
 		
 		  // fatch3.setDefinitionExpression("FileName='ss03'");
             map.addLayer(fatch3);
+			search = new Search({
+			sources: [{
+			featureLayer:new FeatureLayer("http://localhost:6080/arcgis/rest/services/fwx1g/FeatureServer/0" ,{
+				  outFields: ["*"],
+                  infoTemplate: new InfoTemplate("范围红线", "<table width='100%' style='table-layout:fixed'><tr height='15%' width='100%'><th width='60%' align='left'>文件名:${FileName} </th><th width='40%' align='left'>完成人:${FshPerson} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>坐标信息:${CoodSystem} </th><th width='40%' align='left'>完成时间:${FinishTime} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>中央子午线:${CenterMed} </th><th width='40%' align='left'>上传时间:${UploadTime} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>文件类型:${FileType} </th><th width='40%' align='left'>文件大小:${FileSize} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>项目名称:${ProName} </th><th width='40%' align='left' id='tdid'>图形ID:${OBJECTID} </th></tr><tr height='15%' width='100%'><th width='100%' align='left'>备注:${Memo} </th></tr></table><button style='margin:5px 8px' type='button' onclick='SYT()' class='btn btn-primary btn-xs'>缩略图</button><button style='margin:5px 8px' type='button' onclick='Change()' class='btn btn-primary btn-xs'>修  改</button><button style='margin:5px 8px' type='button' onclick='dele()' class='btn btn-primary btn-xs'>删  除</button><button style='margin:5px 0px 5px 8px' type='button' onclick='Down()' class='btn btn-primary btn-xs'>下  载</button>")
+              }),
+              exactMatch: false,//精确查找  
+              outFields: ["OBJECTID", "FileName","Directory","CoodSystem"],
+              searchFields: ["FileName","Directory","CoodSystem","FshPerson"],//查找的关键字  
+              suggestionTemplate: "${FileName}",
+              displayField: "FileName",
+              suggestionTemplate: "${FileName}",
+               name: "",
+               placeholder: "",//搜索提示 
+               maxResults: 6,
+			   maxSuggestions: true,
+               minCharacters: 0,
+               searchQueryParams: { distance: 5000,maxAllowableOffset:1},
+               enableSuggestions: true
+             
+          }],
+			
+			
+			
+			map: map
+             },"search");
+          search.startup();
+	 on(search, 'search-results', function (e) {
+		 //console.log(e);
+		 searchresult = e;
+	});
+
+
 		    function getCookie(name) {
                 var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
                  if (arr = document.cookie.match(reg))
@@ -281,9 +313,31 @@
                     //alert(textStatus);
                 }
              });
-			    console.log(info);
-				$("#finishpersoninfo").val('test');
-			    $("#finishtimeinfo").val("2017-12-12");
+			    console.log("("+info+")");
+				var info1=eval("("+info+")");
+				//$("#CoodinateSystem").combobox("setValue","dsfasd");
+			 // $('#CoodinateSystem').combobox('setValue',info1.CoodinateSystem);
+			  $("#_easyui_textbox_input1").val(info1.CoodinateSystem);
+              $("#finishtimeinfo").val(info1.FinishtimeInfo );
+              $("#finishpersoninfo").val(info1.FinishPersonInfo );
+              $("#mincoodinate").val(info1.MinCoodinate );
+              $("#maxcoodinate").val(info1.MaxCoodinate);
+              $("#objectnum").val(info1.ObjectNum);
+              $("#mark").val(info1.Mark );
+              $("input[name=Warehousing]:checked").val(info1.Warehousing);
+              $("#projectname").val(info1.ProjectName);
+              $("#filetype").val(info1.FileType);
+              $("#projecttype").val( info1.ProjectType);
+              $("#pcoodinateSystem").val( info1.PcoodinateSystem);
+              $("#centermeridian").val(info1.CenterMeridian);
+              $("#yoffset").val(info1.Yoffset);
+              $("#xoffset").val( info1.Xoffset);
+              $("#finishtime").val(info1.Finishtime);
+              $("#finishperson").val(info1.FinishPerson);
+              $("#surveyingunitname").val(info1.SurveyingUnitName );
+              $("#explain").val(info1.Explain);
+            
+				
                };
 	    function changeInfo(){
 		   var file = {
@@ -313,8 +367,8 @@
             FileSize: "",
             UserID: ""
         };
-		file.FinishtimeInfo = $("#finishtimeinfo").val();
-		console.log(file.FinishtimeInfo);
+		var cc = $("#CoodinateSystem").val();
+		console.log($("#CoodinateSystem").val());
 		
 		};
 	    function dele() {

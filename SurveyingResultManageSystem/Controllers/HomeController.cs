@@ -341,8 +341,8 @@ namespace SurveyingResultManageSystem.Controllers
             var sr = new StreamReader(Request.InputStream);
             var stream = sr.ReadToEnd();
             sr.Close();
-            int idh = int.Parse(stream);
-            tb_FileInfo user = fileInfoService.Find(u => u.UserID == idh);
+            //int idh = int.Parse(stream);
+            tb_FileInfo user = fileInfoService.Find(u => u.ObjectID == stream);
             string tt=Newtonsoft.Json.JsonConvert.SerializeObject(user);
             return tt;
         }

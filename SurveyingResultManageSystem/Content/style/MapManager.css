@@ -1,4 +1,10 @@
-﻿
+﻿#search {
+         display: block;
+         position: relative;
+         z-index: 2;
+         top: 20px;
+         left: 74px;
+      }
 #div_menu {
     border-right: 1px inset #808080;
     float: left;
