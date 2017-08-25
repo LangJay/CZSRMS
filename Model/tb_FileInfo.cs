@@ -120,5 +120,7 @@ namespace Model
         /// 用户ID
         /// </summary>
         public int UserID { get; set; }
+        public string ObjectID { get; set; }
+        public string MD5 { get; set; }
     }
 }
