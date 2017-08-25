@@ -181,6 +181,7 @@
     </div>
 </div>
 <script type="text/javascript">
+    var currentAjax = null;
     $(document).ready(function () {
         //加载分类
         $.ajax({
@@ -208,9 +209,30 @@
         });
         $(".progress-bar").css("width", "0%");
         $(".progress-bar").html("");
-
         $("#myModal").modal('show');
     };
+    //模态框隐藏时
+    $(function () {
+        $('#myModal').on('hide.bs.modal', function (e) {
+            if (currentAjax)
+            {
+                var status = currentAjax.readyState;
+                currentAjax.abort();
+}
+            if (!confirm("是否取消上传?"))
+            {
+                e.preventDefault();
+                currentAjax.open();
+            }
+            else
+            {
+                $(".progress-bar").css("width", "0%");
+                $(".progress-bar").html("");
+                if (currentAjax)
+                    currentAjax.abort();
+            }
+        })
+    });
     function submitInfo() {
         //声明对象
         var fileinfo = {
@@ -281,7 +303,7 @@
             var formData = new FormData();
             formData.append("file", file);
             formData.append("fileinfo", JSON.stringify(fileinfo));
-            $.ajax({
+            currentAjax = $.ajax({
                 url: "/FileManager/UpLoadFile",
                 type: "post",
                 // Form数据
@@ -306,6 +328,11 @@
                     console.log("=====" + data +"======");
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    if (textStatus != "abort")
+                    {
+                        alert("上传失败！");
+                        $("#myModal").modal('hide');
+                    }
                     console.log(textStatus);
                 }
             });

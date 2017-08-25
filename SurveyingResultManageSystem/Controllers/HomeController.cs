@@ -283,6 +283,10 @@ namespace SurveyingResultManageSystem.Controllers
                 Response.Flush();
                 Response.End();
             }
+            catch(System.IO.FileNotFoundException)
+            {
+
+            }
             catch(Exception e)
             {
                 //记录下载
