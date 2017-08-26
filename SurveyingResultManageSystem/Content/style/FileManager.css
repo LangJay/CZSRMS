@@ -43,7 +43,7 @@ ul li h4 {
     display:none;
 }
 .li_div {
-    background-color: #b5b5b5;
+    background-color: #d6d6d6;
     width: 100%;
 }
 #li_map {
@@ -145,7 +145,10 @@ ul {
 .modal .table {
     margin-bottom: 0px;
 }
-
+td a:hover
+{
+    cursor:pointer;
+}
 .modal td,.modal th {
     text-align: center;
 }
@@ -200,8 +203,18 @@ ul {
     display:none;
 }
 .subclass a{
-    padding: 5px 0px 5px 0px;
+    padding: 5px 0px 5px 60px;
     border-bottom:1px solid white;
+}
+textarea {
+    resize: vertical;
+}
+.progress-bar {
+    text-align:right;
+}
+.combo
+{
+    min-width:160px;
 }
 /*加载动画*/
 .card{

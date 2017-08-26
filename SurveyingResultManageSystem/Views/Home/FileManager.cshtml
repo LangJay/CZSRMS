@@ -6,7 +6,8 @@
 @Styles.Render("~/Content/style/FileManager.css")
 <link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
 <link href="~/Content/themes/icon.css" rel="stylesheet" />
-<script src="~/Scripts/jquery.easyui.min.js"></script>
+<script src="~/Scripts/jquery.easyui-1.4.5.min.js"></script>
+<script src="~/Scripts/dist/store.legacy.min.js"></script>
 <div id="div_menu">
     <ul id="div_menu_ul">
         <li id="li_file">
@@ -179,8 +180,8 @@
         </div><!-- /.modal-content -->
     </div>
 </div>
-<script src="~/Scripts/jquery-1.11.3.min.js"></script>
 <script type="text/javascript">
+    var currentAjax = null;
     $(document).ready(function () {
         //加载分类
         $.ajax({
@@ -208,9 +209,37 @@
         });
         $(".progress-bar").css("width", "0%");
         $(".progress-bar").html("");
-
         $("#myModal").modal('show');
     };
+    //模态框隐藏时,处理是否取消上传，终止请求，查看是否有记录，有则删除
+    /*
+        readyState属性状态：
+            0 代表未初始化。
+            1 代表准备发送。
+            2 已发送但还没收到响应
+            3 正在接收
+            4 接收完成
+    */
+    $(function () {
+        $('#myModal').on('hide.bs.modal', function (e) {
+            if (currentAjax) {
+                if (currentAjax.readyState != 4) {
+                    if (confirm("是否取消上传?")) {
+                        console.log(currentAjax.readyState);
+                        currentAjax.abort();
+                        $(".progress-bar").css("width", "0%");
+                        $(".progress-bar").html("");
+                        //根据什么搜索记录是否存在呢？然后删除记录
+                        //刷新数据
+                        getDate(1, "", "");
+                    }
+                    else {
+                        e.preventDefault();
+                    }
+                }
+            }
+        });
+    });
     function submitInfo() {
         //声明对象
         var fileinfo = {
@@ -244,6 +273,12 @@
         if (directory == "")
             alert("没有选择文件！");
         else {
+            var file = document.getElementById("input_file").files[0];
+            if (file.size > 2147480000)//
+            {
+                alert("文件不得大于2GB!");
+                return;
+            }
             var arr = directory.split('\\');
             fileinfo.Directory = "";
             fileinfo.FileName = arr[arr.length - 1];
@@ -269,15 +304,13 @@
             fileinfo.Explain = $("#explain").val();
             fileinfo.PublicObjs = $("#selectObjs").val();
             fileinfo.UploadTime = "";
-            var f = document.getElementById("input_file").files;
-            fileinfo.FileSize = f[0].size / 1024 / 1024;
+            fileinfo.FileSize = file.size / 1024 / 1024;
             fileinfo.UserID = "0";
             //获取文件信息
-            var file = $("#input_file").get(0).files[0];
             var formData = new FormData();
             formData.append("file", file);
             formData.append("fileinfo", JSON.stringify(fileinfo));
-            $.ajax({
+            currentAjax = $.ajax({
                 url: "/FileManager/UpLoadFile",
                 type: "post",
                 // Form数据
@@ -302,6 +335,11 @@
                     console.log("=====" + data +"======");
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    if (textStatus != "abort")
+                    {
+                        alert("上传失败！");
+                        $("#myModal").modal('hide');
+                    }
                     console.log(textStatus);
                 }
             });
@@ -422,7 +460,11 @@
             var selectimg = src.replace("selected.png", "select.png");
             $(e).attr('src', selectimg);
         }
+        //记录选择
+        var store = require('store');
+        store.set('selectimg', { name: 'Marcus' });
     }
+    //复选框选择
     function selectallimg(e)
     {
         //将当前页所有img换颜色
@@ -474,7 +516,7 @@
         var obj = $("#" + fileId).children("#file_" + fileId)[0];
         var filename = obj.innerText;
         if (confirm("你确定要删除" + filename + "吗？")) {
-            $.getJSON("/Home/Delete?fileId=" + fileId, function (data) {
+            $.getJSON("/Home/Delete?fileId=" + Number(fileId), function (data) {
                 console.log(data.code);
                 if (data.code == 4) {
                     $("#" + fileId).remove();

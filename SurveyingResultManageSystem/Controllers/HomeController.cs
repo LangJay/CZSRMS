@@ -11,6 +11,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using ArcServer;
+using System.Linq.Expressions;
 
 namespace SurveyingResultManageSystem.Controllers
 {
@@ -191,17 +192,19 @@ namespace SurveyingResultManageSystem.Controllers
 
        
         [Authentication]
-        public void Delete(string fileId)
+        public void Delete(int fileId)
         {
-            if (string.IsNullOrEmpty(fileId))
+             DeleteFile(u => u.ID == fileId);
+        }
+        private void DeleteFile(Expression<Func<tb_FileInfo, bool>> whereLamdba)
+        {
+            if (string.IsNullOrEmpty(whereLamdba.ToString()))
             {
-                throw new ArgumentNullException("fileId is errror");
+                throw new ArgumentNullException("参数错误!");
             }
             try
             {
-                int id = Convert.ToInt32(fileId);
-                var file = fileInfoService.Find(u => u.ID == id);
-
+                var file = fileInfoService.Find(whereLamdba);
                 //记录下载
                 tb_LogInfo log = new tb_LogInfo
                 {
@@ -228,7 +231,7 @@ namespace SurveyingResultManageSystem.Controllers
                     Response.Write(new JavaScriptSerializer().Serialize(response));
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 //记录下载
                 tb_LogInfo log = new tb_LogInfo
@@ -243,7 +246,6 @@ namespace SurveyingResultManageSystem.Controllers
                 Log.AddRecord(e);
                 AlertMsg("删除失败！");
             }
-
         }
         [Authentication]
         public void Download(string fileId)
@@ -282,6 +284,10 @@ namespace SurveyingResultManageSystem.Controllers
                 Response.BinaryWrite(bytes);
                 Response.Flush();
                 Response.End();
+            }
+            catch(System.IO.FileNotFoundException)
+            {
+                
             }
             catch(Exception e)
             {
