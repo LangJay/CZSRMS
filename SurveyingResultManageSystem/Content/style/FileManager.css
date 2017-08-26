@@ -145,7 +145,10 @@ ul {
 .modal .table {
     margin-bottom: 0px;
 }
-
+td a:hover
+{
+    cursor:pointer;
+}
 .modal td,.modal th {
     text-align: center;
 }
