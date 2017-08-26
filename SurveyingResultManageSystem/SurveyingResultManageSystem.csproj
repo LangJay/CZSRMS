@@ -534,7 +534,6 @@
     <Content Include="Scripts\dist\store.v1-backcompat.min.js" />
     <Content Include="Scripts\easyloader.js" />
     <None Include="Scripts\jquery-1.11.3.intellisense.js" />
-    <Content Include="Scripts\easyui.html" />
     <Content Include="Scripts\jquery-1.11.3.js" />
     <Content Include="Scripts\jquery-1.11.3.min.js" />
     <Content Include="Scripts\jquery-1.11.3.min.map" />

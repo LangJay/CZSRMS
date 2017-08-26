@@ -211,27 +211,34 @@
         $(".progress-bar").html("");
         $("#myModal").modal('show');
     };
-    //模态框隐藏时
+    //模态框隐藏时,处理是否取消上传，终止请求，查看是否有记录，有则删除
+    /*
+        readyState属性状态：
+            0 代表未初始化。
+            1 代表准备发送。
+            2 已发送但还没收到响应
+            3 正在接收
+            4 接收完成
+    */
     $(function () {
         $('#myModal').on('hide.bs.modal', function (e) {
-            if (currentAjax)
-            {
-                var status = currentAjax.readyState;
-                currentAjax.abort();
-}
-            if (!confirm("是否取消上传?"))
-            {
-                e.preventDefault();
-                currentAjax.open();
+            if (currentAjax) {
+                if (currentAjax.readyState != 4) {
+                    if (confirm("是否取消上传?")) {
+                        console.log(currentAjax.readyState);
+                        currentAjax.abort();
+                        $(".progress-bar").css("width", "0%");
+                        $(".progress-bar").html("");
+                        //根据什么搜索记录是否存在呢？然后删除记录
+                        //刷新数据
+                        getDate(1, "", "");
+                    }
+                    else {
+                        e.preventDefault();
+                    }
+                }
             }
-            else
-            {
-                $(".progress-bar").css("width", "0%");
-                $(".progress-bar").html("");
-                if (currentAjax)
-                    currentAjax.abort();
-            }
-        })
+        });
     });
     function submitInfo() {
         //声明对象
@@ -508,7 +515,7 @@
         var obj = $("#" + fileId).children("#file_" + fileId)[0];
         var filename = obj.innerText;
         if (confirm("你确定要删除" + filename + "吗？")) {
-            $.getJSON("/Home/Delete?fileId=" + fileId, function (data) {
+            $.getJSON("/Home/Delete?fileId=" + Number(fileId), function (data) {
                 console.log(data.code);
                 if (data.code == 4) {
                     $("#" + fileId).remove();

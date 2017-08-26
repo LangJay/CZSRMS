@@ -98,6 +98,8 @@ namespace SurveyingResultManageSystem.Controllers
                         FileName = fileInfo.FileName,
                         Explain = "上传成功！"
                     };
+                    var response = new {fileId = fileInfo.ID };
+                    Response.Write(new JavaScriptSerializer().Serialize(response));
                     logInfoService.Add(log);
                     return "上传成功！";
                 }
