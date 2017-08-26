@@ -4,10 +4,7 @@
 @using Model;
 @model Model.PageInfo<tb_FileInfo>
 @Styles.Render("~/Content/style/FileManager.css")
-<link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
-<link href="~/Content/themes/icon.css" rel="stylesheet" />
-<script src="~/Scripts/jquery.easyui-1.4.5.min.js"></script>
-<script src="~/Scripts/dist/store.legacy.min.js"></script>
+<script src="~/Scripts/store/store.legacy.min.js"></script>
 <div id="div_menu">
     <ul id="div_menu_ul">
         <li id="li_file">
@@ -64,7 +61,7 @@
                             <td>坐标信息框架：</td>
                             <td>
                                 <span>
-                                    <input id="CoodinateSystem" width="160" panelHeight="auto" class="easyui-combobox" name="coodinatesystem" data-options="valueField:'Value',textField:'Value',url:'/Droplist/CoodinateSystemlist'" />
+                                    <select id="CoodinateSystem"></select>
                                 </span>
                             </td>
                             <td>完成时间信息：</td>
@@ -84,16 +81,16 @@
                         </tr>
                         <tr>
                             <td>备注信息：</td>
-                            <td colspan="3" style="width:100%;max-width:100%;"><textarea style="width:100%;min-width:100%;" name="Mark" id="mark"></textarea></td>
+                            <td colspan="3" style="width:100%;max-width:100%;"><textarea style="width:96%;min-width:96%;" name="Mark" id="mark"></textarea></td>
                         </tr>
                         <tr>
                             <td>是否需要进库：</td>
                             <td>
                                 <span>
                                     是：
-                                    <input type="radio" name="Warehousing" value="true" />
+                                    <input style="width:auto;height:auto;" type="radio" name="Warehousing" value="true" />
                                     否：
-                                    <input type="radio" checked="checked" name="Warehousing" value="false" />
+                                    <input style="width:auto;height:auto;" type="radio" checked="checked" name="Warehousing" value="false" />
                                 </span>
                             </td>
                             <td>所属项目名称：</td>
@@ -104,13 +101,13 @@
                             <td>文件类型：</td>
                             <td>
                                 <span>
-                                    <input id="filetype" panelHeight="auto" class="easyui-combobox" name="FileType" data-options="valueField:'Value',textField:'Value',url:'/Droplist/FiltTypelist'" />
+                                    <select id="filetype"></select>
                                 </span>
                             </td>
                             <td>所属项目类型：</td>
                             <td>
                                 <span>
-                                    <input id="projecttype" panelHeight="auto" class="easyui-combobox" name="ProjectType" data-options="valueField:'Value',textField:'Value',url:'/Droplist/ProjectTypelist'" />
+                                    <select id="projecttype"></select>
                                 </span>
                             </td>
                         </tr>
@@ -118,7 +115,8 @@
                             <td>平面坐标系统：</td>
                             <td>
                                 <span>
-                                    <input id="pcoodinateSystem" panelHeight="auto" class="easyui-combobox" name="Pcoodinatesystem" data-options="valueField:'Value',textField:'Value',url:'/Droplist/CoodinateSystemlist'" />
+                                    <select id="pcoodinateSystem">
+                                    </select>
                                 </span>
                             </td>
                             <td>中央子午线：</td>
@@ -138,22 +136,22 @@
                         </tr>
                         <tr>
                             <td>成果说明：</td>
-                            <td colspan="3"><textarea style="max-width:100%;width:100%;" name="Explain" id="explain"></textarea></td>
+                            <td colspan="3"><textarea style="max-width:96%;width:96%;" name="Explain" id="explain"></textarea></td>
 
                         </tr>
                         <tr>
                             <td>选择公开对象：</td>
                             <td>
                                 <span>
-                                    <input id="selectObjs" class="easyui-combobox"
-                                           name="PublicObjs"
-                                           data-options="url:'/Droplist/Unitlist',method:'get',valueField:'Value',textField:'Value',multiple:true,panelHeight:'auto'">
+                                <select id="selectObjs" class="js-example-basic-multiple" multiple="multiple">
+                                </select>
                                 </span>
                             </td>
                             <td>测绘单位名称：</td>
                             <td>
                                 <span>
-                                    <input id="surveyingunitname" panelHeight="auto" class="easyui-combobox" name="SurveyingUnitName" data-options="valueField:'Value',textField:'Value',url:'/Droplist/Unitlist'" />
+                                    <select id="surveyingunitname">
+                                    </select>
                                 </span>
                             </td>
                         </tr>
@@ -200,8 +198,38 @@
                 }
             }
         });
-
+        //设置下拉选项的数据
+        $(function setSelectData() {
+            var uniturl = "/Droplist/Unitlist";
+            var fieltypeurl = "/Droplist/FiltTypelist";
+            var projecttypeurl = "/Droplist/ProjectTypelist";
+            var coodurl = "/Droplist/CoodinateSystemlist";
+            getDropData("CoodinateSystem", coodurl);
+            getDropData("filetype", coodurl);
+            getDropData("projecttype", projecttypeurl);
+            getDropData("pcoodinateSystem", coodurl);
+            getDropData("selectObjs", uniturl);
+            getDropData("surveyingunitname", uniturl);
+            $(".js-example-basic-multiple").select2();
+        });
     });
+    //获取下拉菜单数据
+    function getDropData(id,url) {
+        //获取文件数据
+        $.ajax({
+            url: url,
+            type: "get",
+            dataType: "json",
+            success: function (data) {
+                //这里是ajax提交成功后，程序返回的数据处理函数。data是返回的数据，数据类型在dataType参数里定义！
+                var text = "";
+                for (var i = 0; i < data.length; i++) {
+                    text += "<option>" + data[i].Value + "</option>";
+                }
+                $("#" + id).append(text);
+            }
+        });
+    };
     function uploadFile() {
         var dialogwdith = $(window).width() + $(".modal-dialog").width();
         $(".modal-content").css({
@@ -302,7 +330,15 @@
             fileinfo.FinishPerson = $("#finishperson").val();
             fileinfo.SurveyingUnitName = $("#surveyingunitname").val();
             fileinfo.Explain = $("#explain").val();
-            fileinfo.PublicObjs = $("#selectObjs").val();
+            var objarr = $("#selectObjs").val();
+            fileinfo.PublicObjs = "";
+            for (var i = 0; i < objarr.length; i++)
+            {
+                var text = objarr[i];
+                if(i > 0)
+                    text = "|" + objarr[i];
+                fileinfo.PublicObjs += text;
+            }
             fileinfo.UploadTime = "";
             fileinfo.FileSize = file.size / 1024 / 1024;
             fileinfo.UserID = "0";

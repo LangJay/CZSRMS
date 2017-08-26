@@ -5,10 +5,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link href="~/Content/style/MoreLogInfo.css" rel="stylesheet" />
-<link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
-<link href="~/Content/themes/icon.css" rel="stylesheet" />
-<script src="~/Scripts/jquery-2.2.4.min.js"></script>
-<script src="~/Scripts/jquery.easyui.min.js"></script>
 <div id="div-filemanager" style="left:10%;width:80%">
     <div id="div_filemanager_pager">
         <div id="div_filemanager_list">
@@ -99,7 +95,7 @@
                         <td style="width:80px;">权限等级：</td>
                         <td>
                             <form>
-                                <select id="input-levels" panelHeight="auto" class="easyui-combobox" name="dept">
+                                <select style="width:174px;height:30px;" id="input-levels" >
                                     <option value="0">管理员</option>
                                     <option value="1" selected="selected">普通账户</option>
                                 </select>
@@ -108,7 +104,7 @@
                         <td style="width:80px;">所属单位：</td>
                         <td>
                             <span>
-                                <input id="input-unit" panelHeight="auto" class="easyui-combobox" name="dept" data-options="valueField:'Value',textField:'Value',url:'/Droplist/Unitlist'">
+                                <select style="width:174px;height:30px;" id="input-unit"></select>
                             </span>
                         </td>
                     </tr>
@@ -127,6 +123,24 @@
     </div>
 </div>
 <script type="text/javascript">
+    $(document).ready(function(){
+        var id = "input-unit";
+        var url = "/Droplist/Unitlist";
+        //获取文件数据
+        $.ajax({
+            url: url,
+            type: "get",
+            dataType: "json",
+            success: function (data) {
+                //这里是ajax提交成功后，程序返回的数据处理函数。data是返回的数据，数据类型在dataType参数里定义！
+                var text = "";
+                for (var i = 0; i < data.length; i++) {
+                    text += "<option>" + data[i].Value + "</option>";
+                }
+                $("#" + id).append(text);
+            }
+        });
+    });
     setTimeout(function () {
         if (@Model.pageIndex <= 1) {
             $("#footer-right-btn2").attr("disabled", "true");

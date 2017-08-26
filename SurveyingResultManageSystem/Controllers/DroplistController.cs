@@ -19,24 +19,28 @@ namespace SurveyingResultManageSystem.Controllers
             coodinateSystemInfoService = new CoodinateSystemInfoService();
         }
         // GET: Droplist
-        public ActionResult Unitlist()
+        [HttpGet]
+        public JsonResult Unitlist()
         {
             //2.1.查询出weight实体,并将其转成DTO类型  
             List<tb_Unit> uinitList = unitInfoService.FindAll(u => u.Value != "", "ID", true);
             //2.2返回json  
             return Json(uinitList, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult FiltTypelist()
+        [HttpGet]
+        public JsonResult FiltTypelist()
         { 
             List<tb_FileType> fileTypeList = fileTypeInfoService.FindAll(u => u.Value != "", "ID", true);
             return Json(fileTypeList, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult ProjectTypelist()
+        [HttpGet]
+        public JsonResult ProjectTypelist()
         {
             List<tb_ProjectType> projectTypeList = projectTypeInfoService.FindAll(u => u.Value != "", "ID", true);
             return Json(projectTypeList, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult CoodinateSystemlist()
+        [HttpGet]
+        public JsonResult CoodinateSystemlist()
         {
             List<tb_CoodinateSystem> coodinateSystemList = coodinateSystemInfoService.FindAll(u => u.Value != "", "ID", true);
             return Json(coodinateSystemList, JsonRequestBehavior.AllowGet);
