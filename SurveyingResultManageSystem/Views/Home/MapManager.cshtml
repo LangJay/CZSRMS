@@ -6,9 +6,6 @@
 <script type="text/javascript" src="http://192.168.0.230:8080/arcgis_js_api/library/3.21/3.21/init.js"></script>
 @Styles.Render("~/Content/style/MapManager.css")
 @Styles.Render("~/Content/style/FileManager.css")
-<link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
-<link href="~/Content/themes/icon.css" rel="stylesheet" />
-<script src="~/Scripts/jquery.easyui-1.4.5.min.js"></script>
 <div id="div_menu">
     <ul id="div_menu_ul">
         <li id="li_file">
@@ -41,7 +38,7 @@
                                 filename1
                             </td>
                             <td>
-                                <img class="select_img" src="~/Sources/Images/select.png" onclick="selectallimg(this)" />
+                                <img class="select_img" src="~/Sources/Images/select.png" onclick="selectimg(this)" />
                             </td>
                         </tr>
                         <tr>
@@ -49,7 +46,7 @@
                                 filename2
                             </td>
                             <td>
-                                <img class="select_img" src="~/Sources/Images/select.png" onclick="selectallimg(this)" />
+                                <img class="select_img" src="~/Sources/Images/select.png" onclick="selectimg(this)" />
                             </td>
                         </tr>
                         <tr>
@@ -57,7 +54,7 @@
                                 filename3
                             </td>
                             <td>
-                                <img class="select_img" src="~/Sources/Images/select.png" onclick="selectallimg(this)" />
+                                <img class="select_img" src="~/Sources/Images/select.png" onclick="selectimg(this)" />
                             </td>
                         </tr>
                     </table>
@@ -291,7 +288,7 @@
             }
             $(e).attr('src', selectimg);
         }
-    }
+    };
     require(["esri/map", "esri/layers/ArcGISDynamicMapServiceLayer", "esri/layers/FeatureLayer", "esri/InfoTemplate", "esri/dijit/Search", "dojo/dom",
           "dojo/on", "dojo/domReady!"],
         function (Map, ArcGISDynamicMapServiceLayer, FeatureLayer, InfoTemplate, Search, dom, on) {

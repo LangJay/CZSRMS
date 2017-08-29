@@ -4,7 +4,6 @@
 @using Model;
 @model Model.PageInfo<tb_FileInfo>
 @Styles.Render("~/Content/style/FileManager.css")
-<script src="~/Scripts/store/store.legacy.min.js"></script>
 <div id="div_menu">
     <ul id="div_menu_ul">
         <li id="li_file">
@@ -201,16 +200,17 @@
         //设置下拉选项的数据
         $(function setSelectData() {
             var uniturl = "/Droplist/Unitlist";
-            var fieltypeurl = "/Droplist/FiltTypelist";
+            var filetypeurl = "/Droplist/FiltTypelist";
             var projecttypeurl = "/Droplist/ProjectTypelist";
             var coodurl = "/Droplist/CoodinateSystemlist";
             getDropData("CoodinateSystem", coodurl);
-            getDropData("filetype", coodurl);
+            getDropData("filetype", filetypeurl);
             getDropData("projecttype", projecttypeurl);
             getDropData("pcoodinateSystem", coodurl);
             getDropData("selectObjs", uniturl);
             getDropData("surveyingunitname", uniturl);
             $(".js-example-basic-multiple").select2();
+            //$("#surveyingunitname").val("苏仙区测绘队");
         });
     });
     //获取下拉菜单数据
@@ -224,7 +224,7 @@
                 //这里是ajax提交成功后，程序返回的数据处理函数。data是返回的数据，数据类型在dataType参数里定义！
                 var text = "";
                 for (var i = 0; i < data.length; i++) {
-                    text += "<option>" + data[i].Value + "</option>";
+                    text += "<option value=" + data[i].Value + ">" + data[i].Value + "</option>";
                 }
                 $("#" + id).append(text);
             }
@@ -332,12 +332,14 @@
             fileinfo.Explain = $("#explain").val();
             var objarr = $("#selectObjs").val();
             fileinfo.PublicObjs = "";
-            for (var i = 0; i < objarr.length; i++)
+            if (objarr != null)
             {
-                var text = objarr[i];
-                if(i > 0)
-                    text = "|" + objarr[i];
-                fileinfo.PublicObjs += text;
+                for (var i = 0; i < objarr.length; i++) {
+                    var text = objarr[i];
+                    if (i > 0)
+                        text = "|" + objarr[i];
+                    fileinfo.PublicObjs += text;
+                }
             }
             fileinfo.UploadTime = "";
             fileinfo.FileSize = file.size / 1024 / 1024;
@@ -466,6 +468,15 @@
                 $("#loading").css("display", "none");
             }
         });
+        //重新记录选择效果
+        var arr = localStorage.getItem('selectimg');
+        if (arr != null)
+        {
+            for (var i = 0; i < arr.length; i++) {
+
+                //setselect(arr[i]);
+            }
+        }
     };
     //点击子分类
     function clickclass(e) {
@@ -484,6 +495,18 @@
 
     //选择
     function selectimg(e) {
+        setselect(e);
+        //记录选择
+        var arrold = localStorage.getItem('selectimg');
+        var arrnew = $(e).parentNode.parentNode.id;
+        if (arrold != null)
+            localStorage.setItem('selectimg', arrold.concat(arrnew));
+        else
+            localStorage.setItem('selectimg', arrnew);
+    }
+    //设置选择效果
+    function setselect(e)
+    {
         var src = $(e)[0].src;
         var arr = src.split("/");
         var img = arr[arr.length - 1];
@@ -496,9 +519,6 @@
             var selectimg = src.replace("selected.png", "select.png");
             $(e).attr('src', selectimg);
         }
-        //记录选择
-        var store = require('store');
-        store.set('selectimg', { name: 'Marcus' });
     }
     //复选框选择
     function selectallimg(e)
