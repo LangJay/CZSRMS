@@ -12,6 +12,7 @@ using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using ArcServer;
 using System.Linq.Expressions;
+using Newtonsoft.Json;
 
 namespace SurveyingResultManageSystem.Controllers
 {
@@ -319,7 +320,7 @@ namespace SurveyingResultManageSystem.Controllers
             var sr = new StreamReader(Request.InputStream);
             var stream = sr.ReadToEnd();
             sr.Close();
-            item1.url = "http://localhost:6080/arcgis/rest/services/fwx1g/FeatureServer/0";
+            item1.url = "http://localhost:6080/arcgis/rest/services/BX/FeatureServer/0";
             bool tt = openauto.DeleFeature(item1.url, stream);
             return tt;
         }
@@ -351,6 +352,50 @@ namespace SurveyingResultManageSystem.Controllers
             tb_FileInfo user = fileInfoService.Find(u => u.ObjectID == stream);
             string tt=Newtonsoft.Json.JsonConvert.SerializeObject(user);
             return tt;
+        }
+        [Authentication]
+        [HttpPost]//王军军增加8.23
+        public Boolean setfileinfo()
+        {
+            var sr = new StreamReader(Request.InputStream);
+            var stream = sr.ReadToEnd();
+            sr.Close();
+
+            tb_FileInfo fileInfo = JsonConvert.DeserializeObject<tb_FileInfo>(stream) as tb_FileInfo;
+            //int idh = int.Parse(stream);
+            FeatureItem1 featureItem2 = new FeatureItem1();
+            featureItem2.Attributes = new Dictionary<string, object>();
+            featureItem2.Attributes.Add("FileName", fileInfo.FileName);//文件名
+            
+            featureItem2.Attributes.Add("CoodSystem", fileInfo.CoodinateSystem);//坐标框架信息
+            if (fileInfo.Finishtime.Trim() != "")
+            {
+              
+                featureItem2.Attributes.Add("FinishTime", fileInfo.Finishtime);
+            }//完成时间信息
+            featureItem2.Attributes.Add("FshPerson", fileInfo.FinishPerson);//完成人信息
+            featureItem2.Attributes.Add("MinCood", fileInfo.MinCoodinate);//最小坐标
+            featureItem2.Attributes.Add("MaxCood", fileInfo.MaxCoodinate);//最大坐标
+            featureItem2.Attributes.Add("ObjectNum", fileInfo.ObjectNum);//文件中对象数量
+            featureItem2.Attributes.Add("Mark", fileInfo.Mark);// 备注信息
+            featureItem2.Attributes.Add("ProName", fileInfo.ProjectName);// 所属项目名称
+            featureItem2.Attributes.Add("FileType", fileInfo.FileType);// 文件类型，宗地图、供地红线图、报批红线图、地籍图、勘测定界报告、竣工验收测绘报告
+            featureItem2.Attributes.Add("ProType", fileInfo.ProjectType);// 所属项目类型，供地、报批、竣工验收
+            featureItem2.Attributes.Add("CenterMed", fileInfo.CenterMeridian);// 中央子午线
+            featureItem2.Attributes.Add("Yoffset", fileInfo.Yoffset);// 纵坐标偏移值
+            featureItem2.Attributes.Add("Xoffset", fileInfo.Xoffset);// 水平坐标偏移值
+            featureItem2.Attributes.Add("SUnitName", fileInfo.SurveyingUnitName);// 测绘单位名称，北湖区测绘队、苏仙区测绘队、市局测绘队
+            featureItem2.Attributes.Add("Memo", fileInfo.Explain);// 成果说明
+            if (fileInfo.UploadTime.Trim() != "")
+            {
+           
+                featureItem2.Attributes.Add("UploadTime", fileInfo.UploadTime);
+            }
+           // featureItem2.Attributes.Add("UploadTime", fileInfo.UploadTime);// 上传时间
+            featureItem2.url = "http://localhost:6080/arcgis/rest/services/BX/FeatureServer/0";
+            string idh = fileInfo.ObjectID.Trim();
+           var tt1 = openauto.UpdateFeature(featureItem2.url, idh, featureItem2);
+            return tt1;
         }
     }
 }

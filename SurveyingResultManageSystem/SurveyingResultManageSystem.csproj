@@ -248,6 +248,9 @@
     <Content Include="Views\Home\GetFileView.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Scripts\easyfader\css\" />
+    <Folder Include="Scripts\easyfader\images\" />
+    <Folder Include="Scripts\easyfader\js\" />
     <Folder Include="Views\Droplist\" />
     <Folder Include="Views\FileManager\" />
     <Folder Include="Views\Layout\" />

@@ -186,6 +186,18 @@
                 </h4>
             </div>
             <div class="modal-body">
+			    <div class="wrap">
+                  <div id="dowebok" class="fader">
+				     <img class="slide" src="../Scripts/easyfader/images/img1.jpg">
+                     <img class="slide" src="../Scripts/easyfader/images/img2.jpg">
+                     <img class="slide" src="../Scripts/easyfader/images/img3.jpg">
+                      <div class="fader_controls">
+                             <div class="page prev" data-target="prev">&lsaquo;</div>
+                             <div class="page next" data-target="next">&rsaquo;</div>
+                             <ul class="pager_list"></ul>
+                      </div>
+				  </div>
+               </div>
 			 </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default"
@@ -226,16 +238,17 @@
         //设置下拉选项的数据
         $(function setSelectData() {
             var uniturl = "/Droplist/Unitlist";
-            var fieltypeurl = "/Droplist/FiltTypelist";
+            var filetypeurl = "/Droplist/FiltTypelist";
             var projecttypeurl = "/Droplist/ProjectTypelist";
             var coodurl = "/Droplist/CoodinateSystemlist";
             getDropData("CoodinateSystem", coodurl);
-            getDropData("filetype", coodurl);
+            getDropData("filetype", filetypeurl);
             getDropData("projecttype", projecttypeurl);
             getDropData("pcoodinateSystem", coodurl);
             getDropData("selectObjs", uniturl);
             getDropData("surveyingunitname", uniturl);
             $(".js-example-basic-multiple").select2();
+            //$("#surveyingunitname").val("苏仙区测绘队");
         });
     });
     //获取下拉菜单数据
@@ -249,7 +262,7 @@
                 //这里是ajax提交成功后，程序返回的数据处理函数。data是返回的数据，数据类型在dataType参数里定义！
                 var text = "";
                 for (var i = 0; i < data.length; i++) {
-                    text += "<option>" + data[i].Value + "</option>";
+                    text += "<option value=" + data[i].Value + ">" + data[i].Value + "</option>";
                 }
                 $("#" + id).append(text);
             }
@@ -328,13 +341,14 @@
           "dojo/on", "dojo/domReady!"],
         function (Map, ArcGISDynamicMapServiceLayer, FeatureLayer,GraphicsLayer, InfoTemplate, Search, dom, on) {
             map = new Map("mapDiv", { logo: false });
+			map.infoWindow.resize(350, 400);
             //利用url创建一个动态地图服务对象
             //   var layer = new ArcGISDynamicMapServiceLayer("http://192.168.0.230:6080/arcgis/rest/services/1/MapServer");
             //将地图服务对象添加到地图容器中
-            fatch3 = new FeatureLayer("http://192.168.0.205:6080/arcgis/rest/services/fwx1g/FeatureServer/0", {
+            fatch3 = new FeatureLayer("http://localhost:6080/arcgis/rest/services/BX/FeatureServer/0", {
                 mode: FeatureLayer.MODE_SNAPSHOT,
                 outFields: ["*"],
-                infoTemplate: new InfoTemplate("范围红线", "<table width='100%' style='table-layout:fixed'><tr height='15%' width='100%'><th width='60%' align='left'>文件名:${FileName} </th><th width='40%' align='left'>完成人:${FshPerson} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>坐标信息:${CoodSystem} </th><th width='40%' align='left'>完成时间:${FinishTime} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>中央子午线:${CenterMed} </th><th width='40%' align='left'>上传时间:${UploadTime} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>文件类型:${FileType} </th><th width='40%' align='left'>文件大小:${FileSize} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>项目名称:${ProName} </th><th width='40%' align='left' id='tdid'>图形ID:${OBJECTID} </th></tr><tr height='15%' width='100%'><th width='100%' align='left'>备注:${Memo} </th></tr></table><button style='margin:5px 8px' type='button' onclick='SYT()' class='btn btn-primary btn-xs'>缩略图</button><button style='margin:5px 8px' type='button' onclick='Change()' class='btn btn-primary btn-xs'>修  改</button><button style='margin:5px 8px' type='button' onclick='dele()' class='btn btn-primary btn-xs'>删  除</button><button style='margin:5px 0px 5px 8px' type='button' onclick='Down()' class='btn btn-primary btn-xs'>下  载</button>")
+                infoTemplate: new InfoTemplate("范围红线", "<table width='100%' style='table-layout:fixed'><tr height='15%' width='100%'><th width='60%' align='left'>文件名:${FileName} </th><th width='40%' align='left'>完成人:${FshPerson} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>坐标信息:${CoodSystem} </th><th width='40%' align='left'>完成时间:${FinishTime:DateFormat(selector: 'date', fullYear: true)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>中央子午线:${CenterMed} </th><th width='40%' align='left'>上传时间:${UploadTime:DateFormat(selector: 'date', fullYear: true)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>文件类型:${FileType} </th><th width='40%' align='left'>文件大小:${FileSize} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>项目名称:${ProName} </th><th width='40%' align='left' id='tdid'>图形ID:${OBJECTID} </th></tr><tr height='15%' width='100%'><th width='100%' align='left'>备注:${Memo} </th></tr></table><button style='margin:5px 15px' type='button' onclick='SYT()' class='btn btn-primary btn-xs'>缩略图</button><button style='margin:5px 15px' type='button' onclick='Change()' class='btn btn-primary btn-xs'>修  改</button><button style='margin:5px 15px' type='button' onclick='dele()' class='btn btn-primary btn-xs'>删  除</button><button style='margin:5px 0px 5px 15px' type='button' onclick='Down()' class='btn btn-primary btn-xs'>下  载</button>")
 
             });
 			 graphiclayer = new GraphicsLayer();
@@ -368,7 +382,7 @@
             map.addLayer(fatch3);
             search = new Search({
                 sources: [{
-                    featureLayer: new FeatureLayer("http://192.168.0.205:6080/arcgis/rest/services/fwx1g/FeatureServer/0", {
+                    featureLayer: new FeatureLayer("http://localhost:6080/arcgis/rest/services/BX/FeatureServer/0", {
                         outFields: ["*"],
                         infoTemplate: new InfoTemplate("范围红线", "<table width='100%' style='table-layout:fixed'><tr height='15%' width='100%'><th width='60%' align='left'>文件名:${FileName} </th><th width='40%' align='left'>完成人:${FshPerson} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>坐标信息:${CoodSystem} </th><th width='40%' align='left'>完成时间:${FinishTime} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>中央子午线:${CenterMed} </th><th width='40%' align='left'>上传时间:${UploadTime} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>文件类型:${FileType} </th><th width='40%' align='left'>文件大小:${FileSize} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>项目名称:${ProName} </th><th width='40%' align='left' id='tdid'>图形ID:${OBJECTID} </th></tr><tr height='15%' width='100%'><th width='100%' align='left'>备注:${Memo} </th></tr></table><button style='margin:5px 8px' type='button' onclick='SYT()' class='btn btn-primary btn-xs'>缩略图</button><button style='margin:5px 8px' type='button' onclick='Change()' class='btn btn-primary btn-xs'>修  改</button><button style='margin:5px 8px' type='button' onclick='dele()' class='btn btn-primary btn-xs'>删  除</button><button style='margin:5px 0px 5px 8px' type='button' onclick='Down()' class='btn btn-primary btn-xs'>下  载</button>")
                     }),
@@ -421,10 +435,11 @@
             };
 
         });
+	var idhh;
     function Change() {
         var id = document.getElementById("tdid").innerHTML;
         var idh = id.split(':');
-        console.log(idh[1]);
+        idhh=idh[1];
         map.infoWindow.hide();
         var dialogwdith = $(window).width() + $(".modal-dialog").width();
         $(".modal-content").css({
@@ -481,9 +496,18 @@
 		}
 		else
 		{
-		 arr[0]=info1.PublicObjs;
+		   if(info1.PublicObjs!="")
+		   {
+		   arr[0]=info1.PublicObjs;
+		   }
+		   else
+		   {
+		    arr[0]="";
+		   }
 		}
-	
+		
+		 $("#selectObjs").select2().val(arr).trigger('change');
+		
       };
     function changeInfo() {
         var file = {
@@ -508,9 +532,9 @@
             SurveyingUnitName: "",
             Explain: "",
             IsPublic: "",
-            UploadTime: "",
-            FileSize: "",
-            UserID: ""
+			objectid:"",
+            UploadTime: ""
+          
         };
 		    file.FileName = $("#filename").val();
             file.CoodinateSystem = $("#CoodinateSystem").val();
@@ -533,6 +557,7 @@
             file.SurveyingUnitName = $("#surveyingunitname").val();
             file.Explain = $("#explain").val();
             var objarr = $("#selectObjs").val();
+			file.objectid=idhh;
 			file.PublicObjs = "";
             for (var i = 0; i < objarr.length; i++)
             {
@@ -541,7 +566,36 @@
                     text = "|" + objarr[i];
                 file.PublicObjs += text;
             }
+			//var formData = new FormData();
+		  //  formData.append("fileinfo", JSON.stringify(file));
+			var fileinfomation=JSON.stringify(file);
+			 $.ajax({
+            url: "/Home/setfileinfo",
+            type: "post",
+            dataType: "text",
+            async: false,
+            data:fileinfomation ,
+            success: function (data) {
+             info = data;
 
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(XMLHttpRequest.status);
+               }
+        });
+		 if(info){
+		       fatch3.refresh();
+			   $("#myModal").modal('hide');
+			   alert("修改成功！");
+			
+			 }
+		else
+		{
+		 $("#myModal").modal('hide');
+		  alert("修改失败！");
+		 
+		}
+             
     };
     function dele() {
         var id = document.getElementById("tdid").innerHTML;
@@ -567,6 +621,11 @@
 
 			 if(info){
 			  map.infoWindow.hide();
+			   alert("删除成功！");
+			 }
+			 else
+			 {
+			  alert("删除失败！");
 			 }
               fatch3.refresh();
 		 };
@@ -578,15 +637,21 @@
 	    function SYT() {
                var id = document.getElementById("tdid").innerHTML; 
 			   var idh=id.split(':');
-			   console.log(idh[1]);
+			  // console.log(idh[1]);
 			    map.infoWindow.hide();
 			    var dialogwdith = $(window).width()+$(".modal-dialog").width();
                $(".modal-content").css({
                  left: (dialogwdith - $(".modal-content").width()) / 2,
                 })
                 $("#myModal1").modal('show');
+				 //var image1 = document.getElementById("dowebok")
+				//  image1.innerHTML="<img class='slide' src='../Scripts/easyfader/images/img1.jpg'><img class='slide' src='../Scripts/easyfader/images/img2.jpg'><img class='slide' src='../Scripts/easyfader/images/img3.jpg'><div class='fader_controls'><div class='page prev' data-target='prev'>&lsaquo;</div><div class='page next' data-target='next'>&rsaquo;</div> <ul class='pager_list'></ul></div>";
+
+				 $('#dowebok').easyFader();
+
+
                };
-			   function openMarkerTipById1(pointid, thiss) {  //根据id 打开搜索结果点tip  
+function openMarkerTipById1(pointid, thiss) {  //根据id 打开搜索结果点tip  
     thiss.style.background = '#CAE1FF';
 
 }
