@@ -207,3 +207,7 @@ background-color:#0079c1;
     min-height:600px;
     overflow:auto;
 }
+body
+{
+	text-align:left;
+}

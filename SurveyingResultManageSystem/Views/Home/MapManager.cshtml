@@ -6,6 +6,7 @@
    <script src="http://192.168.0.205:80/aspnet_client/API/3.21/3.21/init.js"></script>
 @Styles.Render("~/Content/style/MapManager.css")
 @Styles.Render("~/Content/style/FileManager.css")
+  @Styles.Render("~/Scripts/easyfader/css/jquery.easyfader.css")
 
 <div id="div_menu">
     <ul id="div_menu_ul">
@@ -186,18 +187,18 @@
                 </h4>
             </div>
             <div class="modal-body">
-			    <div class="wrap">
+			   
                   <div id="dowebok" class="fader">
 				     <img class="slide" src="../Scripts/easyfader/images/img1.jpg">
                      <img class="slide" src="../Scripts/easyfader/images/img2.jpg">
-                     <img class="slide" src="../Scripts/easyfader/images/img3.jpg">
+                     <img class="slide" \0[- src="../Scripts/easyfader/images/img3.jpg">
                       <div class="fader_controls">
                              <div class="page prev" data-target="prev">&lsaquo;</div>
                              <div class="page next" data-target="next">&rsaquo;</div>
                              <ul class="pager_list"></ul>
                       </div>
 				  </div>
-               </div>
+               
 			 </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default"
@@ -209,7 +210,8 @@
         </div><!-- /.modal-content -->
     </div>
 </div>
-       
+
+<script src="~/Scripts/easyfader/js/jquery.easyfader.min.js"></script>  
 <script>
     var fatch3;
     var map;
@@ -217,6 +219,9 @@
 	var searchresult;
 	var graphiclayer;
 	 var currentAjax = null;
+	 $(function() {
+	$('#dowebok').easyFader();
+});
     $(document).ready(function () {
         //加载分类
         $.ajax({
@@ -647,7 +652,7 @@
 				 //var image1 = document.getElementById("dowebok")
 				//  image1.innerHTML="<img class='slide' src='../Scripts/easyfader/images/img1.jpg'><img class='slide' src='../Scripts/easyfader/images/img2.jpg'><img class='slide' src='../Scripts/easyfader/images/img3.jpg'><div class='fader_controls'><div class='page prev' data-target='prev'>&lsaquo;</div><div class='page next' data-target='next'>&rsaquo;</div> <ul class='pager_list'></ul></div>";
 
-				 $('#dowebok').easyFader();
+				// $('#dowebok').easyFader();
 
 
                };
