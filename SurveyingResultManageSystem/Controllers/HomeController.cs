@@ -12,6 +12,8 @@ using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using ArcServer;
 using System.Linq.Expressions;
+using Newtonsoft.Json;
+using Ionic.Zip;
 
 namespace SurveyingResultManageSystem.Controllers
 {
@@ -194,13 +196,47 @@ namespace SurveyingResultManageSystem.Controllers
         [Authentication]
         public void Delete(int fileId)
         {
-             DeleteFile(u => u.ID == fileId);
+            if( DeleteFile(u => u.ID == fileId))
+            {
+                var response = new { code = 4, fileId = fileId };
+                Response.Write(new JavaScriptSerializer().Serialize(response));
+            }
         }
-        private void DeleteFile(Expression<Func<tb_FileInfo, bool>> whereLamdba)
+        /// <summary>
+        /// 删除所选文件，需要返回删除的id
+        /// </summary>
+        [Authentication]
+        [HttpPost]
+        public void Deletes() 
+        {
+            var sr = new StreamReader(Request.InputStream);
+            var stream = sr.ReadToEnd();
+            string [] arr = JsonConvert.DeserializeObject<string[]>(stream) as string[];
+            sr.Close();
+            List<int> delIds = new List<int>();
+            if(arr == null)
+            {
+                Response.Write(new JavaScriptSerializer().Serialize(null));
+                return;
+            }
+            foreach(string id in arr)
+            {
+                int idint = int.Parse(id);
+                if(DeleteFile(u => u.ID == idint))
+                {
+                    delIds.Add(idint);
+                }
+            }
+            if (delIds.Count == 0)
+                Response.Write(new JavaScriptSerializer().Serialize(null));
+            else
+                Response.Write(new JavaScriptSerializer().Serialize(delIds));
+        }
+        private bool DeleteFile(Expression<Func<tb_FileInfo, bool>> whereLamdba)
         {
             if (string.IsNullOrEmpty(whereLamdba.ToString()))
             {
-                throw new ArgumentNullException("参数错误!");
+                return false;
             }
             try
             {
@@ -217,8 +253,7 @@ namespace SurveyingResultManageSystem.Controllers
                 {
                     log.FileName = null;
                     log.Explain = "文件不存在";
-                    AlertMsg("文件不存在");
-                    return;
+                    return false;
                 }
                 System.IO.File.Delete(file.Directory);
                 bool success = fileInfoService.Delete(file);
@@ -227,8 +262,7 @@ namespace SurveyingResultManageSystem.Controllers
                     log.FileName = file.FileName;
                     log.Explain = "删除成功！";
                     logInfoService.Add(log);
-                    var response = new { code = 4, fileId = file.ID };
-                    Response.Write(new JavaScriptSerializer().Serialize(response));
+                    return true;
                 }
             }
             catch (Exception e)
@@ -244,7 +278,84 @@ namespace SurveyingResultManageSystem.Controllers
                 };
                 logInfoService.Add(log);
                 Log.AddRecord(e);
-                AlertMsg("删除失败！");
+                return false;
+            }
+            return true;
+        }
+        /// <summary>
+        /// code的数字带表意思：
+        /// code=1：参数错误；
+        /// code=2：文件不存在；
+        /// code=3：服务器错误；
+        /// code=4：下载成功；
+        /// </summary>
+        [Authentication]
+        [HttpPost]
+        public void Downloads()
+        {
+            try {
+                var sr = new StreamReader(Request.InputStream);
+                var stream = sr.ReadToEnd();
+                string[] ids = JsonConvert.DeserializeObject<string[]>(stream) as string[];
+                sr.Close();
+                if (ids == null)
+                {
+                    var response1 = new { code = 1 };
+                    Response.Write(new JavaScriptSerializer().Serialize(response1));
+                    return;
+                }
+                //声明并初始化参数
+                List<string> fileDirectories = new List<string>();
+                for(int i = 0;i < ids.Length;i ++ )
+                {
+                    
+                    int id = Convert.ToInt32(ids[i]);
+                    var file = fileInfoService.Find(u => u.ID == id);
+                    if (file != null && System.IO.File.Exists(file.Directory))
+                    {
+                        //记录下载
+                        tb_LogInfo log = new tb_LogInfo
+                        {
+                            UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value,
+                            FileName = file.FileName,
+                            Explain = "请求下载文件！",
+                            Time = DateTime.Now.ToString(),
+                            Operation = LogOperations.DownloadFile()
+                        };
+                        logInfoService.Add(log);
+                        //加入路径数组
+                        fileDirectories.Add(file.Directory);
+                    }
+                }
+                //生成压缩文件
+                string filename = HttpRuntime.AppDomainAppPath.ToString() + "/Data/File/下载.zip";
+                using (ZipFile zipFile = new ZipFile(System.Text.Encoding.Default))
+                {
+                    if(fileDirectories.Count > 0)
+                    {
+                        zipFile.AddFiles(fileDirectories, "Files");
+                        zipFile.Save(filename);
+                    }
+                    else//没有一个文件
+                    {
+                        var response2 = new { code = 2 };
+                        Response.Write(new JavaScriptSerializer().Serialize(response2));
+                        return;
+                    }
+                }
+                var s1 = Server.MapPath("~");
+                var s2 = Server.MapPath("~/Data/File/下载.zip");
+                var nowUri = base.Request.Url;
+                Uri baseUri = new Uri(string.Format("{0}://{1}", nowUri.Scheme, nowUri.Authority));
+                Uri needUri = new Uri(baseUri, s2.Substring(s1.Length));
+                var response = new { code = 4,url = needUri };
+                Response.Write(new JavaScriptSerializer().Serialize(response));
+            }
+           catch(Exception e)
+           {
+                Log.AddRecord(e);
+                var response = new { code = 3 };
+                Response.Write(new JavaScriptSerializer().Serialize(response));
             }
         }
         [Authentication]
@@ -274,7 +385,7 @@ namespace SurveyingResultManageSystem.Controllers
                 };
                 logInfoService.Add(log);
                 //以字符流的形式下载文件
-                FileStream fs = new FileStream(file.Directory, FileMode.Open, FileAccess.ReadWrite);
+                FileStream fs = new FileStream(file.Directory, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
                 byte[] bytes = new byte[(int)fs.Length];
                 fs.Read(bytes, 0, bytes.Length);
                 fs.Close();

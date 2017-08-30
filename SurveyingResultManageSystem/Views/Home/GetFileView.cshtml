@@ -60,7 +60,12 @@
             <div id="footer_left">
                 <img class="select_img" src="~/Sources/Images/select.png" onclick="selectallimg(this)" />
                 <p style="display:inline">全选</p>
-                下载删除
+                <a onclick="deleteFiles()">
+                    删除
+                </a>
+                <a onclick="downloadFiles()">
+                    下载
+                </a>
             </div>
             <div id="footer_right">
                 <input id="footer-right-btn1" onclick="refresh(1)" class="button" type="button" value="首页" />

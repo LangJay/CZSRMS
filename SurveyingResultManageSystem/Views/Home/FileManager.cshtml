@@ -211,6 +211,8 @@
             getDropData("surveyingunitname", uniturl);
             $(".js-example-basic-multiple").select2();
             //$("#surveyingunitname").val("苏仙区测绘队");
+            //清除缓存
+            sessionStorage.clear();
         });
     });
     //获取下拉菜单数据
@@ -237,6 +239,10 @@
         });
         $(".progress-bar").css("width", "0%");
         $(".progress-bar").html("");
+
+        $(".js-example-basic-multiple").select2().val(["市局测绘队","苏仙区测绘队"]).trigger("change");
+
+        //$("#surveyingunitname").val("苏仙区测绘队");
         $("#myModal").modal('show');
     };
     //模态框隐藏时,处理是否取消上传，终止请求，查看是否有记录，有则删除
@@ -468,14 +474,29 @@
                 $("#loading").css("display", "none");
             }
         });
+        var imgnum = $(".table").find("img").length;
         //重新记录选择效果
-        var arr = localStorage.getItem('selectimg');
-        if (arr != null)
+        var str = sessionStorage.getItem('selectimg');
+        if (str != null)
         {
+            var arr = JSON.parse(str);
             for (var i = 0; i < arr.length; i++) {
-
-                //setselect(arr[i]);
+                var id = arr[i];
+                var img = $("#" + id).find("img")[0];
+                if (img != undefined)
+                {
+                    imgnum--;
+                    var selectedimg = img.src.replace("select.png", "selected.png");
+                    img.src = selectedimg;
+                }
             }
+        }
+        if(imgnum == 0)
+        {
+            //全选处于选择状态
+            var img = $("#footer_left img")[0];
+            var selectedimg = img.src.replace("select.png", "selected.png");
+            img.src = selectedimg;
         }
     };
     //点击子分类
@@ -496,28 +517,61 @@
     //选择
     function selectimg(e) {
         setselect(e);
-        //记录选择
-        var arrold = localStorage.getItem('selectimg');
-        var arrnew = $(e).parentNode.parentNode.id;
-        if (arrold != null)
-            localStorage.setItem('selectimg', arrold.concat(arrnew));
+    }
+    //删除记录
+    function deleterecord(e)
+    {
+        var arrold = JSON.parse(sessionStorage.getItem('selectimg'));
+        var id = e.parentNode.parentNode.id;
+        var index = arrold.indexOf(id);
+        arrold.splice(index, 1);
+        sessionStorage.clear();
+        sessionStorage.setItem('selectimg', JSON.stringify(arrold));
+    }
+    //保存记录
+    function saverecord(e)
+    {
+        //保存json
+        var arrold = sessionStorage.getItem('selectimg');
+        var td = e.parentNode;
+        var arrnew = new Array();
+        arrnew[0] = td.parentNode.id;
+        if (arrold != null) {
+            var jsonold = JSON.parse(arrold);
+            ////判断是否存在，存在就不添加
+            var index = -1;
+            for (var i = 0; i < jsonold.length; i++) {
+                if (jsonold[i] == arrnew[0]) {
+                    index = i;
+                }
+            }
+            if (index > -1) {
+                //jsonold.splice(index, 1)
+                sessionStorage.setItem('selectimg', JSON.stringify(jsonold));
+            }
+            else
+                sessionStorage.setItem('selectimg', JSON.stringify(jsonold.concat(arrnew)));
+        }
         else
-            localStorage.setItem('selectimg', arrnew);
+            sessionStorage.setItem('selectimg', JSON.stringify(arrnew));
     }
     //设置选择效果
     function setselect(e)
     {
-        var src = $(e)[0].src;
+        var obj = $(e);
+        var src = obj[0].src;
         var arr = src.split("/");
         var img = arr[arr.length - 1];
 
         if (img == "select.png") {
+            saverecord(e);
             var selectedimg = src.replace("select.png", "selected.png");
-            $(e).attr('src', selectedimg);
+            obj.attr('src', selectedimg);
         }
         else {
+            deleterecord(e);
             var selectimg = src.replace("selected.png", "select.png");
-            $(e).attr('src', selectimg);
+            obj.attr('src', selectimg);
         }
     }
     //复选框选择
@@ -533,6 +587,7 @@
             var selectedimg = src.replace("select.png", "selected.png");
             for (var i = 0; i < f.length; i++)
             {
+                saverecord(f[i]);
                 $(f[i]).attr('src', selectedimg);
             }
             $(e).attr('src', selectedimg);
@@ -541,6 +596,7 @@
         {
             var selectimg = src.replace("selected.png", "select.png");
             for (var i = 0; i < f.length; i++) {
+                deleterecord(f[i]);
                 $(f[i]).attr('src', selectimg);
             }
             $(e).attr('src', selectimg);
@@ -574,12 +630,70 @@
         if (confirm("你确定要删除" + filename + "吗？")) {
             $.getJSON("/Home/Delete?fileId=" + Number(fileId), function (data) {
                 console.log(data.code);
-                if (data.code == 4) {
+                if (data.code == 4)
+                {
                     $("#" + fileId).remove();
                     getDate(1, "", "");
-                };
-
+                }
+                else {
+                    alert("删除失败!");
+                }
             });
         }
     };
+    function deleteFiles()
+    {
+        //获取所有id
+        var ids = JSON.parse(sessionStorage.getItem('selectimg'));
+        if(ids != null)
+        {
+            if (ids != null) {
+                if (confirm("你确定要删除所选" + ids.length + "个文件吗？"))
+                {
+                    $.ajax({
+                        url: '/Home/Deletes',
+                        type: "post",
+                        dataType: "text",
+                        data: JSON.stringify(ids),
+                        async: false,
+                        success: function (data) {
+                            var arr = JSON.parse(data);
+                            for (var i = 0; i < arr.length; i++) {
+                                $("#" + arr[i]).remove();
+                            }
+                            getDate(1, "", "");
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            alert("删除失败!");
+                        }
+                    });
+                }
+            }
+        }
+    }
+    function downloadFiles()
+    {
+        //获取所有id
+        var ids = JSON.parse(sessionStorage.getItem('selectimg'));
+        if (ids != null) {
+            $.ajax({
+                url: '/Home/Downloads',
+                type: "post",
+                dataType: "text",
+                data: JSON.stringify(ids),
+                async: false,
+                success: function (data) {
+                    var json = JSON.parse(data);
+                    if (json.code == 4)
+                        window.open(json.url);
+                    else
+                        alert("下载失败!");
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("下载失败!");
+                }
+            });
+        }
+    }
+
 </script>
