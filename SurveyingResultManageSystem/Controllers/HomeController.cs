@@ -14,6 +14,7 @@ using ArcServer;
 using System.Linq.Expressions;
 using Newtonsoft.Json;
 using Ionic.Zip;
+using System.Threading;
 
 namespace SurveyingResultManageSystem.Controllers
 {
@@ -333,8 +334,8 @@ namespace SurveyingResultManageSystem.Controllers
                 {
                     if(fileDirectories.Count > 0)
                     {
-                        zipFile.AddFiles(fileDirectories, "Files");
-                        zipFile.Save(filename);
+                        zipFile.AddFiles(fileDirectories, "下载");
+                        zipFile.Save(filename);//太费时
                     }
                     else//没有一个文件
                     {
@@ -343,12 +344,7 @@ namespace SurveyingResultManageSystem.Controllers
                         return;
                     }
                 }
-                var s1 = Server.MapPath("~");
-                var s2 = Server.MapPath("~/Data/File/下载.zip");
-                var nowUri = base.Request.Url;
-                Uri baseUri = new Uri(string.Format("{0}://{1}", nowUri.Scheme, nowUri.Authority));
-                Uri needUri = new Uri(baseUri, s2.Substring(s1.Length));
-                var response = new { code = 4,url = needUri };
+                var response = new { code = 4,url = "/Home/Download"};
                 Response.Write(new JavaScriptSerializer().Serialize(response));
             }
            catch(Exception e)
@@ -359,7 +355,21 @@ namespace SurveyingResultManageSystem.Controllers
             }
         }
         [Authentication]
-        public void Download(string fileId)
+        public void Download()
+        {
+            try
+            {
+                string filename = "下载.zip";
+                string directory = HttpRuntime.AppDomainAppPath.ToString() + "/Data/File/下载.zip";
+                DownloadTask(filename, directory);
+            }
+            catch(Exception e)
+            {
+                Log.AddRecord(e);
+            }
+        }
+        [Authentication]
+        public void DownloadWithId(string fileId)
         {
             if (string.IsNullOrEmpty(fileId))
             {
@@ -372,33 +382,21 @@ namespace SurveyingResultManageSystem.Controllers
                 AlertMsg("文件不存在");
                 return;
             }
+            string filename = file.FileName;
+            string directory = file.Directory;
             try
             {
                 //记录下载
                 tb_LogInfo log = new tb_LogInfo
                 {
                     UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value,
-                    FileName = file.FileName,
+                    FileName = filename,
                     Explain = "请求下载文件！",
                     Time = DateTime.Now.ToString(),
                     Operation = LogOperations.DownloadFile()
                 };
                 logInfoService.Add(log);
-                //以字符流的形式下载文件
-                FileStream fs = new FileStream(file.Directory, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
-                byte[] bytes = new byte[(int)fs.Length];
-                fs.Read(bytes, 0, bytes.Length);
-                fs.Close();
-                Response.ContentType = "application/octet-stream";
-                //通知浏览器下载文件而不是打开
-                Response.AddHeader("Content-Disposition", "attachment; filename=" + HttpUtility.UrlEncode(file.FileName, System.Text.Encoding.UTF8));
-                Response.BinaryWrite(bytes);
-                Response.Flush();
-                Response.End();
-            }
-            catch(System.IO.FileNotFoundException)
-            {
-                
+                DownloadTask(filename, directory);
             }
             catch(Exception e)
             {
@@ -406,7 +404,7 @@ namespace SurveyingResultManageSystem.Controllers
                 tb_LogInfo log = new tb_LogInfo
                 {
                     UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value,
-                    FileName = file.FileName,
+                    FileName = filename,
                     Explain = "下载失败！",
                     Time = DateTime.Now.ToString(),
                     Operation = LogOperations.DownloadFile()
@@ -414,6 +412,48 @@ namespace SurveyingResultManageSystem.Controllers
                 logInfoService.Add(log);
                 Log.AddRecord(e);
             }
+        }
+        private void DownloadTask(string filename,string directory)
+        {
+            //以字符流的形式下载文件
+            FileStream fs = new FileStream(directory, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+            Response.ContentType = "application/octet-stream";
+            //通知浏览器下载文件而不是打开
+            Response.AddHeader("Content-Disposition", "attachment; filename=" + HttpUtility.UrlEncode(filename, System.Text.Encoding.UTF8));
+            Response.AddHeader("Content-Length", fs.Length.ToString());
+            //还没有读取的文件内容长度
+            long leftLength = fs.Length;
+            //创建接收文件内容的字节数组
+            byte[] buffer = new byte[1024];
+            //每次读取的最大字节数
+            int maxLength = buffer.Length;
+            //每次实际返回的字节数长度
+            int num = 0;
+            //文件开始读取的位置
+            int fileStart = 0;
+            while (leftLength > 0)
+            {
+                //设置文件流的读取位置
+                fs.Position = fileStart;
+                if (leftLength < maxLength)
+                {
+                    num = fs.Read(buffer, 0, Convert.ToInt32(leftLength));
+                }
+                else
+                {
+                    num = fs.Read(buffer, 0, maxLength);
+                }
+                if (num == 0)
+                {
+                    break;
+                }
+                fileStart += num;
+                leftLength -= num;
+                Response.BinaryWrite(buffer);
+                Response.Flush();
+            }
+            fs.Close();
+            Response.End();
         }
         private void AlertMsg(string msg)
         {

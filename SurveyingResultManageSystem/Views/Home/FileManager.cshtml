@@ -645,7 +645,7 @@
     {
         //获取所有id
         var ids = JSON.parse(sessionStorage.getItem('selectimg'));
-        if(ids != null)
+        if(ids != null && ids.length > 0)
         {
             if (ids != null) {
                 if (confirm("你确定要删除所选" + ids.length + "个文件吗？"))
@@ -675,7 +675,8 @@
     {
         //获取所有id
         var ids = JSON.parse(sessionStorage.getItem('selectimg'));
-        if (ids != null) {
+        if (ids != null && ids.length > 0)
+        {
             $.ajax({
                 url: '/Home/Downloads',
                 type: "post",
