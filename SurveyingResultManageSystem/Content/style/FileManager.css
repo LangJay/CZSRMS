@@ -21,6 +21,7 @@
 .checked {
     background-color: #c8c8c8;
 }
+
 .li_div a:active {
     scrollbar-base-color: #c8c8c8;
 }
@@ -145,14 +146,18 @@ ul {
 .modal .table {
     margin-bottom: 0px;
 }
-td a:hover
+a:hover
 {
     cursor:pointer;
 }
+
 .modal td,.modal th {
     text-align: center;
 }
 
+tr th{
+text-align:center;
+}
 #div_filemanager_list_footer {
     border-top: 1px solid #d8d7d7;
     height: 50px;

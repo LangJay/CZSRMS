@@ -13,6 +13,8 @@ using System.Web.Script.Serialization;
 using ArcServer;
 using System.Linq.Expressions;
 using Newtonsoft.Json;
+using Ionic.Zip;
+using System.Threading;
 
 namespace SurveyingResultManageSystem.Controllers
 {
@@ -195,13 +197,47 @@ namespace SurveyingResultManageSystem.Controllers
         [Authentication]
         public void Delete(int fileId)
         {
-             DeleteFile(u => u.ID == fileId);
+            if( DeleteFile(u => u.ID == fileId))
+            {
+                var response = new { code = 4, fileId = fileId };
+                Response.Write(new JavaScriptSerializer().Serialize(response));
+            }
         }
-        private void DeleteFile(Expression<Func<tb_FileInfo, bool>> whereLamdba)
+        /// <summary>
+        /// 删除所选文件，需要返回删除的id
+        /// </summary>
+        [Authentication]
+        [HttpPost]
+        public void Deletes() 
+        {
+            var sr = new StreamReader(Request.InputStream);
+            var stream = sr.ReadToEnd();
+            string [] arr = JsonConvert.DeserializeObject<string[]>(stream) as string[];
+            sr.Close();
+            List<int> delIds = new List<int>();
+            if(arr == null)
+            {
+                Response.Write(new JavaScriptSerializer().Serialize(null));
+                return;
+            }
+            foreach(string id in arr)
+            {
+                int idint = int.Parse(id);
+                if(DeleteFile(u => u.ID == idint))
+                {
+                    delIds.Add(idint);
+                }
+            }
+            if (delIds.Count == 0)
+                Response.Write(new JavaScriptSerializer().Serialize(null));
+            else
+                Response.Write(new JavaScriptSerializer().Serialize(delIds));
+        }
+        private bool DeleteFile(Expression<Func<tb_FileInfo, bool>> whereLamdba)
         {
             if (string.IsNullOrEmpty(whereLamdba.ToString()))
             {
-                throw new ArgumentNullException("参数错误!");
+                return false;
             }
             try
             {
@@ -218,8 +254,7 @@ namespace SurveyingResultManageSystem.Controllers
                 {
                     log.FileName = null;
                     log.Explain = "文件不存在";
-                    AlertMsg("文件不存在");
-                    return;
+                    return false;
                 }
                 System.IO.File.Delete(file.Directory);
                 bool success = fileInfoService.Delete(file);
@@ -228,8 +263,7 @@ namespace SurveyingResultManageSystem.Controllers
                     log.FileName = file.FileName;
                     log.Explain = "删除成功！";
                     logInfoService.Add(log);
-                    var response = new { code = 4, fileId = file.ID };
-                    Response.Write(new JavaScriptSerializer().Serialize(response));
+                    return true;
                 }
             }
             catch (Exception e)
@@ -245,11 +279,104 @@ namespace SurveyingResultManageSystem.Controllers
                 };
                 logInfoService.Add(log);
                 Log.AddRecord(e);
-                AlertMsg("删除失败！");
+                return false;
+            }
+            return true;
+        }
+        /// <summary>
+        /// code的数字带表意思：
+        /// code=1：参数错误；
+        /// code=2：文件不存在；
+        /// code=3：服务器错误；
+        /// code=4：下载成功；
+        /// </summary>
+        [Authentication]
+        [HttpPost]
+        public void Downloads()
+        {
+            try {
+                var sr = new StreamReader(Request.InputStream);
+                var stream = sr.ReadToEnd();
+                string[] ids = JsonConvert.DeserializeObject<string[]>(stream) as string[];
+                sr.Close();
+                if (ids == null)
+                {
+                    var response1 = new { code = 1 };
+                    Response.Write(new JavaScriptSerializer().Serialize(response1));
+                    return;
+                }
+                List<string> urls = new List<string>();
+                for(int i = 0;i<ids.Length;i ++)
+                {
+                    string url = "/Home/DownloadWithId?fileId=" + ids[i];
+                    urls.Add(url);
+                }
+                ////声明并初始化参数
+                //List<string> fileDirectories = new List<string>();
+                //for(int i = 0;i < ids.Length;i ++ )
+                //{
+
+                //    int id = Convert.ToInt32(ids[i]);
+                //    var file = fileInfoService.Find(u => u.ID == id);
+                //    if (file != null && System.IO.File.Exists(file.Directory))
+                //    {
+                //        //记录下载
+                //        tb_LogInfo log = new tb_LogInfo
+                //        {
+                //            UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value,
+                //            FileName = file.FileName,
+                //            Explain = "请求下载文件！",
+                //            Time = DateTime.Now.ToString(),
+                //            Operation = LogOperations.DownloadFile()
+                //        };
+                //        logInfoService.Add(log);
+                //        //加入路径数组
+                //        fileDirectories.Add(file.Directory);
+                //    }
+                //}
+                ////生成压缩文件
+                //string filename = HttpRuntime.AppDomainAppPath.ToString() + "/Data/File/下载.zip";
+                //using (ZipFile zipFile = new ZipFile(System.Text.Encoding.Default))
+                //{
+                //    if(fileDirectories.Count > 0)
+                //    {
+                //        zipFile.AddFiles(fileDirectories, "下载");
+                //        zipFile.Save(filename);//太费时
+                //    }
+                //    else//没有一个文件
+                //    {
+                //        var response2 = new { code = 2 };
+                //        Response.Write(new JavaScriptSerializer().Serialize(response2));
+                //        return;
+                //    }
+                //}
+                //var response = new { code = 4,url = "/Home/Download"};
+                var response = new { code = 4, url = urls };
+                Response.Write(new JavaScriptSerializer().Serialize(response));
+            }
+           catch(Exception e)
+           {
+                Log.AddRecord(e);
+                var response = new { code = 3 };
+                Response.Write(new JavaScriptSerializer().Serialize(response));
             }
         }
         [Authentication]
-        public void Download(string fileId)
+        public void Download()
+        {
+            try
+            {
+                string filename = "下载.zip";
+                string directory = HttpRuntime.AppDomainAppPath.ToString() + "/Data/File/下载.zip";
+                DownloadTask(filename, directory);
+            }
+            catch(Exception e)
+            {
+                Log.AddRecord(e);
+            }
+        }
+        [Authentication]
+        public void DownloadWithId(string fileId)
         {
             if (string.IsNullOrEmpty(fileId))
             {
@@ -262,33 +389,21 @@ namespace SurveyingResultManageSystem.Controllers
                 AlertMsg("文件不存在");
                 return;
             }
+            string filename = file.FileName;
+            string directory = file.Directory;
             try
             {
                 //记录下载
                 tb_LogInfo log = new tb_LogInfo
                 {
                     UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value,
-                    FileName = file.FileName,
+                    FileName = filename,
                     Explain = "请求下载文件！",
                     Time = DateTime.Now.ToString(),
                     Operation = LogOperations.DownloadFile()
                 };
                 logInfoService.Add(log);
-                //以字符流的形式下载文件
-                FileStream fs = new FileStream(file.Directory, FileMode.Open, FileAccess.ReadWrite);
-                byte[] bytes = new byte[(int)fs.Length];
-                fs.Read(bytes, 0, bytes.Length);
-                fs.Close();
-                Response.ContentType = "application/octet-stream";
-                //通知浏览器下载文件而不是打开
-                Response.AddHeader("Content-Disposition", "attachment; filename=" + HttpUtility.UrlEncode(file.FileName, System.Text.Encoding.UTF8));
-                Response.BinaryWrite(bytes);
-                Response.Flush();
-                Response.End();
-            }
-            catch(System.IO.FileNotFoundException)
-            {
-                
+                DownloadTask(filename, directory);
             }
             catch(Exception e)
             {
@@ -296,7 +411,7 @@ namespace SurveyingResultManageSystem.Controllers
                 tb_LogInfo log = new tb_LogInfo
                 {
                     UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value,
-                    FileName = file.FileName,
+                    FileName = filename,
                     Explain = "下载失败！",
                     Time = DateTime.Now.ToString(),
                     Operation = LogOperations.DownloadFile()
@@ -304,6 +419,48 @@ namespace SurveyingResultManageSystem.Controllers
                 logInfoService.Add(log);
                 Log.AddRecord(e);
             }
+        }
+        private void DownloadTask(string filename,string directory)
+        {
+            //以字符流的形式下载文件
+            FileStream fs = new FileStream(directory, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+            Response.ContentType = "application/octet-stream";
+            //通知浏览器下载文件而不是打开
+            Response.AddHeader("Content-Disposition", "attachment; filename=" + HttpUtility.UrlEncode(filename, System.Text.Encoding.UTF8));
+            Response.AddHeader("Content-Length", fs.Length.ToString());
+            //还没有读取的文件内容长度
+            long leftLength = fs.Length;
+            //创建接收文件内容的字节数组
+            byte[] buffer = new byte[1024*30];
+            //每次读取的最大字节数
+            int maxLength = buffer.Length;
+            //每次实际返回的字节数长度
+            int num = 0;
+            //文件开始读取的位置
+            int fileStart = 0;
+            while (leftLength > 0)
+            {
+                //设置文件流的读取位置
+                fs.Position = fileStart;
+                if (leftLength < maxLength)
+                {
+                    num = fs.Read(buffer, 0, Convert.ToInt32(leftLength));
+                }
+                else
+                {
+                    num = fs.Read(buffer, 0, maxLength);
+                }
+                if (num == 0)
+                {
+                    break;
+                }
+                fileStart += num;
+                leftLength -= num;
+                Response.BinaryWrite(buffer);
+                Response.Flush();
+            }
+            fs.Close();
+            Response.End();
         }
         private void AlertMsg(string msg)
         {
