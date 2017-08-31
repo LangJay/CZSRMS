@@ -13,6 +13,8 @@ using BLL;
 using System.Web;
 using SurveyingResultManageSystem.Models;
 using System.Net.Mail;
+using System.Text;
+using FilePackageLib;
 
 namespace SurveyingResultManageSystem.Controllers
 {
@@ -58,28 +60,54 @@ namespace SurveyingResultManageSystem.Controllers
             {
                 var file = files[0];
                 string fileName = file.FileName.Split('\\').Last();
-               // Stream inputStream = file.InputStream;
-                string fileSaveFolder = HttpRuntime.AppDomainAppPath.ToString() + "/Data/File/";
+                string fileSaveFolder = HttpRuntime.AppDomainAppPath.ToString() + "Data\\File\\";
                 //如果目标不存在，则创建
-                if (!Directory.Exists(fileSaveFolder))
-                {
-                    Directory.CreateDirectory(fileSaveFolder);
-                }
-                //int lenth = 1024;
-                //for(int index = 0;index < inputStream.Length/lenth + 1;index ++)
+                //if (!Directory.Exists(fileSaveFolder))
                 //{
-                //    byte[] buffer = new byte[lenth];
-                //    inputStream.Read(buffer,)
+                //    Directory.CreateDirectory(fileSaveFolder);
                 //}
-                //inputStream.Read(buffer, 0, buffer.Length);
-                //string strFileMd5 = MD5Helper.GetMD5FromFile(buffer);
+                //string md5 = GetMD5HashFromFile(file.InputStream);
+                //if(md5 == null)//不允许上传
+                //{
+                //    tb_LogInfo log = new tb_LogInfo()
+                //    {
+                //        UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value,
+                //        Time = DateTime.Now.ToString(),
+                //        Operation = LogOperations.UploadFile(),
+                //        FileName = fileName,
+                //        Explain = "文件格式不正确！"
+                //    };
+                //    logInfoService.Add(log);
+                //    return "文件格式不正确！";
+                //}
+                ////检查数据库是否存在该文件，若是，则不允许上传
+                //tb_FileInfo oldFile = fileInfoService.Find(u => u.MD5 == md5);
+                //if (oldFile != null )//
+                //{
+                //    tb_LogInfo log = new tb_LogInfo()
+                //    {
+                //        UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value,
+                //        Time = DateTime.Now.ToString(),
+                //        Operation = LogOperations.UploadFile(),
+                //        FileName = fileName,
+                //        Explain = "已经存在该文件！"
+                //    };
+                //    logInfoService.Add(log);
+                //    return "已经存在该文件！";
+                //}
                 string fileSavePath = Path.Combine(fileSaveFolder, fileName);
                 file.SaveAs(fileSavePath);
-                //inputStream.Close();
-                //tb_FileInfo fileInfo = FormClass.FormToClass<tb_FileInfo>(Request.Form);
+                //解压该文件
+                string zipFileSavePath = Path.Combine(fileSaveFolder, DateTime.Now.ToFileTime().ToString());
+                //创建该目录i
+                Directory.CreateDirectory(zipFileSavePath);
+                FileCompressExtend fce = new FileCompressExtend();
+                fce.DecompressDirectory(fileSavePath, zipFileSavePath);
+                //赋值模型
                 tb_FileInfo fileInfo = JsonConvert.DeserializeObject<tb_FileInfo>(json) as tb_FileInfo;
-                fileInfo.Directory = fileSavePath;
+                 fileInfo.Directory = fileSavePath;//重新赋值路径
                 fileInfo.FileName = fileName;
+                //fileInfo.MD5 = md5;
                 var username = System.Web.HttpContext.Current.Request.Cookies["username"].Value;
                 fileInfo.UserID = userInfoService.Find(u => u.UserName == username).ID;
                 fileInfo.UploadTime = DateTime.Now.ToString();
@@ -98,9 +126,8 @@ namespace SurveyingResultManageSystem.Controllers
                         FileName = fileInfo.FileName,
                         Explain = "上传成功！"
                     };
-                    var response = new {fileId = fileInfo.ID };
-                    Response.Write(new JavaScriptSerializer().Serialize(response));
                     logInfoService.Add(log);
+                 
                     return "上传成功！";
                 }
                 else
@@ -111,13 +138,34 @@ namespace SurveyingResultManageSystem.Controllers
                         Time = DateTime.Now.ToString(),
                         Operation = LogOperations.UploadFile(),
                         FileName = fileInfo.FileName,
-                        Explain = "上传失败！"
+                        Explain = "上传失败，写入数据库出错！"
                     };
                     logInfoService.Add(log);
-                    return "上传失败！";
+                    return "上传失败，写入数据库出错！";
                 }
             }
             return "上传失败！";
+        }
+        private string GetMD5HashFromFile(Stream stream)
+        {
+            try
+            {
+                System.Security.Cryptography.MD5 md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
+                byte[] retVal = md5.ComputeHash(stream);
+                stream.Close();
+
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < retVal.Length; i++)
+                {
+                    sb.Append(retVal[i].ToString("x2"));
+                }
+                return sb.ToString();
+            }
+            catch (Exception ex)
+            {
+                Log.AddRecord(ex);
+                return null;
+            }
         }
     }
 }

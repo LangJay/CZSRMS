@@ -305,46 +305,53 @@ namespace SurveyingResultManageSystem.Controllers
                     Response.Write(new JavaScriptSerializer().Serialize(response1));
                     return;
                 }
-                //声明并初始化参数
-                List<string> fileDirectories = new List<string>();
-                for(int i = 0;i < ids.Length;i ++ )
+                List<string> urls = new List<string>();
+                for(int i = 0;i<ids.Length;i ++)
                 {
-                    
-                    int id = Convert.ToInt32(ids[i]);
-                    var file = fileInfoService.Find(u => u.ID == id);
-                    if (file != null && System.IO.File.Exists(file.Directory))
-                    {
-                        //记录下载
-                        tb_LogInfo log = new tb_LogInfo
-                        {
-                            UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value,
-                            FileName = file.FileName,
-                            Explain = "请求下载文件！",
-                            Time = DateTime.Now.ToString(),
-                            Operation = LogOperations.DownloadFile()
-                        };
-                        logInfoService.Add(log);
-                        //加入路径数组
-                        fileDirectories.Add(file.Directory);
-                    }
+                    string url = "/Home/DownloadWithId?fileId=" + ids[i];
+                    urls.Add(url);
                 }
-                //生成压缩文件
-                string filename = HttpRuntime.AppDomainAppPath.ToString() + "/Data/File/下载.zip";
-                using (ZipFile zipFile = new ZipFile(System.Text.Encoding.Default))
-                {
-                    if(fileDirectories.Count > 0)
-                    {
-                        zipFile.AddFiles(fileDirectories, "下载");
-                        zipFile.Save(filename);//太费时
-                    }
-                    else//没有一个文件
-                    {
-                        var response2 = new { code = 2 };
-                        Response.Write(new JavaScriptSerializer().Serialize(response2));
-                        return;
-                    }
-                }
-                var response = new { code = 4,url = "/Home/Download"};
+                ////声明并初始化参数
+                //List<string> fileDirectories = new List<string>();
+                //for(int i = 0;i < ids.Length;i ++ )
+                //{
+
+                //    int id = Convert.ToInt32(ids[i]);
+                //    var file = fileInfoService.Find(u => u.ID == id);
+                //    if (file != null && System.IO.File.Exists(file.Directory))
+                //    {
+                //        //记录下载
+                //        tb_LogInfo log = new tb_LogInfo
+                //        {
+                //            UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value,
+                //            FileName = file.FileName,
+                //            Explain = "请求下载文件！",
+                //            Time = DateTime.Now.ToString(),
+                //            Operation = LogOperations.DownloadFile()
+                //        };
+                //        logInfoService.Add(log);
+                //        //加入路径数组
+                //        fileDirectories.Add(file.Directory);
+                //    }
+                //}
+                ////生成压缩文件
+                //string filename = HttpRuntime.AppDomainAppPath.ToString() + "/Data/File/下载.zip";
+                //using (ZipFile zipFile = new ZipFile(System.Text.Encoding.Default))
+                //{
+                //    if(fileDirectories.Count > 0)
+                //    {
+                //        zipFile.AddFiles(fileDirectories, "下载");
+                //        zipFile.Save(filename);//太费时
+                //    }
+                //    else//没有一个文件
+                //    {
+                //        var response2 = new { code = 2 };
+                //        Response.Write(new JavaScriptSerializer().Serialize(response2));
+                //        return;
+                //    }
+                //}
+                //var response = new { code = 4,url = "/Home/Download"};
+                var response = new { code = 4, url = urls };
                 Response.Write(new JavaScriptSerializer().Serialize(response));
             }
            catch(Exception e)
@@ -424,7 +431,7 @@ namespace SurveyingResultManageSystem.Controllers
             //还没有读取的文件内容长度
             long leftLength = fs.Length;
             //创建接收文件内容的字节数组
-            byte[] buffer = new byte[1024];
+            byte[] buffer = new byte[1024*30];
             //每次读取的最大字节数
             int maxLength = buffer.Length;
             //每次实际返回的字节数长度

@@ -376,6 +376,8 @@
                     $(".progress-bar").html("100%");
                     $("#myModal").modal('hide');
                     getDate(1, "", "");
+                    if (data != "上传成功！")
+                        alert(data);
                     console.log("=====" + data +"======");
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -686,7 +688,13 @@
                 success: function (data) {
                     var json = JSON.parse(data);
                     if (json.code == 4)
-                        window.open(json.url);
+                    {
+                        for(var i = 0;i< json.url.length;i ++)
+                        {
+                            var ulr = json.url[i];
+                            window.open(json.url[i]);
+                        }
+                    }
                     else
                         alert("下载失败!");
                 },
