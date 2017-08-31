@@ -194,6 +194,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
+    <Content Include="Scripts\easyfader\css\jquery.easyfader.css" />
+    <Content Include="Scripts\easyfader\images\img1.jpg" />
+    <Content Include="Scripts\easyfader\images\img2.jpg" />
+    <Content Include="Scripts\easyfader\images\img3.jpg" />
     <Content Include="Scripts\easyfader\js\jquery.easyfader.js" />
     <Content Include="Scripts\easyfader\js\jquery.easyfader.min.js" />
     <Content Include="Scripts\easyfader\js\jquery.min.js" />
@@ -201,6 +205,7 @@
     <Content Include="Scripts\select2\select2.js" />
     <Content Include="Scripts\select2\select2.min.css" />
     <Content Include="Scripts\select2\select2.min.js" />
+    <Content Include="Scripts\easyfader\css\jquery.easyfader.css.bak" />
     <None Include="Scripts\jquery-1.11.3.intellisense.js" />
     <Content Include="Scripts\jquery-1.11.3.js" />
     <Content Include="Scripts\jquery-1.11.3.min.js" />
@@ -258,8 +263,6 @@
     <Content Include="Views\Home\GetFileView.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Scripts\easyfader\css\" />
-    <Folder Include="Scripts\easyfader\images\" />
     <Folder Include="Views\Droplist\" />
     <Folder Include="Views\FileManager\" />
     <Folder Include="Views\Layout\" />

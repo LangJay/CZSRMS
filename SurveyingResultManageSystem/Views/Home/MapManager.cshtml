@@ -4,6 +4,7 @@
 
 <link rel="stylesheet" type="text/css" href="http://192.168.0.205:80/aspnet_client/API/3.21/3.21/esri/css/esri.css" />
    <script src="http://192.168.0.205:80/aspnet_client/API/3.21/3.21/init.js"></script>
+
 @Styles.Render("~/Content/style/MapManager.css")
 @Styles.Render("~/Content/style/FileManager.css")
   @Styles.Render("~/Scripts/easyfader/css/jquery.easyfader.css")
@@ -24,10 +25,10 @@
             <h4 id="h-map"><span id="span_map"></span>地图管理</h4>
             <div id="divlist-map">
                 <div id="divlist-header">
-                    <a onclick="deleteFile()">
+                    <a onclick="deleteFiles()">
                         删除
                     </a>
-                    <a href="/Home/Download?fileId=">
+                    <a onclick="downloadFiles()">
                         下载
                     </a>
                     <p style="display:inline">全选</p>
@@ -301,23 +302,62 @@
             divlist.css("display", "none");
         }
     });
+    //保存记录
+    function saverecord(e) {
+        //保存json
+        var arrold = sessionStorage.getItem('selectimg');
+        var td = e.parentNode;
+        var arrnew = new Array();
+        arrnew[0] = td.parentNode.id;
+        if (arrold != null) {
+            var jsonold = JSON.parse(arrold);
+            ////判断是否存在，存在就不添加
+            var index = -1;
+            for (var i = 0; i < jsonold.length; i++) {
+                if (jsonold[i] == arrnew[0]) {
+                    index = i;
+                }
+            }
+            if (index > -1) {
+                //jsonold.splice(index, 1)
+                sessionStorage.setItem('selectimg', JSON.stringify(jsonold));
+            }
+            else
+                sessionStorage.setItem('selectimg', JSON.stringify(jsonold.concat(arrnew)));
+        }
+        else
+            sessionStorage.setItem('selectimg', JSON.stringify(arrnew));
+    }
+    //删除记录
+    function deleterecord(e) {
+        var arrold = JSON.parse(sessionStorage.getItem('selectimg'));
+        var id = e.parentNode.parentNode.id;
+        var index = arrold.indexOf(id);
+        arrold.splice(index, 1);
+        sessionStorage.clear();
+        sessionStorage.setItem('selectimg', JSON.stringify(arrold));
+    }
     //选择一个
     function selectimg(e) {
-        var src = $(e)[0].src;
+        setselect(e);
+    }
+    //设置选择效果
+    function setselect(e) {
+        var obj = $(e);
+        var src = obj[0].src;
         var arr = src.split("/");
         var img = arr[arr.length - 1];
 
         if (img == "select.png") {
+            saverecord(e);
             var selectedimg = src.replace("select.png", "selected.png");
-            $(e).attr('src', selectedimg);
+            obj.attr('src', selectedimg);
         }
         else {
+            deleterecord(e);
             var selectimg = src.replace("selected.png", "select.png");
-            $(e).attr('src', selectimg);
+            obj.attr('src', selectimg);
         }
-        //记录选择
-        var store = require('store');
-        store.set('selectimg', { name: 'Marcus' });
     }
     //选择全部
     function selectallimg(e) {
@@ -329,6 +369,7 @@
         if (img == "select.png") {
             var selectedimg = src.replace("select.png", "selected.png");
             for (var i = 0; i < f.length; i++) {
+                saverecord(f[i]);
                 $(f[i]).attr('src', selectedimg);
             }
             $(e).attr('src', selectedimg);
@@ -336,12 +377,72 @@
         else {
             var selectimg = src.replace("selected.png", "select.png");
             for (var i = 0; i < f.length; i++) {
+                deleterecord(f[i]);
                 $(f[i]).attr('src', selectimg);
             }
             $(e).attr('src', selectimg);
         }
     }
- 
+    //Jimmy 2017/8/31 17:30  增加函数 下载多文件
+    function downloadFiles()
+    {
+        //获取所有id
+        var ids = JSON.parse(sessionStorage.getItem('selectimg'));
+        if (ids != null && ids.length > 0)
+        {
+            $.ajax({
+                url: '/Home/Downloads',
+                type: "post",
+                dataType: "text",
+                data: JSON.stringify(ids),
+                async: false,
+                success: function (data) {
+                    var json = JSON.parse(data);
+                    if (json.code == 4)
+                    {
+                        for(var i = 0;i< json.url.length;i ++)
+                        {
+                            var ulr = json.url[i];
+                            window.open(json.url[i]);
+                        }
+                    }
+                    else
+                        alert("下载失败!");
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("下载失败!");
+                }
+            });
+        }
+    }
+    //Jimmy 2017/8/31 17:30  增加函数 删除所选文件
+    function deleteFiles() {
+        //获取所有id
+        var ids = JSON.parse(sessionStorage.getItem('selectimg'));
+        if (ids != null && ids.length > 0) {
+            if (ids != null) {
+                if (confirm("你确定要删除所选" + ids.length + "个文件吗？")) {
+                    $.ajax({
+                        url: '/Home/Deletes',
+                        type: "post",
+                        dataType: "text",
+                        data: JSON.stringify(ids),
+                        async: false,
+                        success: function (data) {
+                            var arr = JSON.parse(data);
+                            for (var i = 0; i < arr.length; i++) {
+                                $("#" + arr[i]).remove();
+                            }
+                            getDate(1, "", "");
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            alert("删除失败!");
+                        }
+                    });
+                }
+            }
+        }
+    }
     require(["esri/map", "esri/layers/ArcGISDynamicMapServiceLayer", "esri/layers/FeatureLayer","esri/layers/GraphicsLayer", "esri/InfoTemplate", "esri/dijit/Search", "dojo/dom",
           "dojo/on", "dojo/domReady!"],
         function (Map, ArcGISDynamicMapServiceLayer, FeatureLayer,GraphicsLayer, InfoTemplate, Search, dom, on) {
@@ -350,7 +451,7 @@
             //利用url创建一个动态地图服务对象
             //   var layer = new ArcGISDynamicMapServiceLayer("http://192.168.0.230:6080/arcgis/rest/services/1/MapServer");
             //将地图服务对象添加到地图容器中
-            fatch3 = new FeatureLayer("http://localhost:6080/arcgis/rest/services/BX/FeatureServer/0", {
+            fatch3 = new FeatureLayer("http://192.168.0.205:6080/arcgis/rest/services/BX/FeatureServer/0", {
                 mode: FeatureLayer.MODE_SNAPSHOT,
                 outFields: ["*"],
                 infoTemplate: new InfoTemplate("范围红线", "<table width='100%' style='table-layout:fixed'><tr height='15%' width='100%'><th width='60%' align='left'>文件名:${FileName} </th><th width='40%' align='left'>完成人:${FshPerson} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>坐标信息:${CoodSystem} </th><th width='40%' align='left'>完成时间:${FinishTime:DateFormat(selector: 'date', fullYear: true)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>中央子午线:${CenterMed} </th><th width='40%' align='left'>上传时间:${UploadTime:DateFormat(selector: 'date', fullYear: true)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>文件类型:${FileType} </th><th width='40%' align='left'>文件大小:${FileSize} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>项目名称:${ProName} </th><th width='40%' align='left' id='tdid'>图形ID:${OBJECTID} </th></tr><tr height='15%' width='100%'><th width='100%' align='left'>备注:${Memo} </th></tr></table><button style='margin:5px 15px' type='button' onclick='SYT()' class='btn btn-primary btn-xs'>缩略图</button><button style='margin:5px 15px' type='button' onclick='Change()' class='btn btn-primary btn-xs'>修  改</button><button style='margin:5px 15px' type='button' onclick='dele()' class='btn btn-primary btn-xs'>删  除</button><button style='margin:5px 0px 5px 15px' type='button' onclick='Down()' class='btn btn-primary btn-xs'>下  载</button>")
@@ -387,7 +488,7 @@
             map.addLayer(fatch3);
             search = new Search({
                 sources: [{
-                    featureLayer: new FeatureLayer("http://localhost:6080/arcgis/rest/services/BX/FeatureServer/0", {
+                    featureLayer: new FeatureLayer("http://192.168.0.205:6080/arcgis/rest/services/BX/FeatureServer/0", {
                         outFields: ["*"],
                         infoTemplate: new InfoTemplate("范围红线", "<table width='100%' style='table-layout:fixed'><tr height='15%' width='100%'><th width='60%' align='left'>文件名:${FileName} </th><th width='40%' align='left'>完成人:${FshPerson} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>坐标信息:${CoodSystem} </th><th width='40%' align='left'>完成时间:${FinishTime} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>中央子午线:${CenterMed} </th><th width='40%' align='left'>上传时间:${UploadTime} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>文件类型:${FileType} </th><th width='40%' align='left'>文件大小:${FileSize} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>项目名称:${ProName} </th><th width='40%' align='left' id='tdid'>图形ID:${OBJECTID} </th></tr><tr height='15%' width='100%'><th width='100%' align='left'>备注:${Memo} </th></tr></table><button style='margin:5px 8px' type='button' onclick='SYT()' class='btn btn-primary btn-xs'>缩略图</button><button style='margin:5px 8px' type='button' onclick='Change()' class='btn btn-primary btn-xs'>修  改</button><button style='margin:5px 8px' type='button' onclick='dele()' class='btn btn-primary btn-xs'>删  除</button><button style='margin:5px 0px 5px 8px' type='button' onclick='Down()' class='btn btn-primary btn-xs'>下  载</button>")
                     }),
@@ -413,6 +514,8 @@
             }, "search");
             search.startup();
             on(search, 'search-results', function (e) {
+                //Jimmy 2017/8/31 17:30 删除选择记录
+                sessionStorage.clear();
                var aa1 = document.getElementById("div-table");
 			   var aa = aa1.childNodes;
               if (aa != null) {
@@ -421,13 +524,16 @@
                }
 				searchresult = e;
 				var resultStr = "";
-                for (var i = 0; i < searchresult.results[0].length; i++) {
-                    resultStr += "<div class='ccccn' id='divid" + (i + 1) + "' onclick='openid(" + i + ",this)' onmouseover='openMarkerTipById1(" + i + ",this)' onmouseout='onmouseout_MarkerStyle(" + (i + 1) + ",this)' style=\"font-size: 10px;cursor:pointer;padding:0px 0 2px 2px; border-bottom:1px solid #403d3d;\"><table class='map-table'><tr><td textalign='left'>" + (i + 1) + "、" +  searchresult.results[0][i].feature.attributes.FileName ;
+				for (var i = 0; i < searchresult.results[0].length; i++) {
+                //Jimmy 2017/8/31 17:30 给tr增加id，值为文件的id
+				    var id = searchresult.results[0][i].feature.attributes.ID;
+				    id = i;
+                    resultStr += "<div class='ccccn' id='divid" + (i + 1) + "' onclick='openid(" + i + ",this)' onmouseover='openMarkerTipById1(" + i + ",this)' onmouseout='onmouseout_MarkerStyle(" + (i + 1) + ",this)' style=\"font-size: 10px;cursor:pointer;padding:0px 0 2px 2px; border-bottom:1px solid #403d3d;\"><table class='map-table'><tr id=" + id + "><td textalign='left'>" + (i + 1) + "、" + searchresult.results[0][i].feature.attributes.FileName;
                     resultStr += "</td><td><img class='select_img' src='../Sources/Images/select.png' onclick='selectimg(this)'></img></td></tr></table></div>";
                  
 				}
 				document.getElementById("div-table").innerHTML = resultStr;
-
+                
             });
 
 

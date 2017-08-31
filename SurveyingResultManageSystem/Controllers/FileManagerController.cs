@@ -103,6 +103,7 @@ namespace SurveyingResultManageSystem.Controllers
                 Directory.CreateDirectory(zipFileSavePath);
                 FileCompressExtend fce = new FileCompressExtend();
                 fce.DecompressDirectory(fileSavePath, zipFileSavePath);
+                //发布地图
                 //赋值模型
                 tb_FileInfo fileInfo = JsonConvert.DeserializeObject<tb_FileInfo>(json) as tb_FileInfo;
                  fileInfo.Directory = fileSavePath;//重新赋值路径

@@ -39,10 +39,6 @@ ul li h4 {
     text-align: center;
     padding-top: 15px;
 }
-#divlist-map
-{
-    display:none;
-}
 .li_div {
     background-color: #d6d6d6;
     width: 100%;
@@ -155,7 +151,7 @@ a:hover
     text-align: center;
 }
 
-tr th{
+.table tr th{
 text-align:center;
 }
 #div_filemanager_list_footer {

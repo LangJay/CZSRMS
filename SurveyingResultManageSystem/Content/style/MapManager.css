@@ -195,6 +195,8 @@ background-color:#0079c1;
     padding-top: 5px;
     background-color: #efefef;
     border-top: 1px solid #848181;
+    text-align:right;
+    padding-right:10px;
 }
 #divlist-header a{
     padding-right: 37px;
