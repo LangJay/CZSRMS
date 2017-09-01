@@ -40,7 +40,7 @@ td, th {
     text-align: center;
 }
 td {
-   
+   text-align: center;
 }
 .button {
     background-color: #0972A7;
@@ -68,7 +68,8 @@ td {
     white-space: nowrap;
     overflow: hidden;
 }
-#div-explain:hover { /* 鼠标滑过 */
+ /* 鼠标滑过 */
+#div-explain:hover {
     white-space:normal;
     overflow: visible;
 }

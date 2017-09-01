@@ -3,7 +3,6 @@
 @{
      Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 @Styles.Render("~/Content/style/MoreLogInfo.css")
 <div id="div-filemanager">
     <div id="div_filemanager_pager">
@@ -86,7 +85,7 @@
             $("#footer-right-btn5").css("background-color", "#5090C7");
         }
         
-    }, 21);
+    }, 0);
     /*
    刷心数据用
    */
@@ -102,7 +101,7 @@
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 //应该跳转到ERROR页面
-                window.location.href("/Home/Error");
+                window.location.assign("/Home/Error");
             }
         });
     }

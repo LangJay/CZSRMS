@@ -45,7 +45,7 @@ namespace SurveyingResultManageSystem.Controllers
             {
                 //把keywords存到cookies中
                 HttpCookie cook = new HttpCookie("keywords", keywords);
-                //cook.Expires = DateTime.Now.AddDays(365);//一年，有种你一年不关浏览器
+                //cook.Expires = DateTime.Now.AddDays(1);
                 Response.Cookies.Add(cook);
                 pageInfo.keywords = keywords;
                 //重新检索记录

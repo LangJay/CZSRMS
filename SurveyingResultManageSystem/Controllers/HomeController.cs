@@ -529,7 +529,8 @@ namespace SurveyingResultManageSystem.Controllers
             {
               
                 featureItem2.Attributes.Add("FinishTime", fileInfo.Finishtime);
-            }//完成时间信息
+            }
+            //完成时间信息
             featureItem2.Attributes.Add("FshPerson", fileInfo.FinishPerson);//完成人信息
             featureItem2.Attributes.Add("MinCood", fileInfo.MinCoodinate);//最小坐标
             featureItem2.Attributes.Add("MaxCood", fileInfo.MaxCoodinate);//最大坐标
@@ -545,7 +546,6 @@ namespace SurveyingResultManageSystem.Controllers
             featureItem2.Attributes.Add("Memo", fileInfo.Explain);// 成果说明
             if (fileInfo.UploadTime.Trim() != "")
             {
-           
                 featureItem2.Attributes.Add("UploadTime", fileInfo.UploadTime);
             }
            // featureItem2.Attributes.Add("UploadTime", fileInfo.UploadTime);// 上传时间
