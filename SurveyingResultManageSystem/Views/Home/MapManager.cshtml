@@ -728,7 +728,7 @@
     function Down() {
         var id = document.getElementById("tdid").innerHTML;
         var idh = id.split(':');
-        window.open("/Home/DownloadWithObjectId?=" + idh);
+        window.open("/Home/DownloadWithObjectId?objId=" + idh[1]);
         console.log(idh[1]);
     };
     function SYT() {

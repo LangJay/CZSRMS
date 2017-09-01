@@ -204,7 +204,7 @@ namespace SurveyingResultManageSystem.Controllers
             }
         }
         /// <summary>
-        /// 删除所选文件，需要返回删除的id
+        /// 根据id删除所选文件，需要返回删除的id
         /// </summary>
         [Authentication]
         [HttpPost]
@@ -226,6 +226,35 @@ namespace SurveyingResultManageSystem.Controllers
                 if(DeleteFile(u => u.ID == idint))
                 {
                     delIds.Add(idint);
+                }
+            }
+            if (delIds.Count == 0)
+                Response.Write(new JavaScriptSerializer().Serialize(null));
+            else
+                Response.Write(new JavaScriptSerializer().Serialize(delIds));
+        }
+        /// <summary>
+        /// 根据id删除所选文件，需要返回删除的id
+        /// </summary>
+        [Authentication]
+        [HttpPost]
+        public void DeletesWithObjId()
+        {
+            var sr = new StreamReader(Request.InputStream);
+            var stream = sr.ReadToEnd();
+            string[] arr = JsonConvert.DeserializeObject<string[]>(stream) as string[];
+            sr.Close();
+            List<string> delIds = new List<string>();
+            if (arr == null)
+            {
+                Response.Write(new JavaScriptSerializer().Serialize(null));
+                return;
+            }
+            foreach (string objId in arr)
+            {
+                if (DeleteFile(u => u.ObjectID == objId))
+                {
+                    delIds.Add(objId);
                 }
             }
             if (delIds.Count == 0)
@@ -326,6 +355,38 @@ namespace SurveyingResultManageSystem.Controllers
             }
         }
         [Authentication]
+        [HttpPost]
+        public void DownloadsWithObjId()
+        {
+            try
+            {
+                var sr = new StreamReader(Request.InputStream);
+                var stream = sr.ReadToEnd();
+                string[] ids = JsonConvert.DeserializeObject<string[]>(stream) as string[];
+                sr.Close();
+                if (ids == null)
+                {
+                    var response1 = new { code = 1 };
+                    Response.Write(new JavaScriptSerializer().Serialize(response1));
+                    return;
+                }
+                List<string> urls = new List<string>();
+                for (int i = 0; i < ids.Length; i++)
+                {
+                    string url = "/Home/DownloadWithObjectId?fileId=" + ids[i];
+                    urls.Add(url);
+                }
+                var response = new { code = 4, url = urls };
+                Response.Write(new JavaScriptSerializer().Serialize(response));
+            }
+            catch (Exception e)
+            {
+                Log.AddRecord(e);
+                var response = new { code = 3 };
+                Response.Write(new JavaScriptSerializer().Serialize(response));
+            }
+        }
+        [Authentication]
         public void Download()
         {
             try
@@ -344,7 +405,7 @@ namespace SurveyingResultManageSystem.Controllers
         /// </summary>
         /// <param name="objId"></param>
         [Authentication]
-        private void DownloadWithObjectId(string objId)
+        public void DownloadWithObjectId(string objId)
         {
             tb_FileInfo f = fileInfoService.Find(u => u.ObjectID == objId);
             if(f != null)
