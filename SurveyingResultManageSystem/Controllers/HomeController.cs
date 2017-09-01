@@ -15,6 +15,7 @@ using System.Linq.Expressions;
 using Newtonsoft.Json;
 using Ionic.Zip;
 using System.Threading;
+using System.Configuration;
 
 namespace SurveyingResultManageSystem.Controllers
 {
@@ -285,8 +286,9 @@ namespace SurveyingResultManageSystem.Controllers
                     log.Explain = "文件不存在";
                     return false;
                 }
-                //删除文件
-                System.IO.File.Delete(file.Directory);
+                //删除文件夹
+                DirectoryInfo dir = new DirectoryInfo(file.Directory);
+                dir.Delete(true);
                 //删除数据库 
                 bool success = fileInfoService.Delete(file);
                 //删除图形
@@ -460,17 +462,22 @@ namespace SurveyingResultManageSystem.Controllers
         }
         private void DownloadTask(string filename,string directory)
         {
+            string savaPath = "";
+            string safeFileName = "";
             //把文件压缩成文件夹
             using (ZipFile zipFile = new ZipFile(System.Text.Encoding.Default))
             {
-                zipFile.AddDirectory(directory,filename);
-                zipFile.Save(filename);//太费时
+                safeFileName = filename.Substring(0, filename.IndexOf('.'));
+                zipFile.AddDirectory(directory, safeFileName);
+                directory = directory.Substring(0, directory.LastIndexOf('\\'));
+                savaPath = Path.Combine(directory, safeFileName + ".zip");
+                zipFile.Save(savaPath);//太费时
             }
             //以字符流的形式下载文件
-            FileStream fs = new FileStream(directory, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+            FileStream fs = new FileStream(savaPath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
             Response.ContentType = "application/octet-stream";
             //通知浏览器下载文件而不是打开
-            Response.AddHeader("Content-Disposition", "attachment; filename=" + HttpUtility.UrlEncode(filename, System.Text.Encoding.UTF8));
+            Response.AddHeader("Content-Disposition", "attachment; filename=" + HttpUtility.UrlEncode(safeFileName + ".zip", System.Text.Encoding.UTF8));
             Response.AddHeader("Content-Length", fs.Length.ToString());
             //还没有读取的文件内容长度
             long leftLength = fs.Length;
@@ -529,7 +536,7 @@ namespace SurveyingResultManageSystem.Controllers
         private bool deleDWG(string objectid)
         {
             FeatureItem1 item1 = new FeatureItem1();
-            item1.url = "http://localhost:6080/arcgis/rest/services/BX/FeatureServer/0";
+            item1.url = ConfigurationManager.AppSettings["serverurl"];
             bool tt = openauto.DeleFeature(item1.url, objectid);
             return tt;
         }
@@ -599,8 +606,8 @@ namespace SurveyingResultManageSystem.Controllers
             {
                 featureItem2.Attributes.Add("UploadTime", fileInfo.UploadTime);
             }
-           // featureItem2.Attributes.Add("UploadTime", fileInfo.UploadTime);// 上传时间
-            featureItem2.url = "http://localhost:6080/arcgis/rest/services/BX/FeatureServer/0";
+            // featureItem2.Attributes.Add("UploadTime", fileInfo.UploadTime);// 上传时间
+            featureItem2.url = ConfigurationManager.AppSettings["serverurl"];
             string idh = fileInfo.ObjectID.Trim();
 #warning 等两个同时上传完毕再执行
             bool tt1 = openauto.UpdateFeature(featureItem2.url, idh, featureItem2);

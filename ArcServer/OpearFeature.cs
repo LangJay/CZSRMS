@@ -326,7 +326,6 @@ namespace ArcServer
                         postion = postion + Geometry1.m_pts[j].Y.ToString().Trim() + ",";
                         postion = postion + Geometry1.m_pts[j].Z.ToString().Trim();
                         postion = postion + "],";
-
                     }
                     postion = postion.Substring(0, postion.Length - 1);
                     postion = postion + "],";
@@ -344,10 +343,8 @@ namespace ArcServer
                 featureItem.resultid = "";
                 bool res = AddFeature1(url, featureItem);
                 idh = idh+featureItem.resultid+",";
-                
-             //   Console.ReadKey();
-
             }
+            shp1.Close();//关闭，不然一直占用文件
             idh = idh.Substring(0, idh.Length - 1);
             return idh;
         }
