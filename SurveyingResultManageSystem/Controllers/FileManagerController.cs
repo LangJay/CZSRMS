@@ -60,53 +60,36 @@ namespace SurveyingResultManageSystem.Controllers
             {
                 var file = files[0];
                 string fileName = file.FileName.Split('\\').Last();
-                string fileSaveFolder = HttpRuntime.AppDomainAppPath.ToString() + "Data\\File\\";
-                //如果目标不存在，则创建
-                //if (!Directory.Exists(fileSaveFolder))
-                //{
-                //    Directory.CreateDirectory(fileSaveFolder);
-                //}
-                //string md5 = GetMD5HashFromFile(file.InputStream);
-                //if(md5 == null)//不允许上传
-                //{
-                //    tb_LogInfo log = new tb_LogInfo()
-                //    {
-                //        UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value,
-                //        Time = DateTime.Now.ToString(),
-                //        Operation = LogOperations.UploadFile(),
-                //        FileName = fileName,
-                //        Explain = "文件格式不正确！"
-                //    };
-                //    logInfoService.Add(log);
-                //    return "文件格式不正确！";
-                //}
-                ////检查数据库是否存在该文件，若是，则不允许上传
-                //tb_FileInfo oldFile = fileInfoService.Find(u => u.MD5 == md5);
-                //if (oldFile != null )//
-                //{
-                //    tb_LogInfo log = new tb_LogInfo()
-                //    {
-                //        UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value,
-                //        Time = DateTime.Now.ToString(),
-                //        Operation = LogOperations.UploadFile(),
-                //        FileName = fileName,
-                //        Explain = "已经存在该文件！"
-                //    };
-                //    logInfoService.Add(log);
-                //    return "已经存在该文件！";
-                //}
-                string fileSavePath = Path.Combine(fileSaveFolder, fileName);
-                file.SaveAs(fileSavePath);
-                //解压该文件
-                string zipFileSavePath = Path.Combine(fileSaveFolder, DateTime.Now.ToFileTime().ToString());
-                //创建该目录i
-                Directory.CreateDirectory(zipFileSavePath);
-                FileCompressExtend fce = new FileCompressExtend();
-                fce.DecompressDirectory(fileSavePath, zipFileSavePath);
-                //发布地图
+                string fileSaveFolder = HttpRuntime.AppDomainAppPath.ToString() + "Data\\File\\" + DateTime.Now.ToFileTime().ToString() + "\\";
+                tb_FileInfo fileInfo = new tb_FileInfo();
+                string fileSavePath = null;//带文件名路径
+                //读取文件并保存
+                try
+                {
+                    if (!Directory.Exists(fileSaveFolder)) Directory.CreateDirectory(fileSaveFolder);
+                    fileInfo = JsonConvert.DeserializeObject<tb_FileInfo>(json) as tb_FileInfo;
+                    fileSavePath = Path.Combine(fileSaveFolder, fileName);
+                    file.SaveAs(fileSavePath);
+                }
+                catch
+                {
+                    return "读取文件错误！";
+                }
+                try
+                {
+                    //解压该文件
+                    string zipFileSavePath = Path.Combine(fileSaveFolder,fileInfo.ProjectName);//解压到该目录
+                    //创建该目录i
+                    Directory.CreateDirectory(zipFileSavePath);
+                    FileCompressExtend fce = new FileCompressExtend();
+                    fce.DecompressDirectory(fileSavePath, zipFileSavePath);
+                }
+                catch
+                {
+                    return "文件格式不正确！";
+                }
                 //赋值模型
-                tb_FileInfo fileInfo = JsonConvert.DeserializeObject<tb_FileInfo>(json) as tb_FileInfo;
-                 fileInfo.Directory = fileSavePath;//重新赋值路径
+                fileInfo.Directory = fileSaveFolder + "原始文件\\";//重新赋值路径
                 fileInfo.FileName = fileName;
                 //fileInfo.MD5 = md5;
                 var username = System.Web.HttpContext.Current.Request.Cookies["username"].Value;
@@ -117,6 +100,9 @@ namespace SurveyingResultManageSystem.Controllers
                 {
                     fileInfo.PublicObjs = fileInfo.PublicObjs.Replace(",", "|");
                 }
+                #warning 王军军 发布地图
+
+                //写入数据库
                 if (fileInfoService.Add(fileInfo) != null)
                 {
                     tb_LogInfo log = new tb_LogInfo()
@@ -128,7 +114,7 @@ namespace SurveyingResultManageSystem.Controllers
                         Explain = "上传成功！"
                     };
                     logInfoService.Add(log);
-                 
+
                     return "上传成功！";
                 }
                 else

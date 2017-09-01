@@ -3,11 +3,11 @@
 }
 
 <link rel="stylesheet" type="text/css" href="http://192.168.0.205:80/aspnet_client/API/3.21/3.21/esri/css/esri.css" />
-   <script src="http://192.168.0.205:80/aspnet_client/API/3.21/3.21/init.js"></script>
+<script src="http://192.168.0.205:80/aspnet_client/API/3.21/3.21/init.js"></script>
 
 @Styles.Render("~/Content/style/MapManager.css")
 @Styles.Render("~/Content/style/FileManager.css")
-  @Styles.Render("~/Scripts/easyfader/css/jquery.easyfader.css")
+@Styles.Render("~/Scripts/easyfader/css/jquery.easyfader.css")
 
 <div id="div_menu">
     <ul id="div_menu_ul">
@@ -35,7 +35,7 @@
                     <img class="select_img" src="~/Sources/Images/select.png" onclick="selectallimg(this)" />
                 </div>
                 <div class="div-table" id="div-table">
-                    
+
                 </div>
             </div>
         </li>
@@ -57,108 +57,105 @@
             </div>
             <div class="modal-body">
                 <table>
-				     <tr>
-                            <td>文件名：</td>
-                            <td><input maxlength="50" name="filename" id="filename" /></td>
-							<td>备注信息：</td>
-                            <td colspan="3" style="width:50%;max-width:50%;"><textarea style="width:80%;min-width:80%;" name="Mark" id="mark"></textarea></td>
-                           
-                     </tr>
-                     <tr>
-                            <td>坐标信息框架：</td>
-                            <td>
-                                <span>
-                                    <select id="CoodinateSystem"></select>
-                                </span>
-                            </td>
-                            <td>完成时间信息：</td>
-                            <td><input type="date" name="FinishtimeInfo" id="finishtimeinfo" /></td>
-                        </tr>
-                        <tr>
-                            <td>完成人信息：</td>
-                            <td><input maxlength="50" name="FinishPersonInfo" id="finishpersoninfo" /></td>
-                            <td>最小坐标：</td>
-                            <td><input type="number" name="MinCoodinate" id="mincoodinate" /></td>
-                        </tr>
-                        <tr>
-                            <td>最大坐标：</td>
-                            <td><input type="number" name="MaxCoodinate" id="maxcoodinate" /></td>
-                            <td>文件中对象数量：</td>
-                            <td><input type="number" name="ObjectNum" id="objectnum" /></td>
-                        </tr>
-                        
-                        <tr>
-                            <td>是否需要进库：</td>
-                            <td>
-                                <span>
-                                    是：
-                                    <input style="width:auto;height:auto;" type="radio" name="Warehousing" value="true" />
-                                    否：
-                                    <input style="width:auto;height:auto;" type="radio" checked="checked" name="Warehousing" value="false" />
-                                </span>
-                            </td>
-                            <td>所属项目名称：</td>
-                            <td><input name="ProjectName" id="projectname" /></td>
+                    <tr>
+                        <td>文件名：</td>
+                        <td><input maxlength="50" name="filename" id="filename" /></td>
+                        <td>备注信息：</td>
+                        <td colspan="3" style="width:50%;max-width:50%;"><textarea style="width:80%;min-width:80%;" name="Mark" id="mark"></textarea></td>
 
-                        </tr>
-                        <tr>
-                            <td>文件类型：</td>
-                            <td>
-                                <span>
-                                    <select id="filetype"></select>
-                                </span>
-                            </td>
-                            <td>所属项目类型：</td>
-                            <td>
-                                <span>
-                                    <select id="projecttype"></select>
-                                </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>平面坐标系统：</td>
-                            <td>
-                                <span>
-                                    <select id="pcoodinateSystem">
-                                    </select>
-                                </span>
-                            </td>
-                            <td>中央子午线：</td>
-                            <td><input maxlength="50" name="CenterMeridian" id="centermeridian" /></td>
-                        </tr>
-                        <tr>
-                            <td>纵坐标偏移值：</td>
-                            <td><input type="number" name="Yoffset" id="yoffset" /></td>
-                            <td>水平坐标偏移值：</td>
-                            <td><input type="number" name="Xoffset" id="xoffset" /></td>
-                        </tr>
-                        <tr>
-                            <td>完成时间：</td>
-                            <td><input type="date" name="Finishtime" id="finishtime" value="" /></td>
-                            <td>完成人名称：</td>
-                            <td><input maxlength="50" name="FinishPerson" id="finishperson" /></td>
-                        </tr>
-                        <tr>
-                            <td>成果说明：</td>
-                            <td colspan="3"><textarea style="max-width:96%;width:96%;" name="Explain" id="explain"></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>坐标信息框架：</td>
+                        <td>
+                            <span>
+                                <select id="CoodinateSystem"></select>
+                            </span>
+                        </td>
+                        <td>完成时间信息：</td>
+                        <td><input type="date" name="FinishtimeInfo" id="finishtimeinfo" /></td>
+                    </tr>
+                    <tr>
+                        <td>完成人信息：</td>
+                        <td><input maxlength="50" name="FinishPersonInfo" id="finishpersoninfo" /></td>
+                        <td>最小坐标：</td>
+                        <td><input type="number" name="MinCoodinate" id="mincoodinate" /></td>
+                    </tr>
+                    <tr>
+                        <td>最大坐标：</td>
+                        <td><input type="number" name="MaxCoodinate" id="maxcoodinate" /></td>
+                        <td>文件中对象数量：</td>
+                        <td><input type="number" name="ObjectNum" id="objectnum" /></td>
+                    </tr>
 
-                        </tr>
-                        <tr>
-                            <td>选择公开对象：</td>
-                            <td>
-                                <span>
-                                <select id="selectObjs" class="js-example-basic-multiple" multiple="multiple">
-                                </select>
-                                </span>
-                            </td>
-                            <td>测绘单位名称：</td>
-                            <td>
-                                <span>
-                                    <select id="surveyingunitname">
-                                    </select>
-                                </span>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td>是否需要进库：</td>
+                        <td>
+                            <span>
+                                是：
+                                <input style="width:auto;height:auto;" type="radio" name="Warehousing" value="true" />
+                                否：
+                                <input style="width:auto;height:auto;" type="radio" checked="checked" name="Warehousing" value="false" />
+                            </span>
+                        </td>
+                        <td>所属项目名称：</td>
+                        <td><input name="ProjectName" id="projectname" /></td>
+
+                    </tr>
+                    <tr>
+                        <td>文件类型：</td>
+                        <td>
+                            <span>
+                                <select id="filetype"></select>
+                            </span>
+                        </td>
+                        <td>所属项目类型：</td>
+                        <td>
+                            <span>
+                                <select id="projecttype"></select>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>平面坐标系统：</td>
+                        <td>
+                            <span>
+                                <select id="pcoodinateSystem"></select>
+                            </span>
+                        </td>
+                        <td>中央子午线：</td>
+                        <td><input maxlength="50" name="CenterMeridian" id="centermeridian" /></td>
+                    </tr>
+                    <tr>
+                        <td>纵坐标偏移值：</td>
+                        <td><input type="number" name="Yoffset" id="yoffset" /></td>
+                        <td>水平坐标偏移值：</td>
+                        <td><input type="number" name="Xoffset" id="xoffset" /></td>
+                    </tr>
+                    <tr>
+                        <td>完成时间：</td>
+                        <td><input type="date" name="Finishtime" id="finishtime" value="" /></td>
+                        <td>完成人名称：</td>
+                        <td><input maxlength="50" name="FinishPerson" id="finishperson" /></td>
+                    </tr>
+                    <tr>
+                        <td>成果说明：</td>
+                        <td colspan="3"><textarea style="max-width:96%;width:96%;" name="Explain" id="explain"></textarea></td>
+
+                    </tr>
+                    <tr>
+                        <td>选择公开对象：</td>
+                        <td>
+                            <span>
+                                <select id="selectObjs" class="js-example-basic-multiple" multiple="multiple"></select>
+                            </span>
+                        </td>
+                        <td>测绘单位名称：</td>
+                        <td>
+                            <span>
+                                <select id="surveyingunitname"></select>
+                            </span>
+                        </td>
+                    </tr>
                 </table>
 
             </div>
@@ -188,41 +185,41 @@
                 </h4>
             </div>
             <div class="modal-body">
-			   
-                  <div id="dowebok" class="fader">
-				     <img class="slide" src="../Scripts/easyfader/images/img1.jpg">
-                     <img class="slide" src="../Scripts/easyfader/images/img2.jpg">
-                     <img class="slide" \0[- src="../Scripts/easyfader/images/img3.jpg">
-                      <div class="fader_controls">
-                             <div class="page prev" data-target="prev">&lsaquo;</div>
-                             <div class="page next" data-target="next">&rsaquo;</div>
-                             <ul class="pager_list"></ul>
-                      </div>
-				  </div>
-               
-			 </div>
+
+                <div id="dowebok" class="fader">
+                    <img class="slide" src="../Scripts/easyfader/images/img1.jpg">
+                    <img class="slide" src="../Scripts/easyfader/images/img2.jpg">
+                    <img class="slide" \0[- src="../Scripts/easyfader/images/img3.jpg">
+                    <div class="fader_controls">
+                        <div class="page prev" data-target="prev">&lsaquo;</div>
+                        <div class="page next" data-target="next">&rsaquo;</div>
+                        <ul class="pager_list"></ul>
+                    </div>
+                </div>
+
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default"
                         data-dismiss="modal">
                     关闭
                 </button>
-               
+
             </div>
         </div><!-- /.modal-content -->
     </div>
 </div>
 
-<script src="~/Scripts/easyfader/js/jquery.easyfader.min.js"></script>  
+<script src="~/Scripts/easyfader/js/jquery.easyfader.min.js"></script>
 <script>
     var fatch3;
     var map;
     var search;
-	var searchresult;
-	var graphiclayer;
-	 var currentAjax = null;
-	 $(function() {
-	$('#dowebok').easyFader();
-});
+    var searchresult;
+    var graphiclayer;
+    var currentAjax = null;
+    $(function () {
+        $('#dowebok').easyFader();
+    });
     $(document).ready(function () {
         //加载分类
         $.ajax({
@@ -258,7 +255,7 @@
         });
     });
     //获取下拉菜单数据
-    function getDropData(id,url) {
+    function getDropData(id, url) {
         //获取文件数据
         $.ajax({
             url: url,
@@ -384,12 +381,10 @@
         }
     }
     //Jimmy 2017/8/31 17:30  增加函数 下载多文件
-    function downloadFiles()
-    {
+    function downloadFiles() {
         //获取所有id
         var ids = JSON.parse(sessionStorage.getItem('selectimg'));
-        if (ids != null && ids.length > 0)
-        {
+        if (ids != null && ids.length > 0) {
             $.ajax({
                 url: '/Home/Downloads',
                 type: "post",
@@ -398,10 +393,8 @@
                 async: false,
                 success: function (data) {
                     var json = JSON.parse(data);
-                    if (json.code == 4)
-                    {
-                        for(var i = 0;i< json.url.length;i ++)
-                        {
+                    if (json.code == 4) {
+                        for (var i = 0; i < json.url.length; i++) {
                             var ulr = json.url[i];
                             window.open(json.url[i]);
                         }
@@ -443,11 +436,11 @@
             }
         }
     }
-    require(["esri/map", "esri/layers/ArcGISDynamicMapServiceLayer", "esri/layers/FeatureLayer","esri/layers/GraphicsLayer", "esri/InfoTemplate", "esri/dijit/Search", "dojo/dom",
+    require(["esri/map", "esri/layers/ArcGISDynamicMapServiceLayer", "esri/layers/FeatureLayer", "esri/layers/GraphicsLayer", "esri/InfoTemplate", "esri/dijit/Search", "dojo/dom",
           "dojo/on", "dojo/domReady!"],
-        function (Map, ArcGISDynamicMapServiceLayer, FeatureLayer,GraphicsLayer, InfoTemplate, Search, dom, on) {
+        function (Map, ArcGISDynamicMapServiceLayer, FeatureLayer, GraphicsLayer, InfoTemplate, Search, dom, on) {
             map = new Map("mapDiv", { logo: false });
-			map.infoWindow.resize(350, 400);
+            map.infoWindow.resize(350, 400);
             //利用url创建一个动态地图服务对象
             //   var layer = new ArcGISDynamicMapServiceLayer("http://192.168.0.230:6080/arcgis/rest/services/1/MapServer");
             //将地图服务对象添加到地图容器中
@@ -457,7 +450,7 @@
                 infoTemplate: new InfoTemplate("范围红线", "<table width='100%' style='table-layout:fixed'><tr height='15%' width='100%'><th width='60%' align='left'>文件名:${FileName} </th><th width='40%' align='left'>完成人:${FshPerson} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>坐标信息:${CoodSystem} </th><th width='40%' align='left'>完成时间:${FinishTime:DateFormat(selector: 'date', fullYear: true)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>中央子午线:${CenterMed} </th><th width='40%' align='left'>上传时间:${UploadTime:DateFormat(selector: 'date', fullYear: true)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>文件类型:${FileType} </th><th width='40%' align='left'>文件大小:${FileSize} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>项目名称:${ProName} </th><th width='40%' align='left' id='tdid'>图形ID:${OBJECTID} </th></tr><tr height='15%' width='100%'><th width='100%' align='left'>备注:${Memo} </th></tr></table><button style='margin:5px 15px' type='button' onclick='SYT()' class='btn btn-primary btn-xs'>缩略图</button><button style='margin:5px 15px' type='button' onclick='Change()' class='btn btn-primary btn-xs'>修  改</button><button style='margin:5px 15px' type='button' onclick='dele()' class='btn btn-primary btn-xs'>删  除</button><button style='margin:5px 0px 5px 15px' type='button' onclick='Down()' class='btn btn-primary btn-xs'>下  载</button>")
 
             });
-			 graphiclayer = new GraphicsLayer();
+            graphiclayer = new GraphicsLayer();
             var username = getCookie("username");
             var userinfo = "";
             $.ajax({
@@ -472,7 +465,7 @@
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     alert(XMLHttpRequest.status);
-                   
+
                 }
             });
             var ss = userinfo.split(',');
@@ -493,8 +486,8 @@
                         infoTemplate: new InfoTemplate("范围红线", "<table width='100%' style='table-layout:fixed'><tr height='15%' width='100%'><th width='60%' align='left'>文件名:${FileName} </th><th width='40%' align='left'>完成人:${FshPerson} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>坐标信息:${CoodSystem} </th><th width='40%' align='left'>完成时间:${FinishTime} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>中央子午线:${CenterMed} </th><th width='40%' align='left'>上传时间:${UploadTime} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>文件类型:${FileType} </th><th width='40%' align='left'>文件大小:${FileSize} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>项目名称:${ProName} </th><th width='40%' align='left' id='tdid'>图形ID:${OBJECTID} </th></tr><tr height='15%' width='100%'><th width='100%' align='left'>备注:${Memo} </th></tr></table><button style='margin:5px 8px' type='button' onclick='SYT()' class='btn btn-primary btn-xs'>缩略图</button><button style='margin:5px 8px' type='button' onclick='Change()' class='btn btn-primary btn-xs'>修  改</button><button style='margin:5px 8px' type='button' onclick='dele()' class='btn btn-primary btn-xs'>删  除</button><button style='margin:5px 0px 5px 8px' type='button' onclick='Down()' class='btn btn-primary btn-xs'>下  载</button>")
                     }),
                     exactMatch: false,//精确查找
-                    outFields: ["OBJECTID", "FileName", "Directory", "CoodSystem", "FinishTime","FshPerson","MinCood","MaxCood","ObjectNum","Mark","ProName","FileType","ProType","CenterMed","Yoffset","Xoffset","SUnitName","Memo","IsPublic","UploadTime","FileSize"],
-                    searchFields: ["FileName", "Directory", "CoodSystem", "FinishTime","FshPerson","MinCood","MaxCood","ObjectNum","Mark","ProName","FileType","ProType","CenterMed","Yoffset","Xoffset","SUnitName","Memo","IsPublic","UploadTime","FileSize"],//查找的关键字
+                    outFields: ["OBJECTID", "FileName", "Directory", "CoodSystem", "FinishTime", "FshPerson", "MinCood", "MaxCood", "ObjectNum", "Mark", "ProName", "FileType", "ProType", "CenterMed", "Yoffset", "Xoffset", "SUnitName", "Memo", "IsPublic", "UploadTime", "FileSize"],
+                    searchFields: ["FileName", "Directory", "CoodSystem", "FinishTime", "FshPerson", "MinCood", "MaxCood", "ObjectNum", "Mark", "ProName", "FileType", "ProType", "CenterMed", "Yoffset", "Xoffset", "SUnitName", "Memo", "IsPublic", "UploadTime", "FileSize"],//查找的关键字
                     suggestionTemplate: "${FileName}",
                     displayField: "FileName",
                     suggestionTemplate: "${FileName}",
@@ -516,24 +509,23 @@
             on(search, 'search-results', function (e) {
                 //Jimmy 2017/8/31 17:30 删除选择记录
                 sessionStorage.clear();
-               var aa1 = document.getElementById("div-table");
-			   var aa = aa1.childNodes;
-              if (aa != null) {
-			     for(var i = 0; i < aa.length; i++) {        aa1.removeChild(aa[i]);  } 
+                var aa1 = document.getElementById("div-table");
+                var aa = aa1.childNodes;
+                if (aa != null) {
+                    for (var i = 0; i < aa.length; i++) { aa1.removeChild(aa[i]); }
 
-               }
-				searchresult = e;
-				var resultStr = "";
-				for (var i = 0; i < searchresult.results[0].length; i++) {
-                //Jimmy 2017/8/31 17:30 给tr增加id，值为文件的id
-				    var id = searchresult.results[0][i].feature.attributes.ID;
-				    id = i;
+                }
+                searchresult = e;
+                var resultStr = "";
+                for (var i = 0; i < searchresult.results[0].length; i++) {
+                    //Jimmy 2017/8/31 17:30 给tr增加id，值为文件的id
+                    var id = searchresult.results[0][i].feature.attributes.objectid;
                     resultStr += "<div class='ccccn' id='divid" + (i + 1) + "' onclick='openid(" + i + ",this)' onmouseover='openMarkerTipById1(" + i + ",this)' onmouseout='onmouseout_MarkerStyle(" + (i + 1) + ",this)' style=\"font-size: 10px;cursor:pointer;padding:0px 0 2px 2px; border-bottom:1px solid #403d3d;\"><table class='map-table'><tr id=" + id + "><td textalign='left'>" + (i + 1) + "、" + searchresult.results[0][i].feature.attributes.FileName;
                     resultStr += "</td><td><img class='select_img' src='../Sources/Images/select.png' onclick='selectimg(this)'></img></td></tr></table></div>";
-                 
-				}
-				document.getElementById("div-table").innerHTML = resultStr;
-                
+
+                }
+                document.getElementById("div-table").innerHTML = resultStr;
+
             });
 
 
@@ -546,11 +538,11 @@
             };
 
         });
-	var idhh;
+    var idhh;
     function Change() {
         var id = document.getElementById("tdid").innerHTML;
         var idh = id.split(':');
-        idhh=idh[1];
+        idhh = idh[1];
         map.infoWindow.hide();
         var dialogwdith = $(window).width() + $(".modal-dialog").width();
         $(".modal-content").css({
@@ -574,10 +566,10 @@
                 //alert(textStatus);
             }
         });
-       
+
         var info1 = eval("(" + info + ")");
         //$("#CoodinateSystem").combobox("setValue","dsfasd");
-	    $('#CoodinateSystem').val(info1.CoodinateSystem);
+        $('#CoodinateSystem').val(info1.CoodinateSystem);
         $('#filename').val(info1.FileName);
         $("#_easyui_textbox_input1").val(info1.CoodinateSystem);
         $("#finishtimeinfo").val(info1.FinishtimeInfo);
@@ -586,9 +578,9 @@
         $("#maxcoodinate").val(info1.MaxCoodinate);
         $("#objectnum").val(info1.ObjectNum);
         $("#mark").val(info1.Mark);
-		
-		$("input[name='Warehousing']").attr("checked",info1.Warehousing);
-   
+
+        $("input[name='Warehousing']").attr("checked", info1.Warehousing);
+
         $("#projectname").val(info1.ProjectName);
         $("#filetype").val(info1.FileType);
         $("#projecttype").val(info1.ProjectType);
@@ -600,26 +592,22 @@
         $("#finishperson").val(info1.FinishPerson);
         $("#surveyingunitname").val(info1.SurveyingUnitName);
         $("#explain").val(info1.Explain);
-		var arr=new Array();
-		if(info1.PublicObjs.indexOf("|") > 0 )
-		{
-		  arr=info1.PublicObjs.split("|");
-		}
-		else
-		{
-		   if(info1.PublicObjs!="")
-		   {
-		   arr[0]=info1.PublicObjs;
-		   }
-		   else
-		   {
-		    arr[0]="";
-		   }
-		}
-		
-		 $("#selectObjs").select2().val(arr).trigger('change');
-		
-      };
+        var arr = new Array();
+        if (info1.PublicObjs.indexOf("|") > 0) {
+            arr = info1.PublicObjs.split("|");
+        }
+        else {
+            if (info1.PublicObjs != "") {
+                arr[0] = info1.PublicObjs;
+            }
+            else {
+                arr[0] = "";
+            }
+        }
+
+        $("#selectObjs").select2().val(arr).trigger('change');
+
+    };
     function changeInfo() {
         var file = {
             FileName: "",
@@ -643,70 +631,68 @@
             SurveyingUnitName: "",
             Explain: "",
             IsPublic: "",
-			objectid:"",
+            objectid: "",
             UploadTime: ""
-          
+
         };
-		    file.FileName = $("#filename").val();
-            file.CoodinateSystem = $("#CoodinateSystem").val();
-            file.FinishtimeInfo = $("#finishtimeinfo").val();
-            file.FinishPersonInfo = $("#finishpersoninfo").val();
-            file.MinCoodinate = $("#mincoodinate").val();
-            file.MaxCoodinate = $("#maxcoodinate").val();
-            file.ObjectNum = $("#objectnum").val();
-            file.Mark = $("#mark").val();
-            file.Warehousing = $("input[name=Warehousing]:checked").val();
-            file.ProjectName = $("#projectname").val();
-            file.FileType = $("#filetype").val();
-            file.ProjectType = $("#projecttype").val();
-            file.PcoodinateSystem = $("#pcoodinateSystem").val();
-           file.CenterMeridian = $("#centermeridian").val();
-            file.Yoffset = $("#yoffset").val();
-            file.Xoffset = $("#xoffset").val();
-           file.Finishtime = $("#finishtime").val();
-            file.FinishPerson = $("#finishperson").val();
-            file.SurveyingUnitName = $("#surveyingunitname").val();
-            file.Explain = $("#explain").val();
-            var objarr = $("#selectObjs").val();
-			file.objectid=idhh;
-			file.PublicObjs = "";
-            for (var i = 0; i < objarr.length; i++)
-            {
-                var text = objarr[i];
-                if(i > 0)
-                    text = "|" + objarr[i];
-                file.PublicObjs += text;
-            }
-			//var formData = new FormData();
-		  //  formData.append("fileinfo", JSON.stringify(file));
-			var fileinfomation=JSON.stringify(file);
-			 $.ajax({
+        file.FileName = $("#filename").val();
+        file.CoodinateSystem = $("#CoodinateSystem").val();
+        file.FinishtimeInfo = $("#finishtimeinfo").val();
+        file.FinishPersonInfo = $("#finishpersoninfo").val();
+        file.MinCoodinate = $("#mincoodinate").val();
+        file.MaxCoodinate = $("#maxcoodinate").val();
+        file.ObjectNum = $("#objectnum").val();
+        file.Mark = $("#mark").val();
+        file.Warehousing = $("input[name=Warehousing]:checked").val();
+        file.ProjectName = $("#projectname").val();
+        file.FileType = $("#filetype").val();
+        file.ProjectType = $("#projecttype").val();
+        file.PcoodinateSystem = $("#pcoodinateSystem").val();
+        file.CenterMeridian = $("#centermeridian").val();
+        file.Yoffset = $("#yoffset").val();
+        file.Xoffset = $("#xoffset").val();
+        file.Finishtime = $("#finishtime").val();
+        file.FinishPerson = $("#finishperson").val();
+        file.SurveyingUnitName = $("#surveyingunitname").val();
+        file.Explain = $("#explain").val();
+        var objarr = $("#selectObjs").val();
+        file.objectid = idhh;
+        file.PublicObjs = "";
+        for (var i = 0; i < objarr.length; i++) {
+            var text = objarr[i];
+            if (i > 0)
+                text = "|" + objarr[i];
+            file.PublicObjs += text;
+        }
+        //var formData = new FormData();
+        //  formData.append("fileinfo", JSON.stringify(file));
+        var fileinfomation = JSON.stringify(file);
+        $.ajax({
             url: "/Home/setfileinfo",
             type: "post",
             dataType: "text",
             async: false,
-            data:fileinfomation ,
+            data: fileinfomation,
             success: function (data) {
-             info = data;
+                info = data;
 
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 alert(XMLHttpRequest.status);
-               }
+            }
         });
-		 if(info){
-		       fatch3.refresh();
-			   $("#myModal").modal('hide');
-			   alert("修改成功！");
-			
-			 }
-		else
-		{
-		 $("#myModal").modal('hide');
-		  alert("修改失败！");
-		 
-		}
-             
+        if (info) {
+            fatch3.refresh();
+            $("#myModal").modal('hide');
+            alert("修改成功！");
+
+        }
+        else {
+            $("#myModal").modal('hide');
+            alert("修改失败！");
+
+        }
+
     };
     function dele() {
         var id = document.getElementById("tdid").innerHTML;
@@ -730,80 +716,80 @@
             }
         });
 
-			 if(info){
-			  map.infoWindow.hide();
-			   alert("删除成功！");
-			 }
-			 else
-			 {
-			  alert("删除失败！");
-			 }
-              fatch3.refresh();
-		 };
-	    function Down() {
-               var id = document.getElementById("tdid").innerHTML; 
-			   var idh=id.split(':');
-			   console.log(idh[1]);
-               };
-	    function SYT() {
-               var id = document.getElementById("tdid").innerHTML; 
-			   var idh=id.split(':');
-			  // console.log(idh[1]);
-			    map.infoWindow.hide();
-			    var dialogwdith = $(window).width()+$(".modal-dialog").width();
-               $(".modal-content").css({
-                 left: (dialogwdith - $(".modal-content").width()) / 2,
-                })
-                $("#myModal1").modal('show');
-				 //var image1 = document.getElementById("dowebok")
-				//  image1.innerHTML="<img class='slide' src='../Scripts/easyfader/images/img1.jpg'><img class='slide' src='../Scripts/easyfader/images/img2.jpg'><img class='slide' src='../Scripts/easyfader/images/img3.jpg'><div class='fader_controls'><div class='page prev' data-target='prev'>&lsaquo;</div><div class='page next' data-target='next'>&rsaquo;</div> <ul class='pager_list'></ul></div>";
+        if (info) {
+            map.infoWindow.hide();
+            alert("删除成功！");
+        }
+        else {
+            alert("删除失败！");
+        }
+        fatch3.refresh();
+    };
+    function Down() {
+        var id = document.getElementById("tdid").innerHTML;
+        var idh = id.split(':');
+        window.open("/Home/DownloadWithObjectId?=" + idh);
+        console.log(idh[1]);
+    };
+    function SYT() {
+        var id = document.getElementById("tdid").innerHTML;
+        var idh = id.split(':');
+        // console.log(idh[1]);
+        map.infoWindow.hide();
+        var dialogwdith = $(window).width() + $(".modal-dialog").width();
+        $(".modal-content").css({
+            left: (dialogwdith - $(".modal-content").width()) / 2,
+        })
+        $("#myModal1").modal('show');
+        //var image1 = document.getElementById("dowebok")
+        //  image1.innerHTML="<img class='slide' src='../Scripts/easyfader/images/img1.jpg'><img class='slide' src='../Scripts/easyfader/images/img2.jpg'><img class='slide' src='../Scripts/easyfader/images/img3.jpg'><div class='fader_controls'><div class='page prev' data-target='prev'>&lsaquo;</div><div class='page next' data-target='next'>&rsaquo;</div> <ul class='pager_list'></ul></div>";
 
-				// $('#dowebok').easyFader();
+        // $('#dowebok').easyFader();
 
 
-               };
-function openMarkerTipById1(pointid, thiss) {  //根据id 打开搜索结果点tip  
-    thiss.style.background = '#CAE1FF';
+    };
+    function openMarkerTipById1(pointid, thiss) {  //根据id 打开搜索结果点tip
+        thiss.style.background = '#CAE1FF';
 
-}
-function onmouseout_MarkerStyle(pointid, thiss) { //鼠标移开后点样式恢复  
-    thiss.style.background = "";
-}
-//输入提示框鼠标滑过时的样式  
-function openMarkerTipById(pointid, thiss) {  //根据id打开搜索结果点tip    
-    thiss.style.background = '#CAE1FF';
-}
-//输入提示框鼠标移出时的样式  
-function onmouseout_MarkerStyle(pointid, thiss) {  //鼠标移开后点样式恢复    
-    thiss.style.background = "";
-}
-function openid(pointid, thiss) {
-   // var ss=document.getElementsByClassName("sizer")[0].style.display="none";
-    map.graphics.clear();
-   // console.log(ss[0]);
-    // console.log(searchresult);
-  // search.searchClear();
-    thiss.style.background = '#CAE1FF';
-    var cPoint = new esri.geometry.Point();
-	var polyline1=new esri.geometry.Polygon(searchresult.results[0][pointid].feature.geometry);
-    cPoint =  polyline1.getExtent().getCenter();
-   // cPoint.x = parseFloat(searchresult.results[0][pointid].feature.geometry.x);
-   // cPoint.y = parseFloat(searchresult.results[0][pointid].feature.geometry.y);
-   // var sr = new esri.SpatialReference(searchresult.results[0][pointid].feature.spatialReference);
-    // cPoint.setSpatialReference(sr);
-   
-    var graphic = searchresult.results[0][pointid].feature;
-    //graphic.setSymbol(defaultSymbol);
-    //graphic.setInfoTemplate("编号: " + searchresult.results[0][pointid].feature.attributes.OBJECTID + "<br>地名:" + searchresult.results[0][pointid].name + "<br>");
-   
-   
-    map.infoWindow.setContent("<table width='100%' style='table-layout:fixed'><tr height='15%' width='100%'><th width='60%' align='left'>文件名:" +searchresult.results[0][pointid].feature.attributes.FileName+"</th><th width='40%' align='left'>完成人:"+searchresult.results[0][pointid].feature.attributes.FshPerson+" </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>坐标信息:"+searchresult.results[0][pointid].feature.attributes.CoodSystem+" </th><th width='40%' align='left'>完成时间:"+searchresult.results[0][pointid].feature.attributes.FinishTime+" </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>中央子午线:"+searchresult.results[0][pointid].feature.attributes.CenterMed+" </th><th width='40%' align='left'>上传时间:"+searchresult.results[0][pointid].feature.attributes.UploadTime+" </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>文件类型:"+searchresult.results[0][pointid].feature.attributes.FileType+" </th><th width='40%' align='left'>文件大小:"+searchresult.results[0][pointid].feature.attributes.FileSize+" </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>项目名称:"+searchresult.results[0][pointid].feature.attributes.ProName+" </th><th width='40%' align='left' id='tdid'>图形ID:"+searchresult.results[0][pointid].feature.attributes.OBJECTID+" </th></tr><tr height='15%' width='100%'><th width='100%' align='left'>备注:"+searchresult.results[0][pointid].feature.attributes.Memo+" </th></tr></table><button style='margin:5px 8px' type='button' onclick='SYT()' class='btn btn-primary btn-xs'>缩略图</button><button style='margin:5px 8px' type='button' onclick='Change()' class='btn btn-primary btn-xs'>修  改</button><button style='margin:5px 8px' type='button' onclick='dele()' class='btn btn-primary btn-xs'>删  除</button><button style='margin:5px 0px 5px 8px' type='button' onclick='Down()' class='btn btn-primary btn-xs'>下  载</button>");
-     map.infoWindow.setTitle("范围红线");
-    map.infoWindow.show(cPoint, map.getInfoWindowAnchor(cPoint));
-    graphiclayer.add(graphic);
-   // console.log(map.infoWindow.anchor);
-    map.setScale(100);
-    map.centerAt(cPoint);
-}
-		
+    }
+    function onmouseout_MarkerStyle(pointid, thiss) { //鼠标移开后点样式恢复
+        thiss.style.background = "";
+    }
+    //输入提示框鼠标滑过时的样式
+    function openMarkerTipById(pointid, thiss) {  //根据id打开搜索结果点tip
+        thiss.style.background = '#CAE1FF';
+    }
+    //输入提示框鼠标移出时的样式
+    function onmouseout_MarkerStyle(pointid, thiss) {  //鼠标移开后点样式恢复
+        thiss.style.background = "";
+    }
+    function openid(pointid, thiss) {
+        // var ss=document.getElementsByClassName("sizer")[0].style.display="none";
+        map.graphics.clear();
+        // console.log(ss[0]);
+        // console.log(searchresult);
+        // search.searchClear();
+        thiss.style.background = '#CAE1FF';
+        var cPoint = new esri.geometry.Point();
+        var polyline1 = new esri.geometry.Polygon(searchresult.results[0][pointid].feature.geometry);
+        cPoint = polyline1.getExtent().getCenter();
+        // cPoint.x = parseFloat(searchresult.results[0][pointid].feature.geometry.x);
+        // cPoint.y = parseFloat(searchresult.results[0][pointid].feature.geometry.y);
+        // var sr = new esri.SpatialReference(searchresult.results[0][pointid].feature.spatialReference);
+        // cPoint.setSpatialReference(sr);
+
+        var graphic = searchresult.results[0][pointid].feature;
+        //graphic.setSymbol(defaultSymbol);
+        //graphic.setInfoTemplate("编号: " + searchresult.results[0][pointid].feature.attributes.OBJECTID + "<br>地名:" + searchresult.results[0][pointid].name + "<br>");
+
+
+        map.infoWindow.setContent("<table width='100%' style='table-layout:fixed'><tr height='15%' width='100%'><th width='60%' align='left'>文件名:" + searchresult.results[0][pointid].feature.attributes.FileName + "</th><th width='40%' align='left'>完成人:" + searchresult.results[0][pointid].feature.attributes.FshPerson + " </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>坐标信息:" + searchresult.results[0][pointid].feature.attributes.CoodSystem + " </th><th width='40%' align='left'>完成时间:" + searchresult.results[0][pointid].feature.attributes.FinishTime + " </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>中央子午线:" + searchresult.results[0][pointid].feature.attributes.CenterMed + " </th><th width='40%' align='left'>上传时间:" + searchresult.results[0][pointid].feature.attributes.UploadTime + " </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>文件类型:" + searchresult.results[0][pointid].feature.attributes.FileType + " </th><th width='40%' align='left'>文件大小:" + searchresult.results[0][pointid].feature.attributes.FileSize + " </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>项目名称:" + searchresult.results[0][pointid].feature.attributes.ProName + " </th><th width='40%' align='left' id='tdid'>图形ID:" + searchresult.results[0][pointid].feature.attributes.OBJECTID + " </th></tr><tr height='15%' width='100%'><th width='100%' align='left'>备注:" + searchresult.results[0][pointid].feature.attributes.Memo + " </th></tr></table><button style='margin:5px 8px' type='button' onclick='SYT()' class='btn btn-primary btn-xs'>缩略图</button><button style='margin:5px 8px' type='button' onclick='Change()' class='btn btn-primary btn-xs'>修  改</button><button style='margin:5px 8px' type='button' onclick='dele()' class='btn btn-primary btn-xs'>删  除</button><button style='margin:5px 0px 5px 8px' type='button' onclick='Down()' class='btn btn-primary btn-xs'>下  载</button>");
+        map.infoWindow.setTitle("范围红线");
+        map.infoWindow.show(cPoint, map.getInfoWindowAnchor(cPoint));
+        graphiclayer.add(graphic);
+        // console.log(map.infoWindow.anchor);
+        map.setScale(100);
+        map.centerAt(cPoint);
+    }
+
 </script>

@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ESRI.ArcGIS.Client;
-using EsriGeo=ESRI.ArcGIS.Client.Geometry;
+using EsriGeo = ESRI.ArcGIS.Client.Geometry;
 using ESRI.ArcGIS.Client.Tasks;
 using GeoShape;
 using System.Net;
 using System.IO;
+using Model;
 
 namespace ArcServer
 {
@@ -350,6 +351,7 @@ namespace ArcServer
             idh = idh.Substring(0, idh.Length - 1);
             return idh;
         }
+        
         static void Main(string[] args)
         {
             FeatureItem1 fi2 = new FeatureItem1();
@@ -376,17 +378,17 @@ namespace ArcServer
             fi2.Attributes.Add("FileSize", 0);// 文件大小，单位M
             fi2.Attributes.Add("UserID", 1);// 用户ID
             fi2.Attributes.Add("PublicOB ", "");// 公开单位
-
+            
 
             string url = "http://localhost:6080/arcgis/rest/services/fwx1g/FeatureServer/0";
             fi2.url = url;
-            string cc=readshpfile("E:\\wff.shp", fi2);
-            var tt=DeleFeature(fi2.url, cc);
-            if(tt)
+            string cc = readshpfile("E:\\wff.shp", fi2);
+            var tt = DeleFeature(fi2.url, cc);
+            if (tt)
             {
-                Console.WriteLine("删除成功"); 
+                Console.WriteLine("删除成功");
             }
-            var tt1 = UpdateFeature(fi2.url, "288,13",fi2);
+            var tt1 = UpdateFeature(fi2.url, "288,13", fi2);
             if (tt1)
             {
                 Console.WriteLine("更新成功");

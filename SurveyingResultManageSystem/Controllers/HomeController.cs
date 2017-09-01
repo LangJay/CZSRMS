@@ -193,7 +193,7 @@ namespace SurveyingResultManageSystem.Controllers
             }
         }
 
-       
+       //前端调用
         [Authentication]
         public void Delete(int fileId)
         {
@@ -256,9 +256,13 @@ namespace SurveyingResultManageSystem.Controllers
                     log.Explain = "文件不存在";
                     return false;
                 }
+                //删除文件
                 System.IO.File.Delete(file.Directory);
+                //删除数据库 
                 bool success = fileInfoService.Delete(file);
-                if (success)
+                //删除图形
+                bool success1 = deleDWG(file.ObjectID);
+                if (success && success1)
                 {
                     log.FileName = file.FileName;
                     log.Explain = "删除成功！";
@@ -311,46 +315,6 @@ namespace SurveyingResultManageSystem.Controllers
                     string url = "/Home/DownloadWithId?fileId=" + ids[i];
                     urls.Add(url);
                 }
-                ////声明并初始化参数
-                //List<string> fileDirectories = new List<string>();
-                //for(int i = 0;i < ids.Length;i ++ )
-                //{
-
-                //    int id = Convert.ToInt32(ids[i]);
-                //    var file = fileInfoService.Find(u => u.ID == id);
-                //    if (file != null && System.IO.File.Exists(file.Directory))
-                //    {
-                //        //记录下载
-                //        tb_LogInfo log = new tb_LogInfo
-                //        {
-                //            UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value,
-                //            FileName = file.FileName,
-                //            Explain = "请求下载文件！",
-                //            Time = DateTime.Now.ToString(),
-                //            Operation = LogOperations.DownloadFile()
-                //        };
-                //        logInfoService.Add(log);
-                //        //加入路径数组
-                //        fileDirectories.Add(file.Directory);
-                //    }
-                //}
-                ////生成压缩文件
-                //string filename = HttpRuntime.AppDomainAppPath.ToString() + "/Data/File/下载.zip";
-                //using (ZipFile zipFile = new ZipFile(System.Text.Encoding.Default))
-                //{
-                //    if(fileDirectories.Count > 0)
-                //    {
-                //        zipFile.AddFiles(fileDirectories, "下载");
-                //        zipFile.Save(filename);//太费时
-                //    }
-                //    else//没有一个文件
-                //    {
-                //        var response2 = new { code = 2 };
-                //        Response.Write(new JavaScriptSerializer().Serialize(response2));
-                //        return;
-                //    }
-                //}
-                //var response = new { code = 4,url = "/Home/Download"};
                 var response = new { code = 4, url = urls };
                 Response.Write(new JavaScriptSerializer().Serialize(response));
             }
@@ -373,6 +337,19 @@ namespace SurveyingResultManageSystem.Controllers
             catch(Exception e)
             {
                 Log.AddRecord(e);
+            }
+        }
+        /// <summary>
+        /// 根据objid下载文件，供mapManager使用
+        /// </summary>
+        /// <param name="objId"></param>
+        [Authentication]
+        private void DownloadWithObjectId(string objId)
+        {
+            tb_FileInfo f = fileInfoService.Find(u => u.ObjectID == objId);
+            if(f != null)
+            {
+                DownloadWithId(f.ID.ToString());
             }
         }
         [Authentication]
@@ -422,6 +399,12 @@ namespace SurveyingResultManageSystem.Controllers
         }
         private void DownloadTask(string filename,string directory)
         {
+            //把文件压缩成文件夹
+            using (ZipFile zipFile = new ZipFile(System.Text.Encoding.Default))
+            {
+                zipFile.AddDirectory(directory,filename);
+                zipFile.Save(filename);//太费时
+            }
             //以字符流的形式下载文件
             FileStream fs = new FileStream(directory, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
             Response.ContentType = "application/octet-stream";
@@ -471,17 +454,24 @@ namespace SurveyingResultManageSystem.Controllers
         [HttpPost]//王军军增加8.23
         public bool delefeature()
         {
-            FeatureItem1 item1 = new FeatureItem1();
-
-
             var sr = new StreamReader(Request.InputStream);
             var stream = sr.ReadToEnd();
             sr.Close();
+            bool tt1 = DeleteFile(u => u.ObjectID == stream);
+            return tt1;
+        }
+        /// <summary>
+        /// 根据图形id删除图形
+        /// </summary>
+        /// <param name="objectid"></param>
+        /// <returns></returns>
+        private bool deleDWG(string objectid)
+        {
+            FeatureItem1 item1 = new FeatureItem1();
             item1.url = "http://localhost:6080/arcgis/rest/services/BX/FeatureServer/0";
-            bool tt = openauto.DeleFeature(item1.url, stream);
+            bool tt = openauto.DeleFeature(item1.url, objectid);
             return tt;
         }
-
         [Authentication]
         [HttpPost]//王军军增加8.23
         public string GetUserinfo()
@@ -551,8 +541,10 @@ namespace SurveyingResultManageSystem.Controllers
            // featureItem2.Attributes.Add("UploadTime", fileInfo.UploadTime);// 上传时间
             featureItem2.url = "http://localhost:6080/arcgis/rest/services/BX/FeatureServer/0";
             string idh = fileInfo.ObjectID.Trim();
-           var tt1 = openauto.UpdateFeature(featureItem2.url, idh, featureItem2);
-            return tt1;
+#warning 等两个同时上传完毕再执行
+            bool tt1 = openauto.UpdateFeature(featureItem2.url, idh, featureItem2);
+            bool tt2 = fileInfoService.Update(fileInfo);//更新数据库
+            return tt1 && tt2;
         }
     }
 }
