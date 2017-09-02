@@ -160,3 +160,7 @@ html {
         -webkit-transform: translateX(-100%);
     }
 }
+.a-delete-button
+{
+    display:none;
+}

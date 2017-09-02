@@ -25,7 +25,7 @@
             <h4 id="h-map"><span id="span_map"></span>地图管理</h4>
             <div id="divlist-map">
                 <div id="divlist-header">
-                    <a onclick="deleteFiles()">
+                    <a class="a-delete-button" onclick="deleteFiles()">
                         删除
                     </a>
                     <a onclick="downloadFiles()">
@@ -386,7 +386,7 @@
         var ids = JSON.parse(sessionStorage.getItem('selectimg'));
         if (ids != null && ids.length > 0) {
             $.ajax({
-                url: '/Home/Downloads',
+                url: '/Home/DownloadsWithObjId',
                 type: "post",
                 dataType: "text",
                 data: JSON.stringify(ids),
@@ -423,10 +423,6 @@
                         async: false,
                         success: function (data) {
                             var arr = JSON.parse(data);
-                            for (var i = 0; i < arr.length; i++) {
-                                $("#" + arr[i]).remove();
-                            }
-                            getDate(1, "", "");
                         },
                         error: function (XMLHttpRequest, textStatus, errorThrown) {
                             alert("删除失败!");
@@ -435,6 +431,7 @@
                 }
             }
         }
+            fatch3.refresh();
     }
     require(["esri/map", "esri/layers/ArcGISDynamicMapServiceLayer", "esri/layers/FeatureLayer", "esri/layers/GraphicsLayer", "esri/InfoTemplate", "esri/dijit/Search", "dojo/dom",
           "dojo/on", "dojo/domReady!"],
@@ -447,7 +444,7 @@
             fatch3 = new FeatureLayer("http://192.168.0.205:6080/arcgis/rest/services/fwx2/FeatureServer/0", {
                 mode: FeatureLayer.MODE_SNAPSHOT,
                 outFields: ["*"],
-                infoTemplate: new InfoTemplate("范围红线", "<table width='100%' style='table-layout:fixed'><tr height='15%' width='100%'><th width='60%' align='left'>文件名:${FileName} </th><th width='40%' align='left'>完成人:${FshPerson} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>坐标信息:${CoodSystem} </th><th width='40%' align='left'>完成时间:${FinishTime:DateFormat(selector: 'date', fullYear: true)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>中央子午线:${CenterMed} </th><th width='40%' align='left'>上传时间:${UploadTime:DateFormat(selector: 'date', fullYear: true)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>文件类型:${FileType} </th><th width='40%' align='left'>文件大小:${FileSize} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>项目名称:${ProName} </th><th width='40%' align='left' id='tdid'>图形ID:${OBJECTID} </th></tr><tr height='15%' width='100%'><th width='100%' align='left'>备注:${Memo} </th></tr></table><button style='margin:5px 15px' type='button' onclick='SYT()' class='btn btn-primary btn-xs'>缩略图</button><button style='margin:5px 15px' type='button' onclick='Change()' class='btn btn-primary btn-xs'>修  改</button><button style='margin:5px 15px' type='button' onclick='dele()' class='btn btn-primary btn-xs'>删  除</button><button style='margin:5px 0px 5px 15px' type='button' onclick='Down()' class='btn btn-primary btn-xs'>下  载</button>")
+                infoTemplate: new InfoTemplate("范围红线", "<table width='100%' style='table-layout:fixed'><tr height='15%' width='100%'><th width='60%' align='left'>文件名:${FileName} </th><th width='40%' align='left'>完成人:${FshPerson} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>坐标信息:${CoodSystem} </th><th width='40%' align='left'>完成时间:${FinishTime:DateFormat(selector: 'date', fullYear: true)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>中央子午线:${CenterMed} </th><th width='40%' align='left'>上传时间:${UploadTime:DateFormat(selector: 'date', fullYear: true)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>文件类型:${FileType} </th><th width='40%' align='left'>文件大小:${FileSize} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>项目名称:${ProName} </th><th width='40%' align='left' id='tdid'>图形ID:${OBJECTID} </th></tr><tr height='15%' width='100%'><th width='100%' align='left'>备注:${Memo} </th></tr></table><button style='margin:5px 15px' type='button' onclick='SYT()' class='btn btn-primary btn-xs'>缩略图</button><button style='margin:5px 15px' type='button' onclick='Change()' class='btn btn-primary btn-xs'>修  改</button><button style='margin:5px 15px;display:none;' type='button' onclick='dele()' class='btn btn-primary btn-xs'>删  除</button><button style='margin:5px 0px 5px 15px' type='button' onclick='Down()' class='btn btn-primary btn-xs'>下  载</button>")
 
             });
             graphiclayer = new GraphicsLayer();
@@ -483,7 +480,7 @@
                 sources: [{
                     featureLayer: new FeatureLayer("http://192.168.0.205:6080/arcgis/rest/services/fwx2/FeatureServer/0", {
                         outFields: ["*"],
-                        infoTemplate: new InfoTemplate("范围红线", "<table width='100%' style='table-layout:fixed'><tr height='15%' width='100%'><th width='60%' align='left'>文件名:${FileName} </th><th width='40%' align='left'>完成人:${FshPerson} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>坐标信息:${CoodSystem} </th><th width='40%' align='left'>完成时间:${FinishTime} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>中央子午线:${CenterMed} </th><th width='40%' align='left'>上传时间:${UploadTime} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>文件类型:${FileType} </th><th width='40%' align='left'>文件大小:${FileSize} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>项目名称:${ProName} </th><th width='40%' align='left' id='tdid'>图形ID:${OBJECTID} </th></tr><tr height='15%' width='100%'><th width='100%' align='left'>备注:${Memo} </th></tr></table><button style='margin:5px 8px' type='button' onclick='SYT()' class='btn btn-primary btn-xs'>缩略图</button><button style='margin:5px 8px' type='button' onclick='Change()' class='btn btn-primary btn-xs'>修  改</button><button style='margin:5px 8px' type='button' onclick='dele()' class='btn btn-primary btn-xs'>删  除</button><button style='margin:5px 0px 5px 8px' type='button' onclick='Down()' class='btn btn-primary btn-xs'>下  载</button>")
+                        infoTemplate: new InfoTemplate("范围红线", "<table width='100%' style='table-layout:fixed'><tr height='15%' width='100%'><th width='60%' align='left'>文件名:${FileName} </th><th width='40%' align='left'>完成人:${FshPerson} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>坐标信息:${CoodSystem} </th><th width='40%' align='left'>完成时间:${FinishTime} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>中央子午线:${CenterMed} </th><th width='40%' align='left'>上传时间:${UploadTime} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>文件类型:${FileType} </th><th width='40%' align='left'>文件大小:${FileSize} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>项目名称:${ProName} </th><th width='40%' align='left' id='tdid'>图形ID:${OBJECTID} </th></tr><tr height='15%' width='100%'><th width='100%' align='left'>备注:${Memo} </th></tr></table><button style='margin:5px 8px' type='button' onclick='SYT()' class='btn btn-primary btn-xs'>缩略图</button><button style='margin:5px 8px' type='button' onclick='Change()' class='btn btn-primary btn-xs'>修  改</button><button style='margin:5px 8px;;display:none;' type='button' onclick='dele()' class='btn btn-primary btn-xs'>删  除</button><button style='margin:5px 0px 5px 8px' type='button' onclick='Down()' class='btn btn-primary btn-xs'>下  载</button>")
                     }),
                     exactMatch: false,//精确查找
                     outFields: ["OBJECTID", "FileName", "Directory", "CoodSystem", "FinishTime", "FshPerson", "MinCood", "MaxCood", "ObjectNum", "Mark", "ProName", "FileType", "ProType", "CenterMed", "Yoffset", "Xoffset", "SUnitName", "Memo", "IsPublic", "UploadTime", "FileSize"],
@@ -519,7 +516,7 @@
                 var resultStr = "";
                 for (var i = 0; i < searchresult.results[0].length; i++) {
                     //Jimmy 2017/8/31 17:30 给tr增加id，值为文件的id
-                    var id = searchresult.results[0][i].feature.attributes.objectid;
+                    var id = searchresult.results[0][i].feature.attributes.OBJECTID;
                     resultStr += "<div class='ccccn' id='divid" + (i + 1) + "' onclick='openid(" + i + ",this)' onmouseover='openMarkerTipById1(" + i + ",this)' onmouseout='onmouseout_MarkerStyle(" + (i + 1) + ",this)' style=\"font-size: 10px;cursor:pointer;padding:0px 0 2px 2px; border-bottom:1px solid #403d3d;\"><table class='map-table'><tr id=" + id + "><td textalign='left'>" + (i + 1) + "、" + searchresult.results[0][i].feature.attributes.FileName;
                     resultStr += "</td><td><img class='select_img' src='../Sources/Images/select.png' onclick='selectimg(this)'></img></td></tr></table></div>";
 
@@ -716,7 +713,7 @@
             }
         });
 
-        if (info) {
+        if (info == "True") {
             map.infoWindow.hide();
             alert("删除成功！");
         }

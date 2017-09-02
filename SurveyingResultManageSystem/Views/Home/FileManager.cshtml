@@ -205,6 +205,14 @@
             //清除缓存
             sessionStorage.clear();
         });
+        //查看用户权限，分配功能
+        $.get("/UserInfoManager/GetUserLevels", function (data, status) {
+            if (status == "success") {
+                if (data == 1) {
+                    $(".a-delete-button").css("display", "block");
+                }
+            }
+        });
     });
     //获取下拉菜单数据
     function getDropData(id,url) {

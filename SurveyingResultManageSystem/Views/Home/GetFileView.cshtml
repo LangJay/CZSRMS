@@ -46,7 +46,7 @@
                         @(item.UploadTime.Split(' ')[0])
                     </td>
                     <td>
-                        <a onclick="deleteFile(@item.ID)">
+                        <a class="a-delete-button" onclick="deleteFile(@item.ID)">
                             删除
                         </a>
                         <a href="/Home/DownloadWithId?fileId=@item.ID">
@@ -60,7 +60,7 @@
             <div id="footer_left">
                 <img class="select_img" src="~/Sources/Images/select.png" onclick="selectallimg(this)" />
                 <p style="display:inline">全选</p>
-                <a onclick="deleteFiles()">
+                <a class="a-delete-button" onclick="deleteFiles()">
                     删除
                 </a>
                 <a onclick="downloadFiles()">

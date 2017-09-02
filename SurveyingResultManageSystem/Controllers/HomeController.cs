@@ -215,7 +215,7 @@ namespace SurveyingResultManageSystem.Controllers
             var stream = sr.ReadToEnd();
             string [] arr = JsonConvert.DeserializeObject<string[]>(stream) as string[];
             sr.Close();
-            List<int> delIds = new List<int>();
+            List<string> delIds = new List<string>();
             if(arr == null)
             {
                 Response.Write(new JavaScriptSerializer().Serialize(null));
@@ -223,10 +223,9 @@ namespace SurveyingResultManageSystem.Controllers
             }
             foreach(string id in arr)
             {
-                int idint = int.Parse(id);
-                if(DeleteFile(u => u.ID == idint))
+                if(DeleteFile(u => u.ObjectID.Contains(id.Trim())))
                 {
-                    delIds.Add(idint);
+                    delIds.Add(id);
                 }
             }
             if (delIds.Count == 0)
@@ -375,7 +374,7 @@ namespace SurveyingResultManageSystem.Controllers
                 List<string> urls = new List<string>();
                 for (int i = 0; i < ids.Length; i++)
                 {
-                    string url = "/Home/DownloadWithObjectId?fileId=" + ids[i];
+                    string url = "/Home/DownloadWithObjectId?objId=" + ids[i];
                     urls.Add(url);
                 }
                 var response = new { code = 4, url = urls };
@@ -409,7 +408,7 @@ namespace SurveyingResultManageSystem.Controllers
         [Authentication]
         public void DownloadWithObjectId(string objId)
         {
-            tb_FileInfo f = fileInfoService.Find(u => u.ObjectID == objId);
+            tb_FileInfo f = fileInfoService.Find(u => u.ObjectID.Contains(objId.Trim()));
             if(f != null)
             {
                 DownloadWithId(f.ID.ToString());
@@ -462,16 +461,16 @@ namespace SurveyingResultManageSystem.Controllers
         }
         private void DownloadTask(string filename,string directory)
         {
-            string savaPath = "";
-            string safeFileName = "";
-            //把文件压缩成文件夹
-            using (ZipFile zipFile = new ZipFile(System.Text.Encoding.Default))
+            string safeFileName = filename.Substring(0, filename.IndexOf('.'));
+            string savaPath = Path.Combine(directory, safeFileName + ".zip"); 
+            if(!System.IO.File.Exists(savaPath))
             {
-                safeFileName = filename.Substring(0, filename.IndexOf('.'));
-                zipFile.AddDirectory(directory, safeFileName);
-                directory = directory.Substring(0, directory.LastIndexOf('\\'));
-                savaPath = Path.Combine(directory, safeFileName + ".zip");
-                zipFile.Save(savaPath);//太费时
+                //把文件压缩成文件夹
+                using (ZipFile zipFile = new ZipFile(System.Text.Encoding.Default))
+                {
+                    zipFile.AddDirectory(Path.Combine(directory,"原始文件"), safeFileName);
+                    zipFile.Save(savaPath);//太费时
+                }
             }
             //以字符流的形式下载文件
             FileStream fs = new FileStream(savaPath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
@@ -482,7 +481,7 @@ namespace SurveyingResultManageSystem.Controllers
             //还没有读取的文件内容长度
             long leftLength = fs.Length;
             //创建接收文件内容的字节数组
-            byte[] buffer = new byte[1024*30];
+            byte[] buffer = new byte[1024*100];
             //每次读取的最大字节数
             int maxLength = buffer.Length;
             //每次实际返回的字节数长度
@@ -523,9 +522,9 @@ namespace SurveyingResultManageSystem.Controllers
         public bool delefeature()
         {
             var sr = new StreamReader(Request.InputStream);
-            var stream = sr.ReadToEnd();
+            string stream = sr.ReadToEnd();
             sr.Close();
-            bool tt1 = DeleteFile(u => u.ObjectID == stream);
+            bool tt1 = DeleteFile(u => u.ObjectID.Contains(stream.Trim()));
             return tt1;
         }
         /// <summary>
