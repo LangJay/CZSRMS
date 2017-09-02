@@ -208,8 +208,8 @@
         //查看用户权限，分配功能
         $.get("/UserInfoManager/GetUserLevels", function (data, status) {
             if (status == "success") {
-                if (data == 1) {
-                    $(".a-delete-button").css("display", "block");
+                if (data == 0) {
+                    $(".a-delete-button").css("display", "inline");
                 }
             }
         });
