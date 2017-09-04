@@ -112,7 +112,7 @@ namespace SurveyingResultManageSystem.Controllers
                 {
                     if (finf.Extension.Equals(".shp"))
                         //如果扩展名为“.xml”
-                        filename += finf.FullName;
+                        filename = finf.FullName;
                     //读取文件的完整目录和文件名
                 }
                 if (filename != "")
