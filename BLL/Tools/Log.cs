@@ -44,11 +44,11 @@ namespace BLL.Tools
             catch (Exception ex)
             {
                 // string logFileName = HttpRuntime.AppDomainAppPath.ToString();//
-                string logFileName = rootPath + "\\App_Data" + "\\" + "Log.txt";//生成日志文件  
-                writer = File.AppendText(logFileName);
-                writer.WriteLine(DateTime.Now.ToString("日志记录错误HH:mm:ss") + " " + ex.Message + ex.StackTrace);
-                writer.Flush();
-                writer.Close();
+                //string logFileName = rootPath + "\\App_Data" + "\\" + "Log.txt";//生成日志文件  
+                //writer = File.AppendText(logFileName);
+                //writer.WriteLine(DateTime.Now.ToString("日志记录错误HH:mm:ss") + " " + ex.Message + ex.StackTrace);
+                //writer.Flush();
+                //writer.Close();
             }
         }
     }

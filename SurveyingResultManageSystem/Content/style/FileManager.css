@@ -105,7 +105,7 @@ ul {
 }
 
 #div_filemanager_list_header input {
-    height: 30px;
+    height: 28px;
 }
 .button {
     background-color: #0972A7;
@@ -304,6 +304,6 @@ textarea {
 
 .modal-body input,.modal-body select
 {
-    height:30px;
+    height:28px;
     width:174px;
 }

@@ -185,7 +185,7 @@
             </div>
             <div class="modal-body">
 
-                <div id="dowebok" class="fader">
+                <div id="dowebok" class="fader"  style="background-color:#0972A7">
                     
                 </div>
 
@@ -418,7 +418,7 @@
             if (ids != null) {
                 if (confirm("你确定要删除所选" + ids.length + "个文件吗？")) {
                     $.ajax({
-                        url: '/Home/Deletes',
+                        url: '/Home/DeletesWithObjId',
                         type: "post",
                         dataType: "text",
                         data: JSON.stringify(ids),
@@ -455,7 +455,6 @@
                 data: username,
                 success: function (data) {
                     userinfo = data;
-
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     alert(XMLHttpRequest.status);
@@ -510,13 +509,18 @@
                     enableSuggestions: true
 
                 }],
-
-
-
                 map: map
             }, "search");
             search.startup();
             on(search, 'search-results', function (e) {
+                //查看用户权限，分配功能
+                $.get("/UserInfoManager/GetUserLevels", function (data, status) {
+                    if (status == "success") {
+                        if (data == 0) {
+                            $(".a-delete-button").css("display", "inline");
+                        }
+                    }
+                });
                 //Jimmy 2017/8/31 17:30 删除选择记录
                 sessionStorage.clear();
                 var aa1 = document.getElementById("div-table");
@@ -766,7 +770,7 @@
         	data: idd,
         	success: function (data) {
         		info = data;
-        		var img = info.split("$");
+        		var img = info.split("%$%");
         		if (img.length > 0) {
         			for (var i = 0; i < img.length; i++) {
         				imagepath = imagepath + "<img class='slide' src='" + img[i] + "'></img>";
