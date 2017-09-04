@@ -16,6 +16,7 @@ using Newtonsoft.Json;
 using Ionic.Zip;
 using System.Threading;
 using System.Configuration;
+using System.Transactions;
 
 namespace SurveyingResultManageSystem.Controllers
 {
@@ -186,7 +187,7 @@ namespace SurveyingResultManageSystem.Controllers
                 string username = System.Web.HttpContext.Current.Request.Cookies["username"].Value;
                 return username;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Log.AddRecord(e);
 
@@ -194,11 +195,11 @@ namespace SurveyingResultManageSystem.Controllers
             }
         }
 
-       //前端调用
-        [Authentication]
+        //前端调用
         public void Delete(int fileId)
         {
-            if( DeleteFile(u => u.ID == fileId))
+            if (AuthenLevel()) return;
+            if (DeleteFile(u => u.ID == fileId))
             {
                 var response = new { code = 4, fileId = fileId };
                 Response.Write(new JavaScriptSerializer().Serialize(response));
@@ -207,23 +208,23 @@ namespace SurveyingResultManageSystem.Controllers
         /// <summary>
         /// 根据id删除所选文件，需要返回删除的id
         /// </summary>
-        [Authentication]
         [HttpPost]
-        public void Deletes() 
+        public void Deletes()
         {
+            if (AuthenLevel()) return;
             var sr = new StreamReader(Request.InputStream);
             var stream = sr.ReadToEnd();
-            string [] arr = JsonConvert.DeserializeObject<string[]>(stream) as string[];
+            string[] arr = JsonConvert.DeserializeObject<string[]>(stream) as string[];
             sr.Close();
             List<string> delIds = new List<string>();
-            if(arr == null)
+            if (arr == null)
             {
                 Response.Write(new JavaScriptSerializer().Serialize(null));
                 return;
             }
-            foreach(string id in arr)
+            foreach (string id in arr)
             {
-                if(DeleteFile(u => u.ObjectID.Contains(id.Trim())))
+                if (DeleteFile(u => u.ID == int.Parse(id)))
                 {
                     delIds.Add(id);
                 }
@@ -236,10 +237,10 @@ namespace SurveyingResultManageSystem.Controllers
         /// <summary>
         /// 根据id删除所选文件，需要返回删除的id
         /// </summary>
-        [Authentication]
         [HttpPost]
         public void DeletesWithObjId()
         {
+            if (AuthenLevel()) return;
             var sr = new StreamReader(Request.InputStream);
             var stream = sr.ReadToEnd();
             string[] arr = JsonConvert.DeserializeObject<string[]>(stream) as string[];
@@ -252,7 +253,7 @@ namespace SurveyingResultManageSystem.Controllers
             }
             foreach (string objId in arr)
             {
-                if (DeleteFile(u => u.ObjectID == objId))
+                if (DeleteFile(u => u.ObjectID.Contains(objId.Trim())))
                 {
                     delIds.Add(objId);
                 }
@@ -285,20 +286,28 @@ namespace SurveyingResultManageSystem.Controllers
                     log.Explain = "文件不存在";
                     return false;
                 }
-                //删除文件夹
-                DirectoryInfo dir = new DirectoryInfo(file.Directory);
-                dir.Delete(true);
-                //删除数据库 
-                bool success = fileInfoService.Delete(file);
-                //删除图形
-                bool success1 = deleDWG(file.ObjectID);
-                if (success && success1)
-                {
-                    log.FileName = file.FileName;
-                    log.Explain = "删除成功！";
-                    logInfoService.Add(log);
-                    return true;
+                using (TransactionScope tran = new TransactionScope())
+                { 
+                    //删除数据库 
+                    bool success = fileInfoService.Delete(file);
+                    if(success)
+                    {
+                        //删除图形
+                        bool success1 = deleDWG(file.ObjectID);
+                        if(success1)
+                        {
+                            log.FileName = file.FileName;
+                            log.Explain = "删除成功！";
+                            logInfoService.Add(log);
+                            //删除文件
+                            DirectoryInfo dreInfo = new DirectoryInfo(file.Directory);
+                            dreInfo.Delete(true);
+                            //提交事务
+                            tran.Complete();
+                        }
+                    }
                 }
+                return false;
             }
             catch (Exception e)
             {
@@ -328,7 +337,8 @@ namespace SurveyingResultManageSystem.Controllers
         [HttpPost]
         public void Downloads()
         {
-            try {
+            try
+            {
                 var sr = new StreamReader(Request.InputStream);
                 var stream = sr.ReadToEnd();
                 string[] ids = JsonConvert.DeserializeObject<string[]>(stream) as string[];
@@ -340,7 +350,7 @@ namespace SurveyingResultManageSystem.Controllers
                     return;
                 }
                 List<string> urls = new List<string>();
-                for(int i = 0;i<ids.Length;i ++)
+                for (int i = 0; i < ids.Length; i++)
                 {
                     string url = "/Home/DownloadWithId?fileId=" + ids[i];
                     urls.Add(url);
@@ -348,8 +358,8 @@ namespace SurveyingResultManageSystem.Controllers
                 var response = new { code = 4, url = urls };
                 Response.Write(new JavaScriptSerializer().Serialize(response));
             }
-           catch(Exception e)
-           {
+            catch (Exception e)
+            {
                 Log.AddRecord(e);
                 var response = new { code = 3 };
                 Response.Write(new JavaScriptSerializer().Serialize(response));
@@ -396,7 +406,7 @@ namespace SurveyingResultManageSystem.Controllers
                 string directory = HttpRuntime.AppDomainAppPath.ToString() + "/Data/File/下载.zip";
                 DownloadTask(filename, directory);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Log.AddRecord(e);
             }
@@ -409,7 +419,7 @@ namespace SurveyingResultManageSystem.Controllers
         public void DownloadWithObjectId(string objId)
         {
             tb_FileInfo f = fileInfoService.Find(u => u.ObjectID.Contains(objId.Trim()));
-            if(f != null)
+            if (f != null)
             {
                 DownloadWithId(f.ID.ToString());
             }
@@ -444,7 +454,7 @@ namespace SurveyingResultManageSystem.Controllers
                 logInfoService.Add(log);
                 DownloadTask(filename, directory);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 //记录下载
                 tb_LogInfo log = new tb_LogInfo
@@ -459,16 +469,16 @@ namespace SurveyingResultManageSystem.Controllers
                 Log.AddRecord(e);
             }
         }
-        private void DownloadTask(string filename,string directory)
+        private void DownloadTask(string filename, string directory)
         {
             string safeFileName = filename.Substring(0, filename.IndexOf('.'));
-            string savaPath = Path.Combine(directory, safeFileName + ".zip"); 
-            if(!System.IO.File.Exists(savaPath))
+            string savaPath = Path.Combine(directory, safeFileName + ".zip");
+            if (!System.IO.File.Exists(savaPath))
             {
                 //把文件压缩成文件夹
                 using (ZipFile zipFile = new ZipFile(System.Text.Encoding.Default))
                 {
-                    zipFile.AddDirectory(Path.Combine(directory,"原始文件"), safeFileName);
+                    zipFile.AddDirectory(Path.Combine(directory, "原始文件"), safeFileName);
                     zipFile.Save(savaPath);//太费时
                 }
             }
@@ -481,7 +491,7 @@ namespace SurveyingResultManageSystem.Controllers
             //还没有读取的文件内容长度
             long leftLength = fs.Length;
             //创建接收文件内容的字节数组
-            byte[] buffer = new byte[1024*100];
+            byte[] buffer = new byte[1024 * 100];
             //每次读取的最大字节数
             int maxLength = buffer.Length;
             //每次实际返回的字节数长度
@@ -517,10 +527,11 @@ namespace SurveyingResultManageSystem.Controllers
             Response.ContentType = "text/html";
             Response.Write("<script>alert('" + msg + "');</script>");
         }
-        [Authentication]
+        [AuthorityAuthentication]
         [HttpPost]//王军军增加8.23
         public bool delefeature()
         {
+            if (AuthenLevel()) return false;
             var sr = new StreamReader(Request.InputStream);
             string stream = sr.ReadToEnd();
             sr.Close();
@@ -564,7 +575,7 @@ namespace SurveyingResultManageSystem.Controllers
             sr.Close();
             //int idh = int.Parse(stream);
             tb_FileInfo user = fileInfoService.Find(u => u.ObjectID == stream);
-            string tt=Newtonsoft.Json.JsonConvert.SerializeObject(user);
+            string tt = Newtonsoft.Json.JsonConvert.SerializeObject(user);
             return tt;
         }
         [Authentication]
@@ -580,11 +591,11 @@ namespace SurveyingResultManageSystem.Controllers
             FeatureItem1 featureItem2 = new FeatureItem1();
             featureItem2.Attributes = new Dictionary<string, object>();
             featureItem2.Attributes.Add("FileName", fileInfo.FileName);//文件名
-            
+
             featureItem2.Attributes.Add("CoodSystem", fileInfo.CoodinateSystem);//坐标框架信息
             if (fileInfo.Finishtime.Trim() != "")
             {
-              
+
                 featureItem2.Attributes.Add("FinishTime", fileInfo.Finishtime);
             }
             //完成时间信息
@@ -612,6 +623,25 @@ namespace SurveyingResultManageSystem.Controllers
             bool tt1 = openauto.UpdateFeature(featureItem2.url, idh, featureItem2);
             bool tt2 = fileInfoService.Update(fileInfo);//更新数据库
             return tt1 && tt2;
+        }
+        private bool AuthenLevel()
+        {
+            var cook = System.Web.HttpContext.Current.Request.Cookies["username"];
+            if (cook == null)
+            {
+                return false;
+            }
+            string username = cook.Value;
+            tb_UserInfo user = userInfoService.Find(u => u.UserName == username);
+            if (user == null)
+            {
+                return false;
+            }
+            else if (user.Levels == "1")
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
