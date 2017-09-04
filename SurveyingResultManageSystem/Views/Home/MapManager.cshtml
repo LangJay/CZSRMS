@@ -185,7 +185,7 @@
             </div>
             <div class="modal-body">
 
-                <div id="dowebok" class="fader">
+                <div id="dowebok" class="fader"  style="background-color:#0972A7">
                     
                 </div>
 
@@ -759,7 +759,7 @@
         	data: idd,
         	success: function (data) {
         		info = data;
-        		var img = info.split("$");
+        		var img = info.split("%$%");
         		if (img.length > 0) {
         			for (var i = 0; i < img.length; i++) {
         				imagepath = imagepath + "<img class='slide' src='" + img[i] + "'></img>";

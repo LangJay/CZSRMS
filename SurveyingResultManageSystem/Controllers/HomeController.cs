@@ -585,7 +585,7 @@ namespace SurveyingResultManageSystem.Controllers
             var sr = new StreamReader(Request.InputStream);
             var stream = sr.ReadToEnd();
             sr.Close();
-            var baseurl = Request.Url.Host+":"+Request.Url.Port;
+            var baseurl = "http://" + Request.Url.Host+":"+Request.Url.Port;
 
             //int idh = int.Parse(stream);
             tb_FileInfo user = fileInfoService.Find(u => u.ObjectID.Contains(stream));
@@ -603,7 +603,7 @@ namespace SurveyingResultManageSystem.Controllers
                 if (finf.Extension.Equals(".jpg"))
                     //如果扩展名为“.xml”
                     path2.Replace("\\", "/");
-                    filename = filename+ baseurl+ path2 + finf.Name + ",";
+                    filename = filename+ baseurl+ path2 + finf.Name + "%$%";
 
                 //filename = filename + path1 + finf.Name + "$";
 
@@ -611,7 +611,7 @@ namespace SurveyingResultManageSystem.Controllers
                 //读取文件的完整目录和文件名
             }
 
-            filename = filename.Substring(0, filename.Length - 1);
+            filename = filename.Substring(0, filename.Length - 3);
           
             return filename;
         }
