@@ -570,6 +570,43 @@ namespace SurveyingResultManageSystem.Controllers
         }
         [Authentication]
         [HttpPost]//王军军增加8.23
+        public string getimginfo()
+        {
+            var sr = new StreamReader(Request.InputStream);
+            var stream = sr.ReadToEnd();
+            sr.Close();
+            var baseurl = Request.Url.Host+":"+Request.Url.Port;
+
+            //int idh = int.Parse(stream);
+            tb_FileInfo user = fileInfoService.Find(u => u.ObjectID.Contains(stream));
+
+
+
+            string path1 =user.Directory + "预览文件\\";
+            DirectoryInfo dir = new DirectoryInfo(path1);
+            var startindex = path1.IndexOf("SurveyingResultManageSystem")+ "SurveyingResultManageSystem".Length;
+            var path2= path1.Substring(startindex);
+            FileInfo[] inf = dir.GetFiles();
+            var filename = "";
+            foreach (FileInfo finf in inf)
+            {
+                if (finf.Extension.Equals(".jpg"))
+                    //如果扩展名为“.xml”
+                    path2.Replace("\\", "/");
+                    filename = filename+ baseurl+ path2 + finf.Name + ",";
+
+                //filename = filename + path1 + finf.Name + "$";
+
+
+                //读取文件的完整目录和文件名
+            }
+
+            filename = filename.Substring(0, filename.Length - 1);
+          
+            return filename;
+        }
+        [Authentication]
+        [HttpPost]//王军军增加8.23
         public Boolean setfileinfo()
         {
             var sr = new StreamReader(Request.InputStream);

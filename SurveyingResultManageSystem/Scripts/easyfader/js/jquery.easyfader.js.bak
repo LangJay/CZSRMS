@@ -54,16 +54,7 @@
 					$slides = $container.find(slideSelector),
 					totalSlides = $slides.length,
 					$pagerList = $container.find('.pager_list');
-				prefix = $.support.leadingWhitespace ? cc($container[0]) : false;
-				function cc(el) {
-				    var prefixes1 = ["Webkit", "Moz", "O", "ms"];
-				    for (var i = 0; i < prefixes1.length; i++) {
-				        if (prefixes1[i] + "Transition" in el.style) {
-				            return '-' + prefixes1[i].toLowerCase() + '-';
-				        };
-				    };
-				    return "transition" in el.style ? "" : false;
-				}
+					//prefix = $.support.leadingWhitespace ? prefix($container[0]) : false;
 				function animateSlides(activeNdx, newNdx){
 					function cleanUp(){
 						$slides.eq(activeNdx).removeStyle('opacity, z-index');
@@ -100,7 +91,15 @@
 						},config.fadeDur);
 					};
 				};
-
+function prefix(el){
+		var prefixes = ["Webkit", "Moz", "O", "ms"];
+		for (var i = 0; i < prefixes.length; i++){
+			if (prefixes[i] + "Transition" in el.style){
+				return '-'+prefixes[i].toLowerCase()+'-'; 
+			};
+		}; 
+		return "transition" in el.style ? "" : false;
+	};
 				function changeSlides(target){
 					if(target == 'next'){
 						newSlide = activeSlide + 1;
