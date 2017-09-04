@@ -546,7 +546,7 @@ namespace SurveyingResultManageSystem.Controllers
             var sr = new StreamReader(Request.InputStream);
             var stream = sr.ReadToEnd();
             sr.Close();
-            tb_UserInfo user = userInfoService.Find(u => u.UserName == stream);
+            tb_UserInfo user = userInfoService.Find(u => u.UserName == stream.Trim());
             string str1 = "";
             if (user != null)
             {
@@ -563,7 +563,7 @@ namespace SurveyingResultManageSystem.Controllers
             var stream = sr.ReadToEnd();
             sr.Close();
             //int idh = int.Parse(stream);
-            tb_FileInfo user = fileInfoService.Find(u => u.ObjectID == stream);
+            tb_FileInfo user = fileInfoService.Find(u => u.ObjectID.Contains(stream.Trim()));
             string tt=Newtonsoft.Json.JsonConvert.SerializeObject(user);
             return tt;
         }
@@ -577,10 +577,7 @@ namespace SurveyingResultManageSystem.Controllers
             var baseurl = Request.Url.Host+":"+Request.Url.Port;
 
             //int idh = int.Parse(stream);
-            tb_FileInfo user = fileInfoService.Find(u => u.ObjectID.Contains(stream));
-
-
-
+            tb_FileInfo user = fileInfoService.Find(u => u.ObjectID.Contains(stream.Trim()));
             string path1 =user.Directory + "预览文件\\";
             DirectoryInfo dir = new DirectoryInfo(path1);
             var startindex = path1.IndexOf("SurveyingResultManageSystem")+ "SurveyingResultManageSystem".Length;
@@ -644,7 +641,11 @@ namespace SurveyingResultManageSystem.Controllers
             }
             // featureItem2.Attributes.Add("UploadTime", fileInfo.UploadTime);// 上传时间
             featureItem2.url = ConfigurationManager.AppSettings["serverurl"];
-            string idh = fileInfo.ObjectID.Trim();
+            
+            tb_FileInfo user = fileInfoService.Find(u => u.ObjectID.Contains(fileInfo.ObjectID.Trim()));
+            
+            string idh = user.ObjectID;
+            fileInfo.ObjectID = idh;
 #warning 等两个同时上传完毕再执行
             bool tt1 = openauto.UpdateFeature(featureItem2.url, idh, featureItem2);
             bool tt2 = fileInfoService.Update(fileInfo);//更新数据库
