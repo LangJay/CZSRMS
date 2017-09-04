@@ -51,5 +51,35 @@ namespace BLL.Tools
                 //writer.Close();
             }
         }
+        /// <summary>  
+        /// 日志文件记录   
+        /// </summary>  
+        /// <param name="msg">内容</param>  
+        public static void AddLog(String e)
+        {
+            StreamWriter writer;
+            string rootPath = HttpRuntime.AppDomainAppPath.ToString();//E:\项目\郴州测绘成果管理项目\郴州市测绘成果项目管理系统\SurveyingResultManageSystem\
+            try
+            {
+                string path = rootPath + "\\Log";
+                if (!Directory.Exists(path))//判断是否有该文件    
+                    Directory.CreateDirectory(path);//不存在则创建log文件夹  
+                string logFileName = path + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + ".log";//生成日志文件  
+
+                writer = File.AppendText(logFileName);//文件中添加文件流  
+                writer.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + e);
+                writer.Flush();
+                writer.Close();
+            }
+            catch (Exception ex)
+            {
+                // string logFileName = HttpRuntime.AppDomainAppPath.ToString();//
+                //string logFileName = rootPath + "\\App_Data" + "\\" + "Log.txt";//生成日志文件  
+                //writer = File.AppendText(logFileName);
+                //writer.WriteLine(DateTime.Now.ToString("日志记录错误HH:mm:ss") + " " + ex.Message + ex.StackTrace);
+                //writer.Flush();
+                //writer.Close();
+            }
+        }
     }
 }
