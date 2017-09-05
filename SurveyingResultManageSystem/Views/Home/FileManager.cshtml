@@ -120,18 +120,18 @@
                         </tr>
                           <tr>
                             <td>备注信息：</td>
-                            <td colspan="3" style="width:100%;max-width:100%;"><textarea style="width:96%;min-width:96%;" name="Mark" id="mark"></textarea></td>
+                            <td colspan="3" style="width:100%;max-width:100%;"><textarea style="width:100%;min-width:100%;" name="Mark" id="mark"></textarea></td>
                         </tr>
                         <tr>
                             <td>成果说明：</td>
-                            <td colspan="3"><textarea style="max-width:96%;width:96%;" name="Explain" id="explain"></textarea></td>
+                            <td colspan="3"><textarea style="max-width:100%;width:100%;" name="Explain" id="explain"></textarea></td>
 
                         </tr>
                         <tr>
                             <td>文件公开对象：</td>
                             <td colspan="3">
                                 <span>
-                                <select id="selectObjs" class="js-example-basic-multiple" multiple="multiple" style="width:auto">
+                                <select id="selectObjs" class="js-example-basic-multiple" multiple="multiple" style="min-width:176px">
                                 </select>
                                 </span>
                             </td>
@@ -229,7 +229,7 @@
         $(".progress-bar").css("width", "0%");
         $(".progress-bar").html("");
 
-        $(".js-example-basic-multiple").select2().val(["市局测绘队"]).trigger("change");
+        $(".js-example-basic-multiple").select2().val(["市局测绘队","苏仙区测绘队","北湖区测绘队"]).trigger("change");
 
         //$("#surveyingunitname").val("苏仙区测绘队");
         $("#myModal").modal('show');

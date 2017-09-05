@@ -2,8 +2,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<link rel="stylesheet" type="text/css" href="http://192.168.0.205:80/aspnet_client/API/3.21/3.21/esri/css/esri.css" />
-<script src="http://192.168.0.205:80/aspnet_client/API/3.21/3.21/init.js"></script>
+@*<link rel="stylesheet" type="text/css" href="http://192.168.0.205:80/aspnet_client/API/3.21/3.21/esri/css/esri.css" />
+<script src="http://192.168.0.205:80/aspnet_client/API/3.21/3.21/init.js"></script>*@
+<link rel="stylesheet" type="text/css" href="http://192.168.0.230:8080/arcgis_js_api/library/3.21/3.21/esri/css/esri.css" />
+<script src="http://192.168.0.230:8080/arcgis_js_api/library/3.21/3.21/init.js"></script>
 
 @Styles.Render("~/Content/style/MapManager.css")
 @Styles.Render("~/Content/style/FileManager.css")
@@ -471,7 +473,7 @@
             else {
             	tempstr = "<table width='100%' style='table-layout:fixed'><tr height='15%' width='100%'><th width='60%' align='left'>文件名:${FileName} </th><th width='40%' align='left'>完成人:${FshPerson} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>坐标信息:${CoodSystem} </th><th width='40%' align='left'>完成时间:${FinishTime:DateFormat(selector: 'date', fullYear: true)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>中央子午线:${CenterMed} </th><th width='40%' align='left'>上传时间:${UploadTime:DateFormat(selector: 'date', fullYear: true)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>文件类型:${FileType} </th><th width='40%' align='left'>文件大小:${FileSize:NumberFormat(places:2)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>项目名称:${ProName} </th><th width='40%' align='left' id='tdid'>图形ID:${OBJECTID} </th></tr><tr height='15%' width='100%'><th width='100%' align='left'>备注:${Memo} </th></tr></table><button style='margin:5px 15px' type='button' onclick='SYT()' class='btn btn-primary btn-xs'>缩略图</button><button style='margin:5px 15px' type='button' onclick='Change()' class='btn btn-primary btn-xs a-delete-button'>修  改</button><button style='margin:5px 15px' type='button' onclick='dele()' class='btn btn-primary btn-xs a-delete-button'>删  除</button><button style='margin:5px 0px 5px 15px' type='button' onclick='Down()' class='btn btn-primary btn-xs'>下  载</button>";
             }
-            fatch3 = new FeatureLayer("http://192.168.0.205:6080/arcgis/rest/services/fwx2/FeatureServer/0", {
+            fatch3 = new FeatureLayer("http://192.168.0.230:6080/arcgis/rest/services/fw/FeatureServer/0", {
             	mode: FeatureLayer.MODE_SNAPSHOT,
             	outFields: ["*"],
             	infoTemplate: new InfoTemplate("范围红线", tempstr)
@@ -489,7 +491,7 @@
             map.addLayer(fatch3);
             search = new Search({
                 sources: [{
-                    featureLayer: new FeatureLayer("http://192.168.0.205:6080/arcgis/rest/services/fwx2/FeatureServer/0", {
+                    featureLayer: new FeatureLayer("http://192.168.0.230:6080/arcgis/rest/services/fw/FeatureServer/0", {
                         outFields: ["*"],
                         infoTemplate: new InfoTemplate("范围红线", tempstr)
                     }),
@@ -533,7 +535,7 @@
                 var resultStr = "";
                 for (var i = 0; i < searchresult.results[0].length; i++) {
                     //Jimmy 2017/8/31 17:30 给tr增加id，值为文件的id
-                    var id = searchresult.results[0][i].feature.attributes.objectid;
+                    var id = searchresult.results[0][i].feature.attributes.OBJECTID;
                     resultStr += "<div class='ccccn' id='divid" + (i + 1) + "' onclick='openid(" + i + ",this)' onmouseover='openMarkerTipById1(" + i + ",this)' onmouseout='onmouseout_MarkerStyle(" + (i + 1) + ",this)' style=\"font-size: 10px;cursor:pointer;padding:0px 0 2px 2px; border-bottom:1px solid #403d3d;\"><table class='map-table'><tr id=" + id + "><td textalign='left'>" + (i + 1) + "、" + searchresult.results[0][i].feature.attributes.FileName;
                     resultStr += "</td><td><img class='select_img' src='../Sources/Images/select.png' onclick='selectimg(this)'></img></td></tr></table></div>";
 
@@ -553,6 +555,7 @@
 
         });
     var idhh;
+    var info1;
     function Change() {
         var id = document.getElementById("tdid").innerHTML;
         var idh = id.split(':');
@@ -580,8 +583,7 @@
                 //alert(textStatus);
             }
         });
-
-        var info1 = eval("(" + info + ")");
+        info1 = eval("(" + info + ")");
         //$("#CoodinateSystem").combobox("setValue","dsfasd");
         $('#CoodinateSystem').val(info1.CoodinateSystem);
         $('#filename').val(info1.FileName);
@@ -623,64 +625,38 @@
 
     };
     function changeInfo() {
-        var file = {
-            FileName: "",
-            CoodinateSystem: "",
-            FinishtimeInfo: "",
-            FinishPersonInfo: "",
-            MinCoodinate: "",
-            MaxCoodinate: "",
-            ObjectNum: "",
-            Mark: "",
-            Warehousing: "",
-            ProjectName: "",
-            FileType: "",
-            ProjectType: "",
-            PcoodinateSystem: "",
-            CenterMeridian: "",
-            Yoffset: "",
-            Xoffset: "",
-            Finishtime: "",
-            FinishPerson: "",
-            SurveyingUnitName: "",
-            Explain: "",
-            IsPublic: "",
-            objectid: "",
-            UploadTime: ""
-
-        };
-        file.FileName = $("#filename").val();
-        file.CoodinateSystem = $("#CoodinateSystem").val();
-        file.FinishtimeInfo = $("#finishtimeinfo").val();
-        file.FinishPersonInfo = $("#finishpersoninfo").val();
-        file.MinCoodinate = $("#mincoodinate").val();
-        file.MaxCoodinate = $("#maxcoodinate").val();
-        file.ObjectNum = $("#objectnum").val();
-        file.Mark = $("#mark").val();
-        file.Warehousing = $("input[name=Warehousing]:checked").val();
-        file.ProjectName = $("#projectname").val();
-        file.FileType = $("#filetype").val();
-        file.ProjectType = $("#projecttype").val();
-        file.PcoodinateSystem = $("#pcoodinateSystem").val();
-        file.CenterMeridian = $("#centermeridian").val();
-        file.Yoffset = $("#yoffset").val();
-        file.Xoffset = $("#xoffset").val();
-        file.Finishtime = $("#finishtime").val();
-        file.FinishPerson = $("#finishperson").val();
-        file.SurveyingUnitName = $("#surveyingunitname").val();
-        file.Explain = $("#explain").val();
+      
+        info1.FileName = $("#filename").val();
+        info1.CoodinateSystem = $("#CoodinateSystem").val();
+        info1.FinishtimeInfo = $("#finishtimeinfo").val();
+        info1.FinishPersonInfo = $("#finishpersoninfo").val();
+        info1.MinCoodinate = $("#mincoodinate").val();
+        info1.MaxCoodinate = $("#maxcoodinate").val();
+        info1.ObjectNum = $("#objectnum").val();
+        info1.Mark = $("#mark").val();
+        info1.Warehousing = $("input[name=Warehousing]:checked").val();
+        info1.ProjectName = $("#projectname").val();
+        info1.FileType = $("#filetype").val();
+        info1.ProjectType = $("#projecttype").val();
+        info1.PcoodinateSystem = $("#pcoodinateSystem").val();
+        info1.CenterMeridian = $("#centermeridian").val();
+        info1.Yoffset = $("#yoffset").val();
+        info1.Xoffset = $("#xoffset").val();
+        info1.Finishtime = $("#finishtime").val();
+        info1.FinishPerson = $("#finishperson").val();
+        info1.SurveyingUnitName = $("#surveyingunitname").val();
+        info1.Explain = $("#explain").val();
         var objarr = $("#selectObjs").val();
-        file.objectid = idhh;
-        file.PublicObjs = "";
+        info1.PublicObjs = "";
         for (var i = 0; i < objarr.length; i++) {
             var text = objarr[i];
             if (i > 0)
                 text = "|" + objarr[i];
-            file.PublicObjs += text;
+            info1.PublicObjs += text;
         }
         //var formData = new FormData();
         //  formData.append("fileinfo", JSON.stringify(file));
-        var fileinfomation = JSON.stringify(file);
+        var fileinfomation = JSON.stringify(info1);
         $.ajax({
             url: "/Home/setfileinfo",
             type: "post",
@@ -689,22 +665,19 @@
             data: fileinfomation,
             success: function (data) {
                 info = data;
-
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 alert(XMLHttpRequest.status);
             }
         });
-        if (info) {
+        if (info == "True") {
             fatch3.refresh();
             $("#myModal").modal('hide');
             alert("修改成功！");
-
         }
         else {
             $("#myModal").modal('hide');
             alert("修改失败！");
-
         }
 
     };

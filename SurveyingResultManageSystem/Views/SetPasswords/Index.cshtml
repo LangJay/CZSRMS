@@ -14,7 +14,7 @@
         <input id="input-new" type="password" />
     </div>
     <div id="div-renew" class="div-form">
-        <label>请再次输入新密码：</label>
+        <label>请确定新密码：</label>
         <input id="input-renew" type="password" />
     </div>
     <div id="div-submit" class="div-form">
@@ -61,6 +61,11 @@
                             alert("服务器故障,请重试...");
                         }
                 });
+            }
+            else
+            {
+                $("#input-old").addClass('red-border');
+                return;
             }
         });
       

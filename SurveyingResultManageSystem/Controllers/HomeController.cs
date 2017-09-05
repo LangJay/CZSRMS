@@ -119,7 +119,7 @@ namespace SurveyingResultManageSystem.Controllers
             string username = System.Web.HttpContext.Current.Request.Cookies["username"].Value;
             tb_UserInfo user = userInfoService.Find(u => u.UserName == username);
             string unit = user.Unit;
-            if (user.Levels == "0")
+            if (user.Levels == "0" || user.Unit == "市局测绘队")
                 unit = "";
             pageInfo.pageList = fileInfoService.FindPageList(pageInfo.pageIndex, pageInfo.pageSize, out totalRecord,
                 f => f.PublicObjs.Contains(unit), "ID", false);
@@ -159,7 +159,7 @@ namespace SurveyingResultManageSystem.Controllers
                 //重新检索
                 pageInfo.pageList = fileInfoService.FindAll(u => u.FileName != "", "id", false);
                 IEnumerable<tb_FileInfo> iEn = pageInfo.pageList.Where(f => f.CoodinateSystem.Contains(category) || f.ProjectType.Contains(category)
-                || f.FileType.Contains(category) || f.PublicObjs.Contains(category));
+                || f.FileType.Contains(category) || f.SurveyingUnitName.Contains(category));
                 int index = 1;
                 foreach (tb_FileInfo l in iEn)
                 {
@@ -279,10 +279,9 @@ namespace SurveyingResultManageSystem.Controllers
                     Time = DateTime.Now.ToString(),
                     Operation = LogOperations.DeleteFile()
                 };
-                logInfoService.Add(log);
                 if (file == null)
                 {
-                    log.FileName = null;
+                    log.FileName = "";
                     log.Explain = "文件不存在";
                     return false;
                 }
@@ -307,7 +306,7 @@ namespace SurveyingResultManageSystem.Controllers
                         }
                     }
                 }
-                return false;
+                return true;
             }
             catch (Exception e)
             {
@@ -652,13 +651,9 @@ namespace SurveyingResultManageSystem.Controllers
             }
             // featureItem2.Attributes.Add("UploadTime", fileInfo.UploadTime);// 上传时间
             featureItem2.url = ConfigurationManager.AppSettings["serverurl"];
+           
+            bool tt1 = openauto.UpdateFeature(featureItem2.url, fileInfo.ObjectID, featureItem2);
             
-            tb_FileInfo user = fileInfoService.Find(u => u.ObjectID.Contains(fileInfo.ObjectID.Trim()));
-            
-            string idh = user.ObjectID;
-            fileInfo.ObjectID = idh;
-#warning 等两个同时上传完毕再执行
-            bool tt1 = openauto.UpdateFeature(featureItem2.url, idh, featureItem2);
             bool tt2 = fileInfoService.Update(fileInfo);//更新数据库
             return tt1 && tt2;
         }

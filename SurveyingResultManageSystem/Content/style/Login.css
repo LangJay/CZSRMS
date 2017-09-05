@@ -21,8 +21,17 @@ body {
 
 #div_username, #div_password {
     margin-bottom: 15px;
+    padding-left:90px;
+    text-align:left;
 }
-
+#div_password 
+{
+    padding-left:96px;
+}
+#div_LoginBtn{
+    text-align:left;
+    padding-left:160px;
+}
 #div_title {
     text-align: center;
     display: inline-flex;
@@ -37,4 +46,12 @@ body {
 
 #input_btn {
     background-color: #0972A7;
+    border: none;
+    color: white;
+    outline: none;
+    height:28px;
+    width:153px;
+}
+#input_btn:active {
+    background-color: #5090C7;
 }

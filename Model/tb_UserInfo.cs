@@ -29,7 +29,7 @@ namespace Model
         /// 登录密码，管理员创建时设置初始密码，后来可更改
         /// </summary>
         [Required(ErrorMessage = "必填")]
-        [DisplayName("密    码：")]
+        [DisplayName("密   码：")]
         [DataType(DataType.Password)]
         public string Password { set; get; }
         /// <summary>

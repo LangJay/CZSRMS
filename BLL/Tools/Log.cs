@@ -41,7 +41,7 @@ namespace BLL.Tools
                 writer.Flush();
                 writer.Close();
             }
-            catch (Exception ex)
+            catch
             {
                 // string logFileName = HttpRuntime.AppDomainAppPath.ToString();//
                 //string logFileName = rootPath + "\\App_Data" + "\\" + "Log.txt";//生成日志文件  
@@ -71,7 +71,7 @@ namespace BLL.Tools
                 writer.Flush();
                 writer.Close();
             }
-            catch (Exception ex)
+            catch 
             {
                 // string logFileName = HttpRuntime.AppDomainAppPath.ToString();//
                 //string logFileName = rootPath + "\\App_Data" + "\\" + "Log.txt";//生成日志文件  
