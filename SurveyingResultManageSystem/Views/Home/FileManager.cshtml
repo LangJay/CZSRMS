@@ -220,6 +220,7 @@
                 $("#" + id).append(text);
             }
         });
+       
     };
     function uploadFile() {
         var dialogwdith = $(window).width() + $(".modal-dialog").width();
@@ -335,6 +336,11 @@
                         text = "|" + objarr[i];
                     fileinfo.PublicObjs += text;
                 }
+            }
+            else
+            {
+                alert("文件必须对账户所属单位公开！");
+                return;
             }
             fileinfo.UploadTime = "";
             fileinfo.FileSize = file.size / 1024 / 1024;
@@ -489,6 +495,14 @@
             var selectedimg = img.src.replace("select.png", "selected.png");
             img.src = selectedimg;
         }
+        //查看用户权限，分配功能
+        $.get("/UserInfoManager/GetUserLevels", function (data, status) {
+            if (status == "success") {
+                if (data == 0) {
+                    $(".a-delete-button").css("display", "inline");
+                }
+            }
+        });
     };
     //点击子分类
     function clickclass(e) {

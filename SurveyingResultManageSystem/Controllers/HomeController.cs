@@ -224,7 +224,8 @@ namespace SurveyingResultManageSystem.Controllers
             }
             foreach (string id in arr)
             {
-                if (DeleteFile(u => u.ID == int.Parse(id)))
+                int idInt = int.Parse(id);
+                if (DeleteFile(u => u.ID == idInt))
                 {
                     delIds.Add(id);
                 }
@@ -381,9 +382,28 @@ namespace SurveyingResultManageSystem.Controllers
                     return;
                 }
                 List<string> urls = new List<string>();
-                for (int i = 0; i < ids.Length; i++)
+                List<string> objIds = ids.ToList();
+                //这里的有的id是属于同一个文件，不应该同时下载。
+                for(int i = 0;i <ids.Length;i ++)
                 {
-                    string url = "/Home/DownloadWithObjectId?objId=" + ids[i];
+                    string objId = ids[i];
+                    tb_FileInfo fileInfo = fileInfoService.Find(u => u.ObjectID.Contains(objId));
+                    if(fileInfo != null)
+                    {
+                        string objIdStr = fileInfo.ObjectID;
+                        for (int j = i + 1; j < ids.Length; j++)
+                        {
+                            if (objIdStr.Contains(ids[j]))
+                            {
+                                objIds.Remove(ids[i]);
+                            }
+                        }
+                    }
+                    
+                }
+                for (int i = 0; i < objIds.Count; i++)
+                {
+                    string url = "/Home/DownloadWithObjectId?objId=" + objIds[i];
                     urls.Add(url);
                 }
                 var response = new { code = 4, url = urls };
