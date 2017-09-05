@@ -324,7 +324,6 @@ namespace SurveyingResultManageSystem.Controllers
                 Log.AddRecord(e);
                 return false;
             }
-            return true;
         }
         /// <summary>
         /// code的数字带表意思：

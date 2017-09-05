@@ -60,32 +60,51 @@
             <div class="modal-body">
                 <table>
                     <tr>
-                        <td>文件名：</td>
-                        <td><input maxlength="50" name="filename" id="filename" /></td>
-                        <td>备注信息：</td>
-                        <td colspan="3" style="width:50%;max-width:50%;"><textarea style="width:80%;min-width:80%;" name="Mark" id="mark"></textarea></td>
-                    </tr>
-                    <tr>
+                        <td>文件类型：</td>
+                        <td>
+                            <span>
+                                <select id="filetype"></select>
+                            </span>
+                        </td>
                         <td>坐标信息框架：</td>
                         <td>
                             <span>
                                 <select id="CoodinateSystem"></select>
                             </span>
                         </td>
-                        <td>完成时间信息：</td>
-                        <td><input type="date" name="FinishtimeInfo" id="finishtimeinfo" /></td>
                     </tr>
                     <tr>
-                        <td>完成人信息：</td>
-                        <td><input maxlength="50" name="FinishPersonInfo" id="finishpersoninfo" /></td>
-                        <td>最小坐标：</td>
-                        <td><input type="number" name="MinCoodinate" id="mincoodinate" /></td>
+                        <td>测绘单位名称：</td>
+                        <td>
+                            <span>
+                                <select id="surveyingunitname"></select>
+                            </span>
+                        </td>
+                        <td>文件中对象数量：</td>
+                        <td><input type="number" name="ObjectNum" id="objectnum" /></td>
+                    </tr>
+                    <tr>
+
+                        <td>所属项目类型：</td>
+                        <td>
+                            <span>
+                                <select id="projecttype"></select>
+                            </span>
+                        </td>
+                        <td>所属项目名称：</td>
+                        <td><input name="ProjectName" id="projectname" /></td>
                     </tr>
                     <tr>
                         <td>最大坐标：</td>
                         <td><input type="number" name="MaxCoodinate" id="maxcoodinate" /></td>
-                        <td>文件中对象数量：</td>
-                        <td><input type="number" name="ObjectNum" id="objectnum" /></td>
+                        <td>最小坐标：</td>
+                        <td><input type="number" name="MinCoodinate" id="mincoodinate" /></td>
+                    </tr>
+                    <tr>
+                        <td>纵坐标偏移值：</td>
+                        <td><input type="number" name="Yoffset" id="yoffset" /></td>
+                        <td>水平坐标偏移值：</td>
+                        <td><input type="number" name="Xoffset" id="xoffset" /></td>
                     </tr>
 
                     <tr>
@@ -98,40 +117,11 @@
                                 <input style="width:auto;height:auto;" type="radio" checked="checked" name="Warehousing" value="false" />
                             </span>
                         </td>
-                        <td>所属项目名称：</td>
-                        <td><input name="ProjectName" id="projectname" /></td>
-
-                    </tr>
-                    <tr>
-                        <td>文件类型：</td>
-                        <td>
-                            <span>
-                                <select id="filetype"></select>
-                            </span>
-                        </td>
-                        <td>所属项目类型：</td>
-                        <td>
-                            <span>
-                                <select id="projecttype"></select>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>平面坐标系统：</td>
-                        <td>
-                            <span>
-                                <select id="pcoodinateSystem"></select>
-                            </span>
-                        </td>
                         <td>中央子午线：</td>
                         <td><input maxlength="50" name="CenterMeridian" id="centermeridian" /></td>
+
                     </tr>
-                    <tr>
-                        <td>纵坐标偏移值：</td>
-                        <td><input type="number" name="Yoffset" id="yoffset" /></td>
-                        <td>水平坐标偏移值：</td>
-                        <td><input type="number" name="Xoffset" id="xoffset" /></td>
-                    </tr>
+                    <tr></tr>
                     <tr>
                         <td>完成时间：</td>
                         <td><input type="date" name="Finishtime" id="finishtime" value="" /></td>
@@ -139,21 +129,19 @@
                         <td><input maxlength="50" name="FinishPerson" id="finishperson" /></td>
                     </tr>
                     <tr>
+                        <td>备注信息：</td>
+                        <td colspan="3" style="width:100%;max-width:100%;"><textarea style="width:100%;min-width:100%;" name="Mark" id="mark"></textarea></td>
+                    </tr>
+                    <tr>
                         <td>成果说明：</td>
-                        <td colspan="3"><textarea style="max-width:96%;width:96%;" name="Explain" id="explain"></textarea></td>
+                        <td colspan="3"><textarea style="max-width:100%;width:100%;" name="Explain" id="explain"></textarea></td>
 
                     </tr>
                     <tr>
-                        <td>选择公开对象：</td>
-                        <td>
+                        <td>文件公开对象：</td>
+                        <td colspan="3">
                             <span>
-                                <select id="selectObjs" class="js-example-basic-multiple" multiple="multiple"></select>
-                            </span>
-                        </td>
-                        <td>测绘单位名称：</td>
-                        <td>
-                            <span>
-                                <select id="surveyingunitname"></select>
+                                <select id="selectObjs" class="js-example-basic-multiple" multiple="multiple" style="min-width:176px"></select>
                             </span>
                         </td>
                     </tr>
@@ -564,8 +552,7 @@
         var dialogwdith = $(window).width() + $(".modal-dialog").width();
         $(".modal-content").css({
             left: (dialogwdith - $(".modal-content").width()) / 2,
-        })
-        $("#myModal").modal('show');
+        });
         var info;
         $.ajax({
             url: "/Home/getfileinfo",
@@ -588,19 +575,19 @@
         $('#CoodinateSystem').val(info1.CoodinateSystem);
         $('#filename').val(info1.FileName);
         $("#_easyui_textbox_input1").val(info1.CoodinateSystem);
-        $("#finishtimeinfo").val(info1.FinishtimeInfo);
-        $("#finishpersoninfo").val(info1.FinishPersonInfo);
         $("#mincoodinate").val(info1.MinCoodinate);
         $("#maxcoodinate").val(info1.MaxCoodinate);
         $("#objectnum").val(info1.ObjectNum);
         $("#mark").val(info1.Mark);
-
-        $("input[name='Warehousing']").attr("checked", info1.Warehousing);
-
+        var check = "";
+        if (info1.Warehousing)
+        {
+            check = "checked";
+        }
+        $("input[name='Warehousing']").attr("checked", check);
         $("#projectname").val(info1.ProjectName);
         $("#filetype").val(info1.FileType);
         $("#projecttype").val(info1.ProjectType);
-        $("#pcoodinateSystem").val(info1.PcoodinateSystem);
         $("#centermeridian").val(info1.CenterMeridian);
         $("#yoffset").val(info1.Yoffset);
         $("#xoffset").val(info1.Xoffset);
@@ -623,13 +610,14 @@
 
         $("#selectObjs").select2().val(arr).trigger('change');
 
+        //IE上出现width:4px,内嵌
+        $(".select2-container--default").css("width", "auto");
+        $("#myModal").modal('show');
     };
     function changeInfo() {
-      
-        info1.FileName = $("#filename").val();
         info1.CoodinateSystem = $("#CoodinateSystem").val();
-        info1.FinishtimeInfo = $("#finishtimeinfo").val();
-        info1.FinishPersonInfo = $("#finishpersoninfo").val();
+        info1.FinishtimeInfo = $("#finishtime").val();
+        info1.FinishPersonInfo = $("#finishperson").val();
         info1.MinCoodinate = $("#mincoodinate").val();
         info1.MaxCoodinate = $("#maxcoodinate").val();
         info1.ObjectNum = $("#objectnum").val();
@@ -638,7 +626,6 @@
         info1.ProjectName = $("#projectname").val();
         info1.FileType = $("#filetype").val();
         info1.ProjectType = $("#projecttype").val();
-        info1.PcoodinateSystem = $("#pcoodinateSystem").val();
         info1.CenterMeridian = $("#centermeridian").val();
         info1.Yoffset = $("#yoffset").val();
         info1.Xoffset = $("#xoffset").val();
