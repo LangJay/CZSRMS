@@ -307,3 +307,14 @@ textarea {
     height:28px;
     min-width:174px;
 }
+.btn-primary{
+    height:28px;
+    background-color:#0972A7;
+    border-radius:0px;
+    padding-top:3px;
+    border:none;
+}
+.btn-primary:active
+{
+    background-color:#5090C7;
+}

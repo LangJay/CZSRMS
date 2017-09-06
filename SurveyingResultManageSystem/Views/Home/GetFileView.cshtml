@@ -5,7 +5,20 @@
         <div id="div_filemanager_list_header">
             <div id="div_filemanager_list_header_search">
                 <input class="search" type="search" placeholder="输入关键字查询" value="@Model.keywords" />
-                <input class="button" onclick="search()" type="button" value="🔍搜索" />
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        🔍搜索 <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a onclick="searchbtn('SurveyingUnitName')">测绘单位名称</a></li>
+                        <li><a onclick="searchbtn('CoodinateSystem')">坐标信息框架</a></li>
+                        <li><a onclick="searchbtn('ProjectName')">所属项目名称</a></li>
+                        <li><a onclick="searchbtn('FinishPerson')">完成人名称</a></li>
+                        <li><a onclick="searchbtn('Finishtime')">完成时间</a></li>
+                        <li><a onclick="searchbtn('UploadTime')">上传时间</a></li>
+                        <li><a onclick="searchbtn('FileName')">文件名</a></li>
+                    </ul>
+                </div>
             </div>
             <div id="div_filemanager_list_header_upload">
                 <input onclick="uploadFile()" class="button"  type="button" value="上传文件" />
@@ -109,5 +122,4 @@
             $("#footer-right-btn5").css("background-color", "#5090C7");
         }
     });
-
 </script>

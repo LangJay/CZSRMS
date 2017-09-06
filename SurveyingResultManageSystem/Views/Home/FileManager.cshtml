@@ -453,14 +453,14 @@
     };
 
     //获取数据
-    function getDate(pageIndex, category, keywords) {
+    function getDate(pageIndex, category, keywords,key) {
         $("#loading").css("display", "block");
         //获取文件数据
         $.ajax({
             url: 'GetFileView',
             type: "get",
             dataType: "html",
-            data: { category: category, pageIndex: pageIndex, keywords: keywords },
+            data: { category: category, pageIndex: pageIndex, keywords: keywords,key:key },
             async: false,
             success: function (data) {
                 //这里是ajax提交成功后，程序返回的数据处理函数。data是返回的数据，数据类型在dataType参数里定义！
@@ -510,7 +510,7 @@
         //获得分类名
         var kind = e.innerText;
         var pageIndex = 1;
-        getDate(pageIndex, kind, "");
+        getDate(pageIndex, kind, "","");
         //获取所有子分类，将点击的背景深色
         var a = $(".subclass").find("a");
         for (var i = 0; i < a.length; i++)
@@ -609,10 +609,10 @@
         }
     }
     //搜索
-    function search() {
+    function searchbtn(key) {
         var keywords = $(".search").val();
         var pageIndex = 1;
-        getDate(pageIndex,"", keywords);
+        getDate(pageIndex,"", keywords,key);
     }
     //翻页
     function refresh(pageIndex)
@@ -626,7 +626,7 @@
                 category = "";
         }
         var keywords = $(".search").val();
-        getDate(pageIndex, category, keywords);
+        getDate(pageIndex, category, keywords,"");
     }
     //删除
     function deleteFile(fileId) {
@@ -639,7 +639,7 @@
                 if (data.code == 4)
                 {
                     $("#" + fileId).remove();
-                    getDate(1, "", "");
+                    getDate(1, "", "","");
                 }
                 else {
                     alert("删除失败!");
@@ -668,7 +668,7 @@
                             for (var i = 0; i < arr.length; i++) {
                                 $("#" + arr[i]).remove();
                             }
-                            getDate(1, "", "");
+                            getDate(1, "", "","");
                         },
                         error: function (XMLHttpRequest, textStatus, errorThrown) {
                             alert("删除失败!");

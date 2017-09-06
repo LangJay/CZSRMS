@@ -104,7 +104,7 @@ namespace SurveyingResultManageSystem.Controllers
         }
         [Authentication]
         [HttpGet]
-        public PartialViewResult GetFileView(string category, int? pageIndex, string keywords)
+        public PartialViewResult GetFileView(string category, int? pageIndex, string keywords,string key)
         {
             //分类分页数据
             PageInfo<tb_FileInfo> pageInfo = new PageInfo<tb_FileInfo>()
@@ -129,11 +129,38 @@ namespace SurveyingResultManageSystem.Controllers
                 //重新检索
                 pageInfo.pageList = fileInfoService.FindAll(u => u.FileName != "", "id", false);
                 List<tb_FileInfo> list = new List<tb_FileInfo>();
-                IEnumerable<tb_FileInfo> iEn = pageInfo.pageList.Where(f => f.FileName.Contains(keywords) || f.Directory.Contains(keywords) ||
-                f.CoodinateSystem.Contains(keywords) || f.FinishtimeInfo.Contains(keywords) || f.FinishPersonInfo.Contains(keywords) ||
-                f.Mark.Contains(keywords) || f.ProjectName.Contains(keywords) || f.FileType.Contains(keywords) || f.ProjectType.Contains(keywords) ||
-                f.CenterMeridian.Contains(keywords) || f.Finishtime.Contains(keywords) || f.FinishPerson.Contains(keywords) ||
-                f.SurveyingUnitName.Contains(keywords) || f.Explain.Contains(keywords) || f.UploadTime.Contains(keywords));
+                IEnumerable<tb_FileInfo> iEn;
+                switch (key)
+                {
+                    case "SurveyingUnitName":
+                        iEn = pageInfo.pageList.Where(f => f.SurveyingUnitName.Contains(keywords));
+                        break;
+                    case "CoodinateSystem":
+                        iEn = pageInfo.pageList.Where(f => f.CoodinateSystem.Contains(keywords));
+                        break;
+                    case "ProjectName":
+                        iEn = pageInfo.pageList.Where(f => f.ProjectName.Contains(keywords));
+                        break;
+                    case "FinishPerson":
+                        iEn = pageInfo.pageList.Where(f => f.FinishPerson.Contains(keywords));
+                        break;
+                    case "Finishtime":
+                        iEn = pageInfo.pageList.Where(f => f.Finishtime.Contains(keywords));
+                        break;
+                    case "UploadTime":
+                        iEn = pageInfo.pageList.Where(f => f.UploadTime.Contains(keywords));
+                        break;
+                    case "FileName":
+                        iEn = pageInfo.pageList.Where(f => f.FileName.Contains(keywords));
+                        break;
+                    default:
+                        iEn = pageInfo.pageList.Where(f => f.FileName.Contains(keywords) || f.Directory.Contains(keywords) ||
+                        f.CoodinateSystem.Contains(keywords) || f.FinishtimeInfo.Contains(keywords) || f.FinishPersonInfo.Contains(keywords) ||
+                        f.Mark.Contains(keywords) || f.ProjectName.Contains(keywords) || f.FileType.Contains(keywords) || f.ProjectType.Contains(keywords) ||
+                        f.CenterMeridian.Contains(keywords) || f.Finishtime.Contains(keywords) || f.FinishPerson.Contains(keywords) ||
+                        f.SurveyingUnitName.Contains(keywords) || f.Explain.Contains(keywords) || f.UploadTime.Contains(keywords));
+                        break;
+                }
                 int index = 1;
                 foreach (tb_FileInfo l in iEn)
                 {
