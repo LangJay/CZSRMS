@@ -2,18 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ESRI.ArcGIS.Client;
 using EsriGeo = ESRI.ArcGIS.Client.Geometry;
 using ESRI.ArcGIS.Client.Tasks;
-using GeoShape;
 using System.Net;
 using System.IO;
-using Model;
 
 namespace ArcServer
 {
 
-   
+
     public class FeatureItem
     {
         public EsriGeo.Geometry Geometry { set; get; }
@@ -239,6 +236,7 @@ namespace ArcServer
                         featureItem.Attributes["OBJECTID"] = int.Parse(idhz[jj]);
                     }
                     string attr = Newtonsoft.Json.JsonConvert.SerializeObject(featureItem.Attributes);
+                    
                     data = Replace(data, "\"attributes\":{}", "\"attributes\":" + attr);
 
                 }

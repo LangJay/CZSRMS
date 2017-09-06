@@ -21,18 +21,14 @@
 @using (Html.BeginForm())
 {
         <div id="div_username">
-            @Html.LabelFor(m =>m.UserName,new { @style="display:inline",@for = "用户名"})
-            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "请输入用户名", id = "account" })
-          @*  <p style="display:inline">用户名：</p>*@
-          @*  <input type="text" placeholder="请输入用户名！" />*@
+            @Html.LabelFor(m =>m.UserName,new { @style="display:inline;",@for = "用户"})
+            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "请输入账号", id = "account" })
             @Html.ValidationMessageFor(m => m.UserName)
         </div>
         <div id="div_password">
-            @Html.LabelFor(m => m.Password, new { @style = "display:inline", @for = "密码" })
+            @Html.LabelFor(m => m.Password, new { @style = "display:inline;", @for = "密码" })
             @Html.PasswordFor(m => m.Password, new {@style = "type:password",@class = "form-control", placeholder = "请输入密码", id = "password" })
             @Html.ValidationMessageFor(m => m.Password)
-            @*<p style="display:inline">密&nbsp;&nbsp;&nbsp;码：</p>
-            <input type="password" placeholder="请输入密码！" />*@
         </div>
         <div id="div_LoginBtn">
             <input id="input_btn" type="submit" value="登    录" />

@@ -305,5 +305,5 @@ textarea {
 .modal-body input,.modal-body select
 {
     height:28px;
-    width:174px;
+    min-width:174px;
 }
