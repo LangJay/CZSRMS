@@ -632,7 +632,7 @@ namespace SurveyingResultManageSystem.Controllers
             tb_FileInfo user = fileInfoService.Find(u => u.ObjectID.Contains(stream.Trim()));
             string path1 =user.Directory + "预览文件\\";
             DirectoryInfo dir = new DirectoryInfo(path1);
-            var startindex = path1.IndexOf("SurveyingResultManageSystem")+ "SurveyingResultManageSystem".Length;
+            var startindex = path1.IndexOf("\\Data\\File");
             var path2= path1.Substring(startindex);
             FileInfo[] inf = dir.GetFiles();
             var filename = "";
