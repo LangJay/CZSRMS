@@ -303,12 +303,13 @@ namespace ArcServer
         {
             GeoShape.FeatureClassImpForShp shp1 = new GeoShape.FeatureClassImpForShp(pathfile);
             string idh = "";
+            string postion = "[";
             while (shp1.MoveNext())
             {
                 var Feature1 = shp1.CurrentFeature;
                 var Geometry1 = (GeoShape.Polygon)Feature1.Geometry;
                 var length = Geometry1.m_partsIdx.Length;
-                string postion = "[";
+               
                 for (var i = 0; i < Geometry1.m_partsIdx.Length; i++)
                 {
                     int start = 0;
@@ -337,19 +338,20 @@ namespace ArcServer
                     postion = postion + "],";
 
                 }
-                postion = postion.Substring(0, postion.Length - 1);
-                postion = postion + "]";
-                postion = "[{ \"geometry\":{ \"spatialReference\":{ \"wkid\": 4546},\"rings\":" + postion + "}}]";
-                string url = featureItem.url;
-
-                //  FeatureItem1 fi = new FeatureItem1();
-                featureItem.Geometry = postion;
-                // fi.Attributes = new Dictionary<string, object>();
-                // fi.Attributes = featureItem.Attributes;
-                featureItem.resultid = "";
-                bool res = AddFeature1(url, featureItem);
-                idh = idh+featureItem.resultid+",";
+                
             }
+            postion = postion.Substring(0, postion.Length - 1);
+            postion = postion + "]";
+            postion = "[{ \"geometry\":{ \"spatialReference\":{ \"wkid\": 4546},\"rings\":" + postion + "}}]";
+            string url = featureItem.url;
+
+            //  FeatureItem1 fi = new FeatureItem1();
+            featureItem.Geometry = postion;
+            // fi.Attributes = new Dictionary<string, object>();
+            // fi.Attributes = featureItem.Attributes;
+            featureItem.resultid = "";
+            bool res = AddFeature1(url, featureItem);
+            idh = idh + featureItem.resultid + ",";
             shp1.Close();//关闭，不然一直占用文件
             idh = idh.Substring(0, idh.Length - 1);
             return idh;
