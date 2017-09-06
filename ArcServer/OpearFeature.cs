@@ -6,7 +6,7 @@ using EsriGeo = ESRI.ArcGIS.Client.Geometry;
 using ESRI.ArcGIS.Client.Tasks;
 using System.Net;
 using System.IO;
-
+using System.Text.RegularExpressions;
 namespace ArcServer
 {
 
@@ -220,6 +220,11 @@ namespace ArcServer
             string featuresJson = res1.Substring(begin, end - begin + 1);
             string features = string.Format("features={0}&", featuresJson);
             data = features + data;
+            string r1 = "\"attributes\":{(.*?)}"; //C:c1在中间
+                                                       // string r2 = @"""C"":""\w+"","; //C:c1在开头
+          //  "\"code\":                                                                                 //  MatchCollection matches = Regex.Matches(matched.Value.Replace("[", "").Replace("]", ""), pat, RegexOptions.IgnoreCase);                                   // string r3 = @",""C"":""\w+"""; //C.c1在结尾
+            var sss = Regex.Match(data, r1);
+           data =Regex.Replace(data, r1, "\"attributes\":{}");
             string para = "";
 
             if (idh.IndexOf(',')>=0)
@@ -236,7 +241,10 @@ namespace ArcServer
                         featureItem.Attributes["OBJECTID"] = int.Parse(idhz[jj]);
                     }
                     string attr = Newtonsoft.Json.JsonConvert.SerializeObject(featureItem.Attributes);
+
                     
+
+
                     data = Replace(data, "\"attributes\":{}", "\"attributes\":" + attr);
 
                 }
