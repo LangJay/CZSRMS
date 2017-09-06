@@ -626,13 +626,13 @@ namespace SurveyingResultManageSystem.Controllers
             var sr = new StreamReader(Request.InputStream);
             var stream = sr.ReadToEnd();
             sr.Close();
-            var baseurl = "http://" + Request.Url.Host+":"+Request.Url.Port + "\\";
+            var baseurl = "http://" + Request.Url.Host+":"+Request.Url.Port;
 
             //int idh = int.Parse(stream);
             tb_FileInfo user = fileInfoService.Find(u => u.ObjectID.Contains(stream.Trim()));
             string path1 =user.Directory + "预览文件\\";
             DirectoryInfo dir = new DirectoryInfo(path1);
-            var startindex = path1.IndexOf("\\Data\\File");
+            var startindex = path1.IndexOf("SurveyingResultManageSystem")+ "SurveyingResultManageSystem".Length;
             var path2= path1.Substring(startindex);
             FileInfo[] inf = dir.GetFiles();
             var filename = "";
