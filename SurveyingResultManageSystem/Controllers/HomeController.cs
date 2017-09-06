@@ -14,7 +14,6 @@ using ArcServer;
 using System.Linq.Expressions;
 using Newtonsoft.Json;
 using Ionic.Zip;
-using System.Threading;
 using System.Configuration;
 using System.Transactions;
 
@@ -75,7 +74,6 @@ namespace SurveyingResultManageSystem.Controllers
             return View();
 
         }
-        [Authentication]
         public ActionResult Logout()
         {
             HttpCookie cookie = new HttpCookie("username", string.Empty)
@@ -93,7 +91,6 @@ namespace SurveyingResultManageSystem.Controllers
             //获取消息滚动条数据，取当天的数据
             string date = DateTime.Now.ToString("d");
             ViewBag.Data = logInfoService.FindLogListAndFirst(l => l.Time.Contains(date) && operation.Contains(l.Operation));
-
             return View();
         }
         [Authentication]
@@ -331,6 +328,7 @@ namespace SurveyingResultManageSystem.Controllers
         /// code=2：文件不存在；
         /// code=3：服务器错误；
         /// code=4：下载成功；
+        /// 文件管理多选下载
         /// </summary>
         [Authentication]
         [HttpPost]
@@ -364,6 +362,7 @@ namespace SurveyingResultManageSystem.Controllers
                 Response.Write(new JavaScriptSerializer().Serialize(response));
             }
         }
+        //地图管理多选下载
         [Authentication]
         [HttpPost]
         public void DownloadsWithObjId()
@@ -442,15 +441,19 @@ namespace SurveyingResultManageSystem.Controllers
                 DownloadWithId(f.ID.ToString());
             }
         }
+        /// <summary>
+        /// 单点文件记录下载
+        /// </summary>
+        /// <param name="fileId"></param>
         [Authentication]
         public void DownloadWithId(string fileId)
         {
-            if (string.IsNullOrEmpty(fileId))
+            tb_FileInfo file = null;
+            if (!string.IsNullOrEmpty(fileId))
             {
-                throw new ArgumentNullException("fileId is errror");
+                int id = Convert.ToInt32(fileId);
+                file = fileInfoService.Find(u => u.ID == id);
             }
-            int id = Convert.ToInt32(fileId);
-            var file = fileInfoService.Find(u => u.ID == id);
             if (file == null)
             {
                 AlertMsg("文件不存在");
@@ -469,8 +472,8 @@ namespace SurveyingResultManageSystem.Controllers
                     Time = DateTime.Now.ToString(),
                     Operation = LogOperations.DownloadFile()
                 };
-                logInfoService.Add(log);
                 DownloadTask(filename, directory);
+                logInfoService.Add(log);
             }
             catch (Exception e)
             {
@@ -489,11 +492,11 @@ namespace SurveyingResultManageSystem.Controllers
         }
         private void DownloadTask(string filename, string directory)
         {
-            string safeFileName = filename.Substring(0, filename.IndexOf('.'));
-            string savaPath = Path.Combine(directory, safeFileName + ".zip");
+            string safeFileName = filename.Substring(0, filename.IndexOf('.'));//压缩文件的文件名
+            string savaPath = Path.Combine(directory, safeFileName + ".zip");//压缩文件保存路径
             if (!System.IO.File.Exists(savaPath))
             {
-                //把文件压缩成文件夹
+                //把下载文件压缩成文件夹
                 using (ZipFile zipFile = new ZipFile(System.Text.Encoding.Default))
                 {
                     zipFile.AddDirectory(Path.Combine(directory, "原始文件"), safeFileName);
@@ -520,18 +523,11 @@ namespace SurveyingResultManageSystem.Controllers
             {
                 //设置文件流的读取位置
                 fs.Position = fileStart;
-                if (leftLength < maxLength)
-                {
-                    num = fs.Read(buffer, 0, Convert.ToInt32(leftLength));
-                }
-                else
-                {
-                    num = fs.Read(buffer, 0, maxLength);
-                }
-                if (num == 0)
-                {
-                    break;
-                }
+                //读取最大字节
+                if (leftLength < maxLength)num = fs.Read(buffer, 0, Convert.ToInt32(leftLength));
+                //读取剩余字节
+                else num = fs.Read(buffer, 0, maxLength);
+                if (num == 0) break;//读完
                 fileStart += num;
                 leftLength -= num;
                 Response.BinaryWrite(buffer);
@@ -664,10 +660,10 @@ namespace SurveyingResultManageSystem.Controllers
             featureItem2.Attributes.Add("Xoffset", fileInfo.Xoffset);// 水平坐标偏移值
             featureItem2.Attributes.Add("SUnitName", fileInfo.SurveyingUnitName);// 测绘单位名称，北湖区测绘队、苏仙区测绘队、市局测绘队
             featureItem2.Attributes.Add("Memo", fileInfo.Explain);// 成果说明
-            if (fileInfo.UploadTime.Trim() != "")
-            {
-                featureItem2.Attributes.Add("UploadTime", fileInfo.UploadTime);
-            }
+            //if (fileInfo.UploadTime.Trim() != "")
+            //{
+            //    featureItem2.Attributes.Add("UploadTime", fileInfo.UploadTime);
+            //}
             // featureItem2.Attributes.Add("UploadTime", fileInfo.UploadTime);// 上传时间
             featureItem2.url = ConfigurationManager.AppSettings["serverurl"];
            

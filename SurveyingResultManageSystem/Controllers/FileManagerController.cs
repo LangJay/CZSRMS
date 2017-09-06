@@ -1,9 +1,7 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
-using System.Web.Script.Serialization;
 using Newtonsoft.Json;
 using Model;
 using SurveyingResultManageSystem.App_Start;
@@ -12,7 +10,6 @@ using System;
 using BLL;
 using System.Web;
 using SurveyingResultManageSystem.Models;
-using System.Net.Mail;
 using System.Text;
 using FilePackageLib;
 using ArcServer;
