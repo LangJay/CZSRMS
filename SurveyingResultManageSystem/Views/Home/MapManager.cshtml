@@ -350,14 +350,14 @@
         setselect(e);
     }
     function searchbtn1(name1) {
-    	
+    	var searchtext = "根据文件名搜索";
     	var btnn1 = document.getElementById("dropdowntoggle1");
     	if (name1 == "SurveyingUnitName")
     	{
     		btnn1.innerHTML = "";
     		btnn1.innerHTML = "测绘单位名称<span class='caret'></span>";
     		searchfield = "SUnitName";
-    		
+    		searchtext = "根据测绘单位名称搜索";
     		
     	}
     	if(name1=="CoodinateSystem")
@@ -365,7 +365,7 @@
     		btnn1.innerHTML = "";
     		btnn1.innerHTML = "坐标信息框架<span class='caret'></span>";
     		searchfield = "CoodSystem";
-
+    		searchtext = "根据坐标信息框架搜索";
     	}
     	if (name1 == "ProjectName")
 
@@ -373,14 +373,14 @@
     		btnn1.innerHTML = "";
     		btnn1.innerHTML = "所属项目名称<span class='caret'></span>";
     		searchfield = "ProName";
-
+    		searchtext = "根据所属项目名称搜索";
     	}
     	if(name1=="FinishPerson")
     	{
     		btnn1.innerHTML = "";
     		btnn1.innerHTML = "完成人名称<span class='caret'></span>";
     		searchfield = "FshPerson";
-
+    		searchtext = "根据完成人名称搜索";
     	}
     	if(name1=="Finishtime")
     	{
@@ -401,7 +401,11 @@
     		btnn1.innerHTML = "";
     		btnn1.innerHTML = "文件名<span class='caret'></span>";
     		searchfield = "FileName";
+    		searchtext = "根据文件名搜索";
     	}
+    	$('#search_input').attr('placeholder', searchtext);
+
+    	//search.params.sources[0].placeholder = searchtext;
     	search.params.sources[0].searchFields[0] = searchfield;
     	search.startup();
     }
