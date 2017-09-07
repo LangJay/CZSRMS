@@ -1,4 +1,27 @@
-﻿#search {
+﻿
+#search {
+	position:relative;
+	float:left;
+
+}
+.btn-default {
+	border-color: #333333;
+}
+.btn {
+	border-bottom-right-radius:0px;
+	border-top-right-radius:0px;
+
+}
+.arcgisSearch .searchGroup .searchInput {
+	border-bottom-left-radius:0px;
+	border-top-left-radius:0px;
+}
+
+#btn-group1 {
+	position:relative;
+	float:left;
+}
+#topsearch {
          display: block;
          position: relative;
          z-index: 2;
