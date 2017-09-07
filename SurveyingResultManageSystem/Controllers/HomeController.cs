@@ -116,7 +116,7 @@ namespace SurveyingResultManageSystem.Controllers
             string username = System.Web.HttpContext.Current.Request.Cookies["username"].Value;
             tb_UserInfo user = userInfoService.Find(u => u.UserName == username);
             string unit = user.Unit;
-            if (user.Levels == "0" || user.Unit == "市局测绘队")
+            if (user.Levels == "0")// || user.Unit == "市局测绘队"
                 unit = "";
             pageInfo.pageList = fileInfoService.FindPageList(pageInfo.pageIndex, pageInfo.pageSize, out totalRecord,
                 f => f.PublicObjs.Contains(unit), "ID", false);
@@ -127,7 +127,7 @@ namespace SurveyingResultManageSystem.Controllers
                 Response.Cookies.Add(cook);
                 pageInfo.keywords = keywords;
                 //重新检索
-                pageInfo.pageList = fileInfoService.FindAll(u => u.FileName != "", "id", false);
+                pageInfo.pageList = fileInfoService.FindAll(f => f.PublicObjs.Contains(unit), "id", false);
                 List<tb_FileInfo> list = new List<tb_FileInfo>();
                 IEnumerable<tb_FileInfo> iEn;
                 switch (key)
@@ -181,7 +181,7 @@ namespace SurveyingResultManageSystem.Controllers
             {
                 List<tb_FileInfo> list = new List<tb_FileInfo>();
                 //重新检索
-                pageInfo.pageList = fileInfoService.FindAll(u => u.FileName != "", "id", false);
+                pageInfo.pageList = fileInfoService.FindAll(f => f.PublicObjs.Contains(unit), "id", false);
                 IEnumerable<tb_FileInfo> iEn = pageInfo.pageList.Where(f => f.CoodinateSystem.Contains(category) || f.ProjectType.Contains(category)
                 || f.FileType.Contains(category) || f.SurveyingUnitName.Contains(category));
                 int index = 1;
