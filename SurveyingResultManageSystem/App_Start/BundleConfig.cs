@@ -32,7 +32,7 @@ namespace SurveyingResultManageSystem
             bundles.Add(new StyleBundle("~/Content/style/Layout.css").Include("~/Content/style/Layout.css"));
             bundles.Add(new StyleBundle("~/Content/style/Login.css").Include("~/Content/style/Login.css"));
             bundles.Add(new StyleBundle("~/Content/style/MoreLogInfo.css").Include("~/Content/style/MoreLogInfo.css"));
-            bundles.Add(new StyleBundle("~/Content/style/SetPasswordsIndex.css").Include("~/Content/style/SetPasswordsIndex.css"));
+            bundles.Add(new StyleBundle("~/Content/style/SetPasswords.css").Include("~/Content/style/SetPasswords.css"));
             bundles.Add(new StyleBundle("~/Content/style/CategoryIndex.css").Include("~/Content/style/CategoryIndex.css"));
             //Scripts
 
