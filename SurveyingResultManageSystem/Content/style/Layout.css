@@ -1,11 +1,12 @@
-﻿body{
-    min-width:900px;
+﻿body {
+    min-width: 900px;
 }
+
 #div_title {
     background-color: #0972A7;
     width: 100%;
     text-align: left;
-    position:relative;
+    position: relative;
 }
 
 #div_title_ul {
@@ -70,7 +71,7 @@
     width: 14px;
     height: 18px;
     margin-right: 5px;
-    margin-bottom:10px;
+    margin-bottom: 10px;
     display: inline;
 }
 
@@ -95,23 +96,24 @@
 body {
     margin: 0px 2px 0px 2px;
     padding: 0px;
-	text-align:center;
+    text-align: center;
 }
 
 html {
     width: 100%;
     height: auto;
 }
-#loading{
-    position:relative;
-    display:none;
+
+#loading {
+    position: relative;
+    display: none;
 }
-#loading img
-{
+
+#loading img {
     position: fixed;
     top: 35%;
     left: 37%;
-    z-index:1000;
+    z-index: 1000;
 }
 /*通知轮播*/
 .outer {
@@ -122,22 +124,22 @@ html {
     overflow: hidden;
 }
 
-    .outer ul {
-        display: inline-block;
-        height: 20px;
-        -webkit-transform: translate3d(0, 0, 0); /* 3d渲染，开启硬件加速 */
-        transform: translate3d(0, 0, 0);
-        font-size: 0px; /* 使inline-block无默认间距 */
-        white-space: nowrap; /* 超出不折行 */
-    }
+.outer ul {
+    display: inline-block;
+    height: 20px;
+    -webkit-transform: translate3d(0, 0, 0); /* 3d渲染，开启硬件加速 */
+    transform: translate3d(0, 0, 0);
+    font-size: 0px; /* 使inline-block无默认间距 */
+    white-space: nowrap; /* 超出不折行 */
+}
 
-        .outer ul li {
-            display: inline-block;
-            padding-right: 50px;
-            -webkit-transform: translate3d(0, 0, 0);
-            transform: translate3d(0, 0, 0);
-            font-size:14px;
-        }
+.outer ul li {
+    display: inline-block;
+    padding-right: 50px;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    font-size: 14px;
+}
 
 .theanimation {
     animation: theanimation infinite linear;
@@ -165,7 +167,7 @@ html {
         -webkit-transform: translateX(-100%);
     }
 }
-.a-delete-button
-{
-    display:none;
+
+.a-delete-button {
+    display: none;
 }

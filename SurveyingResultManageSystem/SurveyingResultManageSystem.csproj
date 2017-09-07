@@ -173,6 +173,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\style\SetPasswords.css" />
     <Content Include="Data\Manager.xml" />
     <Content Include="App_Data\Log.txt" />
     <Content Include="Content\bootstrap.css" />
@@ -183,7 +184,6 @@
     <Content Include="Content\style\Login.css" />
     <Content Include="Content\style\MapManager.css" />
     <Content Include="Content\style\MoreLogInfo.css" />
-    <Content Include="Content\style\SerPasswordsIndex.css" />
     <Content Include="Data\FileCategory.xml" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
