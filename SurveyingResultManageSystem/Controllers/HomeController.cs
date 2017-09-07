@@ -222,7 +222,6 @@ namespace SurveyingResultManageSystem.Controllers
         //前端调用
         public void Delete(int fileId)
         {
-            if (AuthenLevel()) return;
             if (DeleteFile(u => u.ID == fileId))
             {
                 var response = new { code = 4, fileId = fileId };
@@ -235,7 +234,6 @@ namespace SurveyingResultManageSystem.Controllers
         [HttpPost]
         public void Deletes()
         {
-            if (AuthenLevel()) return;
             var sr = new StreamReader(Request.InputStream);
             var stream = sr.ReadToEnd();
             string[] arr = JsonConvert.DeserializeObject<string[]>(stream) as string[];
@@ -265,7 +263,6 @@ namespace SurveyingResultManageSystem.Controllers
         [HttpPost]
         public void DeletesWithObjId()
         {
-            if (AuthenLevel()) return;
             var sr = new StreamReader(Request.InputStream);
             var stream = sr.ReadToEnd();
             string[] arr = JsonConvert.DeserializeObject<string[]>(stream) as string[];
@@ -297,6 +294,7 @@ namespace SurveyingResultManageSystem.Controllers
             try
             {
                 var file = fileInfoService.Find(whereLamdba);
+                if (!AuthenLevel(file.SurveyingUnitName)) return false;//没有权限删除
                 //记录下载
                 tb_LogInfo log = new tb_LogInfo
                 {
@@ -572,7 +570,6 @@ namespace SurveyingResultManageSystem.Controllers
         [HttpPost]//王军军增加8.23
         public bool delefeature()
         {
-            if (AuthenLevel()) return false;
             var sr = new StreamReader(Request.InputStream);
             string stream = sr.ReadToEnd();
             sr.Close();
@@ -699,7 +696,7 @@ namespace SurveyingResultManageSystem.Controllers
             bool tt2 = fileInfoService.Update(fileInfo);//更新数据库
             return tt1 && tt2;
         }
-        private bool AuthenLevel()
+        private bool AuthenLevel(string SurveyingUnitName)
         {
             var cook = System.Web.HttpContext.Current.Request.Cookies["username"];
             if (cook == null)
@@ -712,7 +709,7 @@ namespace SurveyingResultManageSystem.Controllers
             {
                 return false;
             }
-            else if (user.Levels == "1")
+            else if (user.Levels == "0" || user.Unit == SurveyingUnitName)
             {
                 return true;
             }

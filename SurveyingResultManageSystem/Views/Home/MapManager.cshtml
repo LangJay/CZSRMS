@@ -508,7 +508,6 @@
             //利用url创建一个动态地图服务对象
             //   var layer = new ArcGISDynamicMapServiceLayer("http://192.168.0.230:6080/arcgis/rest/services/1/MapServer");
             //将地图服务对象添加到地图容器中
-          
             graphiclayer = new GraphicsLayer();
             var username = getCookie("username");
             var userinfo = "";
@@ -523,7 +522,6 @@
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     alert(XMLHttpRequest.status);
-
                 }
             });
             var ss = userinfo.split(',');
@@ -542,10 +540,9 @@
             	infoTemplate: new InfoTemplate("范围红线", tempstr)
 
             });
+            //不是管理员账户筛选要素显示
             if (ss[1].trim() != "0") {
-
-                fatch3.setDefinitionExpression("FileName like '%" + ss[0].trim() + "%'");
-
+                fatch3.setDefinitionExpression("SUnitName like '%" + ss[0].trim() + "%' or PublicOB like '%" + ss[0].trim() + "%'");
             }
 
 
@@ -555,23 +552,25 @@
             search = new Search({
                 sources: [{
                     featureLayer: new FeatureLayer("http://192.168.0.230:6080/arcgis/rest/services/fw/FeatureServer/0", {
-                        outFields: ["*"],
-                        infoTemplate: new InfoTemplate("范围红线", tempstr)
+                        outFields: ["*"]
+                      //  infoTemplate: new InfoTemplate("范围红线", tempstr)
                     }),
                     exactMatch: false,//精确查找
                 	// outFields: ["OBJECTID", "FileName", "Directory", "CoodSystem", "FinishTime", "FshPerson", "MinCood", "MaxCood", "ObjectNum", "Mark", "ProName", "FileType", "ProType", "CenterMed", "Yoffset", "Xoffset", "SUnitName", "Memo", "IsPublic", "UploadTime", "FileSize"],
                     outFields: ["*"],
                     searchFields: ["FileName"],//查找的关键字
-                    suggestionTemplate: "${FileName}",
-                    displayField: "FileName",
-                    suggestionTemplate: "${FileName}",
+                 //   suggestionTemplate: "${FileName}",
+                  //  displayField: "FileName",
+                  //  suggestionTemplate: "${FileName}",
                     name: "",
-                    placeholder: "根据文件名搜索",//搜索提示
+                    placeholder: "根据关键字搜索",//搜索提示
                     maxResults: 6,
                     maxSuggestions: true,
                     minCharacters: 0,
-                    searchQueryParams: { distance: 5000, maxAllowableOffset: 1 },
-                    enableSuggestions: true
+                    enableInfoWindow: false,
+                    enableHighlight:false,
+                    searchQueryParams: { distance: 5000, maxAllowableOffset: 1 }
+                    //enableSuggestions: true
 
                 }],
                 map: map
@@ -600,14 +599,24 @@
             		var resultStr = "";
             		for (var i = 0; i < searchresult.results[0].length; i++) {
             			//Jimmy 2017/8/31 17:30 给tr增加id，值为文件的id
-            			var id = searchresult.results[0][i].feature.attributes.OBJECTID;
-            			resultStr += "<div class='ccccn' id='divid" + (i + 1) + "' onclick='openid(" + i + ",this)' onmouseover='openMarkerTipById1(" + i + ",this)' onmouseout='onmouseout_MarkerStyle(" + (i + 1) + ",this)' style=\"font-size: 10px;cursor:pointer;padding:0px 0 2px 2px; border-bottom:1px solid #403d3d;\"><table class='map-table'><tr id=" + id + "><td textalign='left'>" + (i + 1) + "、" + searchresult.results[0][i].feature.attributes.FileName;
-            			resultStr += "</td><td><img class='select_img' src='../Sources/Images/select.png' onclick='selectimg(this)'></img></td></tr></table></div>";
+            		    var id = searchresult.results[0][i].feature.attributes.OBJECTID;
+            		    var sun = searchresult.results[0][i].feature.attributes.SUnitName;//文件所属单位
+            		    var pob = searchresult.results[0][i].feature.attributes.PublicOB;//公开单位
+            		    if (ss[1].trim() == "0")
+            		    {
+            		        resultStr += "<div class='ccccn' id='divid" + (i + 1) + "' onclick='openid(" + i + ",this)' onmouseover='openMarkerTipById1(" + i + ",this)' onmouseout='onmouseout_MarkerStyle(" + (i + 1) + ",this)' style=\"font-size: 10px;cursor:pointer;padding:0px 0 2px 2px; border-bottom:1px solid #403d3d;\"><table class='map-table'><tr id=" + id + "><td textalign='left'>" + (i + 1) + "、" + searchresult.results[0][i].feature.attributes.FileName;
+            		        resultStr += "</td><td><img class='select_img' src='../Sources/Images/select.png' onclick='selectimg(this)'></img></td></tr></table></div>";
+            		    }
+            		    else if(sun == ss[0].trim() || pob.indexOf(ss[0].trim()) != -1)
+            		    {
+            		        resultStr += "<div class='ccccn' id='divid" + (i + 1) + "' onclick='openid(" + i + ",this)' onmouseover='openMarkerTipById1(" + i + ",this)' onmouseout='onmouseout_MarkerStyle(" + (i + 1) + ",this)' style=\"font-size: 10px;cursor:pointer;padding:0px 0 2px 2px; border-bottom:1px solid #403d3d;\"><table class='map-table'><tr id=" + id + "><td textalign='left'>" + (i + 1) + "、" + searchresult.results[0][i].feature.attributes.FileName;
+            		        resultStr += "</td><td><img class='select_img' src='../Sources/Images/select.png' onclick='selectimg(this)'></img></td></tr></table></div>";
+            		    }
 
             		}
             		document.getElementById("div-table").innerHTML = resultStr;
             	}
-
+            	map.infoWindow.hide();
             });
 
 

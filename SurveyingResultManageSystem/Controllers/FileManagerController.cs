@@ -157,7 +157,7 @@ namespace SurveyingResultManageSystem.Controllers
                     }// 上传时间
                     fi2.Attributes.Add("FileSize", fileInfo.FileSize);// 文件大小，单位M
                     fi2.Attributes.Add("UserID", fileInfo.UserID);// 用户ID
-                    fi2.Attributes.Add("PublicOB ", fileInfo.PublicObjs);// 公开单位
+                    fi2.Attributes.Add("PublicOB", fileInfo.PublicObjs); // 公开单位
                     fi2.url = ConfigurationManager.AppSettings["serverurl"];
                     upObjectId = openauto.readshpfile(filename, fi2);
                     fileInfo.ObjectID = upObjectId;

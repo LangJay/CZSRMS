@@ -39,6 +39,9 @@
                     上传时间
                 </th>
                 <th>
+                    测绘单位
+                </th>
+                <th>
                     操作
                 </th>
             </tr>
@@ -57,6 +60,9 @@
                     </td>
                     <td>
                         @(item.UploadTime.Split(' ')[0])
+                    </td>
+                    <td>
+                        @item.SurveyingUnitName
                     </td>
                     <td>
                         <a class="a-delete-button" onclick="deleteFile(@item.ID)">
