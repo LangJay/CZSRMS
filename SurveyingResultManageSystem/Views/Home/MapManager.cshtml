@@ -43,7 +43,25 @@
         </li>
     </ul>
 </div>
-<div id="mapDiv"><div id="search"></div></div>
+<div id="mapDiv">
+	<div id="topsearch">
+	   <div class="btn-group" id="btn-group1">
+	     <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="dropdowntoggle1">
+			文件名<span class="caret"></span>
+	    </a>
+	    <ul class="dropdown-menu">
+			<li><a onclick="searchbtn1('SurveyingUnitName')">测绘单位名称</a></li>
+			<li><a onclick="searchbtn1('CoodinateSystem')">坐标信息框架</a></li>
+			<li><a onclick="searchbtn1('ProjectName')">所属项目名称</a></li>
+			<li><a onclick="searchbtn1('FinishPerson')">完成人名称</a></li>
+			<li><a onclick="searchbtn1('Finishtime')">完成时间</a></li>
+			<li><a onclick="searchbtn1('UploadTime')">上传时间</a></li>
+			<li><a onclick="searchbtn1('FileName')">文件名</a></li>
+	   </ul>
+      </div>
+	  <div id="search"></div>
+	</div>
+</div>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -201,6 +219,7 @@
     var graphiclayer;
     var currentAjax = null;
     var jx;
+    var searchfield="FileName";
    // $(function () {
       //  $('#dowebok').easyFader();
    // });
@@ -329,6 +348,62 @@
     //选择一个
     function selectimg(e) {
         setselect(e);
+    }
+    function searchbtn1(name1) {
+    	
+    	var btnn1 = document.getElementById("dropdowntoggle1");
+    	if (name1 == "SurveyingUnitName")
+    	{
+    		btnn1.innerHTML = "";
+    		btnn1.innerHTML = "测绘单位名称<span class='caret'></span>";
+    		searchfield = "SUnitName";
+    		
+    		
+    	}
+    	if(name1=="CoodinateSystem")
+    	{
+    		btnn1.innerHTML = "";
+    		btnn1.innerHTML = "坐标信息框架<span class='caret'></span>";
+    		searchfield = "CoodSystem";
+
+    	}
+    	if (name1 == "ProjectName")
+
+    	{
+    		btnn1.innerHTML = "";
+    		btnn1.innerHTML = "所属项目名称<span class='caret'></span>";
+    		searchfield = "ProName";
+
+    	}
+    	if(name1=="FinishPerson")
+    	{
+    		btnn1.innerHTML = "";
+    		btnn1.innerHTML = "完成人名称<span class='caret'></span>";
+    		searchfield = "FshPerson";
+
+    	}
+    	if(name1=="Finishtime")
+    	{
+    		btnn1.innerHTML = "";
+    		btnn1.innerHTML = "完成时间<span class='caret'></span>";
+    		searchfield = "FinishTime";
+
+    	}
+    	if(name1=="UploadTime")
+    	{
+    		btnn1.innerHTML = "";
+    		btnn1.innerHTML = "上传时间<span class='caret'></span>";
+    		searchfield = "UploadTime";
+
+    	}
+    	if(name1=="FileName")
+    	{
+    		btnn1.innerHTML = "";
+    		btnn1.innerHTML = "文件名<span class='caret'></span>";
+    		searchfield = "FileName";
+    	}
+    	search.params.sources[0].searchFields[0] = searchfield;
+    	search.startup();
     }
     //设置选择效果
     function setselect(e) {
@@ -474,7 +549,7 @@
             }
 
 
-
+		
             // fatch3.setDefinitionExpression("FileName='ss03'");
             map.addLayer(fatch3);
             search = new Search({
@@ -486,12 +561,12 @@
                     exactMatch: false,//精确查找
                 	// outFields: ["OBJECTID", "FileName", "Directory", "CoodSystem", "FinishTime", "FshPerson", "MinCood", "MaxCood", "ObjectNum", "Mark", "ProName", "FileType", "ProType", "CenterMed", "Yoffset", "Xoffset", "SUnitName", "Memo", "IsPublic", "UploadTime", "FileSize"],
                     outFields: ["*"],
-                    searchFields: ["OBJECTID", "FileName", "Directory", "CoodSystem", "FinishTime", "FshPerson", "MinCood", "MaxCood", "ObjectNum", "Mark", "ProName", "FileType", "ProType", "CenterMed", "Yoffset", "Xoffset", "SUnitName", "Memo", "IsPublic", "UploadTime", "FileSize"],//查找的关键字
+                    searchFields: ["FileName"],//查找的关键字
                     suggestionTemplate: "${FileName}",
                     displayField: "FileName",
                     suggestionTemplate: "${FileName}",
                     name: "",
-                    placeholder: "根据项目名称搜索",//搜索提示
+                    placeholder: "根据文件名搜索",//搜索提示
                     maxResults: 6,
                     maxSuggestions: true,
                     minCharacters: 0,
@@ -501,34 +576,37 @@
                 }],
                 map: map
             }, "search");
+           // search.params.sources[0].searchFields[0] = searchfield;
             search.startup();
             on(search, 'search-results', function (e) {
-                //查看用户权限，分配功能
-                $.get("/UserInfoManager/GetUserLevels", function (data, status) {
-                    if (status == "success") {
-                        if (data == 0) {
-                            $(".a-delete-button").css("display", "inline");
-                        }
-                    }
-                });
-                //Jimmy 2017/8/31 17:30 删除选择记录
-                sessionStorage.clear();
-                var aa1 = document.getElementById("div-table");
-                var aa = aa1.childNodes;
-                if (aa != null) {
-                    for (var i = 0; i < aa.length; i++) { aa1.removeChild(aa[i]); }
+            	if (e.results != null) {
+            		//查看用户权限，分配功能
+            		$.get("/UserInfoManager/GetUserLevels", function (data, status) {
+            			if (status == "success") {
+            				if (data == 0) {
+            					$(".a-delete-button").css("display", "inline");
+            				}
+            			}
+            		});
+            		//Jimmy 2017/8/31 17:30 删除选择记录
+            		sessionStorage.clear();
+            		var aa1 = document.getElementById("div-table");
+            		var aa = aa1.childNodes;
+            		if (aa != null) {
+            			for (var i = 0; i < aa.length; i++) { aa1.removeChild(aa[i]); }
 
-                }
-                searchresult = e;
-                var resultStr = "";
-                for (var i = 0; i < searchresult.results[0].length; i++) {
-                    //Jimmy 2017/8/31 17:30 给tr增加id，值为文件的id
-                    var id = searchresult.results[0][i].feature.attributes.OBJECTID;
-                    resultStr += "<div class='ccccn' id='divid" + (i + 1) + "' onclick='openid(" + i + ",this)' onmouseover='openMarkerTipById1(" + i + ",this)' onmouseout='onmouseout_MarkerStyle(" + (i + 1) + ",this)' style=\"font-size: 10px;cursor:pointer;padding:0px 0 2px 2px; border-bottom:1px solid #403d3d;\"><table class='map-table'><tr id=" + id + "><td textalign='left'>" + (i + 1) + "、" + searchresult.results[0][i].feature.attributes.FileName;
-                    resultStr += "</td><td><img class='select_img' src='../Sources/Images/select.png' onclick='selectimg(this)'></img></td></tr></table></div>";
+            		}
+            		searchresult = e;
+            		var resultStr = "";
+            		for (var i = 0; i < searchresult.results[0].length; i++) {
+            			//Jimmy 2017/8/31 17:30 给tr增加id，值为文件的id
+            			var id = searchresult.results[0][i].feature.attributes.OBJECTID;
+            			resultStr += "<div class='ccccn' id='divid" + (i + 1) + "' onclick='openid(" + i + ",this)' onmouseover='openMarkerTipById1(" + i + ",this)' onmouseout='onmouseout_MarkerStyle(" + (i + 1) + ",this)' style=\"font-size: 10px;cursor:pointer;padding:0px 0 2px 2px; border-bottom:1px solid #403d3d;\"><table class='map-table'><tr id=" + id + "><td textalign='left'>" + (i + 1) + "、" + searchresult.results[0][i].feature.attributes.FileName;
+            			resultStr += "</td><td><img class='select_img' src='../Sources/Images/select.png' onclick='selectimg(this)'></img></td></tr></table></div>";
 
-                }
-                document.getElementById("div-table").innerHTML = resultStr;
+            		}
+            		document.getElementById("div-table").innerHTML = resultStr;
+            	}
 
             });
 
