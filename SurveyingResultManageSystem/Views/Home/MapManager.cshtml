@@ -555,10 +555,11 @@
             map.addLayer(fatch3);
             search = new Search({
                 sources: [{
-                    featureLayer: new FeatureLayer("http://192.168.0.230:6080/arcgis/rest/services/fw/FeatureServer/0", {
-                        outFields: ["*"]
-                      //  infoTemplate: new InfoTemplate("范围红线", tempstr)
-                    }),
+                    featureLayer:fatch3,
+                    //featureLayer: new FeatureLayer("http://192.168.0.230:6080/arcgis/rest/services/fw/FeatureServer/0", {
+                    //    outFields: ["*"]
+                    //  //  infoTemplate: new InfoTemplate("范围红线", tempstr)
+                    //}),
                     exactMatch: false,//精确查找
                 	// outFields: ["OBJECTID", "FileName", "Directory", "CoodSystem", "FinishTime", "FshPerson", "MinCood", "MaxCood", "ObjectNum", "Mark", "ProName", "FileType", "ProType", "CenterMed", "Yoffset", "Xoffset", "SUnitName", "Memo", "IsPublic", "UploadTime", "FileSize"],
                     outFields: ["*"],
