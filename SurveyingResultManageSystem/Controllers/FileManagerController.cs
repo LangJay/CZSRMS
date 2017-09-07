@@ -92,10 +92,23 @@ namespace SurveyingResultManageSystem.Controllers
                 fileInfo.FileName = fileName;
                 //fileInfo.MD5 = md5;
                 var username = System.Web.HttpContext.Current.Request.Cookies["username"].Value;
-                fileInfo.UserID = userInfoService.Find(u => u.UserName == username).ID;
+                tb_UserInfo user = userInfoService.Find(u => u.UserName == username);
+                fileInfo.UserID = user.ID;
                 fileInfo.UploadTime = DateTime.Now.ToString();
                 //fileInfo.FileSize =  / 1024.00 / 1024.00;
-                if (fileInfo.PublicObjs != null)
+                //若没有本身测绘队，则应该增加
+                if (!fileInfo.PublicObjs.Contains(user.Unit))
+                {
+                    if (!string.IsNullOrEmpty(fileInfo.PublicObjs))
+                    {
+                        fileInfo.PublicObjs += "|" + user.Unit;
+                    }
+                    else
+                    {
+                        fileInfo.PublicObjs = user.Unit;
+                    }
+                }
+                if (!string.IsNullOrEmpty(fileInfo.PublicObjs))
                 {
                     fileInfo.PublicObjs = fileInfo.PublicObjs.Replace(",", "|");
                 }
@@ -144,7 +157,7 @@ namespace SurveyingResultManageSystem.Controllers
                     }// 上传时间
                     fi2.Attributes.Add("FileSize", fileInfo.FileSize);// 文件大小，单位M
                     fi2.Attributes.Add("UserID", fileInfo.UserID);// 用户ID
-                    fi2.Attributes.Add("PublicOB ", fileInfo.PublicObjs);// 公开单位
+                    fi2.Attributes.Add("PublicOB", fileInfo.PublicObjs); // 公开单位
                     fi2.url = ConfigurationManager.AppSettings["serverurl"];
                     upObjectId = openauto.readshpfile(filename, fi2);
                     fileInfo.ObjectID = upObjectId;

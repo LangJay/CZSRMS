@@ -50,14 +50,14 @@ namespace SurveyingResultManageSystem.Controllers
             {
                 //把keywords存到cookies中
                 HttpCookie cook = new HttpCookie("keywords", keywords);
-                //cook.Expires = DateTime.Now.AddDays(365);//一年，有种你一年不关浏览器。资料说不设置时间就是关闭页面（浏览器？）时清除
+                //cook.Expires = DateTime.Now.AddDays(365);//资料说不设置时间就是关闭页面（浏览器？）时清除
                 Response.Cookies.Add(cook);
                 pageInfo.keywords = keywords;
                 //重新检索记录
                 pageInfo.pageList = userInfoService.FindAll(u => u.UserName != "", "Levels", true);
                 List<tb_UserInfo> list = new List<tb_UserInfo>();
                 // || l.Operation.Contains(keywords) || l.UserName.Contains(keywords) || l.Operation.Contains(keywords) || l.FileName.Contains(keywords)
-                IEnumerable<tb_UserInfo> iEn = pageInfo.pageList.Where(p => p.UserName.Contains(keywords) || p.LastLogintime.Contains(keywords) || p.Levels.Contains(keywords) || p.Unit.Contains(keywords));
+                IEnumerable<tb_UserInfo> iEn = pageInfo.pageList.Where(p => p.UserName.Contains(keywords));
                 int index = 1;
                 foreach (tb_UserInfo l in iEn)
                 {
