@@ -186,7 +186,7 @@ text-align:center;
 }
 
 .modal-dialog td {
-    min-width: 100px;
+    min-width: 120px;
     text-align:left;
 }
 
@@ -305,7 +305,7 @@ textarea {
 .modal-body input,.modal-body select
 {
     height:28px;
-    min-width:174px;
+    min-width:180px;
 }
 .btn-primary{
     height:28px;
