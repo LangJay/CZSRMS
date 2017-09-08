@@ -306,6 +306,7 @@ namespace SurveyingResultManageSystem.Controllers
                 {
                     log.FileName = "";
                     log.Explain = "文件不存在";
+                    logInfoService.Add(log);
                     return false;
                 }
                 using (TransactionScope tran = new TransactionScope())
@@ -488,17 +489,7 @@ namespace SurveyingResultManageSystem.Controllers
             string directory = file.Directory;
             try
             {
-                //记录下载
-                tb_LogInfo log = new tb_LogInfo
-                {
-                    UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value,
-                    FileName = filename,
-                    Explain = "请求下载文件！",
-                    Time = DateTime.Now.ToString(),
-                    Operation = LogOperations.DownloadFile()
-                };
                 DownloadTask(filename, directory);
-                logInfoService.Add(log);
             }
             catch (Exception e)
             {
@@ -558,6 +549,16 @@ namespace SurveyingResultManageSystem.Controllers
                 Response.BinaryWrite(buffer);
                 Response.Flush();
             }
+            //记录下载
+            tb_LogInfo log = new tb_LogInfo
+            {
+                UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value,
+                FileName = filename,
+                Explain = "下载成功！",
+                Time = DateTime.Now.ToString(),
+                Operation = LogOperations.DownloadFile()
+            };
+            logInfoService.Add(log);
             fs.Close();
             Response.End();
         }
@@ -611,7 +612,6 @@ namespace SurveyingResultManageSystem.Controllers
             var sr = new StreamReader(Request.InputStream);
             var stream = sr.ReadToEnd();
             sr.Close();
-            //int idh = int.Parse(stream);
             tb_FileInfo user = fileInfoService.Find(u => u.ObjectID.Contains(stream.Trim()));
             string tt=Newtonsoft.Json.JsonConvert.SerializeObject(user);
             return tt;
@@ -624,8 +624,6 @@ namespace SurveyingResultManageSystem.Controllers
             var stream = sr.ReadToEnd();
             sr.Close();
             var baseurl = "http://" + Request.Url.Host+":"+Request.Url.Port;
-
-            //int idh = int.Parse(stream);
             tb_FileInfo user = fileInfoService.Find(u => u.ObjectID.Contains(stream.Trim()));
             string path1 =user.Directory + "预览文件\\";
             DirectoryInfo dir = new DirectoryInfo(path1);
@@ -639,11 +637,6 @@ namespace SurveyingResultManageSystem.Controllers
                     //如果扩展名为“.xml”
                     path2.Replace("\\", "/");
                     filename = filename+ baseurl+ path2 + finf.Name + "%$%";
-
-                //filename = filename + path1 + finf.Name + "$";
-
-
-                //读取文件的完整目录和文件名
             }
 
             filename = filename.Substring(0, filename.Length - 3);
@@ -684,11 +677,6 @@ namespace SurveyingResultManageSystem.Controllers
             featureItem2.Attributes.Add("Xoffset", fileInfo.Xoffset);// 水平坐标偏移值
             featureItem2.Attributes.Add("SUnitName", fileInfo.SurveyingUnitName);// 测绘单位名称，北湖区测绘队、苏仙区测绘队、市局测绘队
             featureItem2.Attributes.Add("Memo", fileInfo.Explain);// 成果说明
-            //if (fileInfo.UploadTime.Trim() != "")
-            //{
-            //    featureItem2.Attributes.Add("UploadTime", fileInfo.UploadTime);
-            //}
-            // featureItem2.Attributes.Add("UploadTime", fileInfo.UploadTime);// 上传时间
             featureItem2.url = ConfigurationManager.AppSettings["serverurl"];
            
             bool tt1 = openauto.UpdateFeature(featureItem2.url, fileInfo.ObjectID, featureItem2);
