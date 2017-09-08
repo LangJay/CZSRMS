@@ -175,7 +175,6 @@
   <ItemGroup>
     <Content Include="Content\style\SetPasswords.css" />
     <Content Include="Data\Manager.xml" />
-    <Content Include="App_Data\Log.txt" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\style\CategoryIndex.css" />
@@ -264,6 +263,7 @@
     <Content Include="Views\Home\GetFileView.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Data\" />
     <Folder Include="Views\Droplist\" />
     <Folder Include="Views\FileManager\" />
     <Folder Include="Views\Layout\" />
