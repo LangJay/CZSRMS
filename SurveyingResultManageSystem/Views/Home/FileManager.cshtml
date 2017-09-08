@@ -51,79 +51,67 @@
                             <td>文件类型：</td>
                             <td>
                                 <span>
-                                    <select id="filetype"></select>
+                                    <select id="filetype" class="red-border"></select>
                                 </span>
                             </td>
                             <td>坐标信息框架：</td>
                             <td>
                                 <span>
-                                    <select id="CoodinateSystem"></select>
+                                    <select id="CoodinateSystem" class="red-border"></select>
                                 </span>
                             </td>
                         </tr>
                         <tr>
+                            <td>所属项目类型：</td>
+                            <td>
+                                <span>
+                                    <select id="projecttype" class="red-border"></select>
+                                </span>
+                            </td>
+                            <td>所属项目名称：</td>
+                            <td><input name="ProjectName" id="projectname" class="red-border"/></td>
+                        </tr>
+                        <tr>
+                            <td>纵坐标偏移值：</td>
+                            <td><input type="number" name="Yoffset" id="yoffset" class="red-border"/></td>
+                            <td>水平坐标偏移值：</td>
+                            <td><input type="number" name="Xoffset" id="xoffset" class="red-border"/></td>
+                        </tr>
+                      
+                        <tr>
+                            <td>是否需要进库：</td>
+                            <td>
+                            是：<input style="min-width:initial;height:auto;" type="radio" name="Warehousing" value="true" class="red-border" /> 
+                            否：<input style="min-width:initial;height:auto;" type="radio"checked="checked" name="Warehousing" value="false" class="red-border" />
+                            </td>
+                            
+                        </tr>
+                        <tr>
+                            <td>中央子午线：</td>
+                            <td><input maxlength="50" name="CenterMeridian" id="centermeridian" class="red-border"/></td>
                             <td>测绘单位名称：</td>
                             <td>
                                 <span>
                                     <select id="surveyingunitname"></select>
                                 </span>
                             </td>
-                            <td><span>文件中对象数量：</span></td>
-                            <td><input type="number" name="ObjectNum" id="objectnum" /></td>
-                        </tr>
-                        <tr>
-
-                            <td>所属项目类型：</td>
-                            <td>
-                                <span>
-                                    <select id="projecttype"></select>
-                                </span>
-                            </td>
-                            <td>所属项目名称：</td>
-                            <td><input name="ProjectName" id="projectname" /></td>
-                        </tr>
-                        <tr>
-                            <td>最大坐标：</td>
-                            <td><input type="number" name="MaxCoodinate" id="maxcoodinate" /></td>
-                            <td>最小坐标：</td>
-                            <td><input type="number" name="MinCoodinate" id="mincoodinate" /></td>
-                        </tr>
-                        <tr>
-                            <td>纵坐标偏移值：</td>
-                            <td><input type="number" name="Yoffset" id="yoffset" /></td>
-                            <td>水平坐标偏移值：</td>
-                            <td><input type="number" name="Xoffset" id="xoffset" /></td>
-                        </tr>
-                      
-                        <tr>
-                            <td>是否需要进库：</td>
-                            <td>
-                            是：<input style="min-width:initial;height:auto;" type="radio" name="Warehousing" value="true" /> 
-                            否：<input style="min-width:initial;height:auto;" type="radio"checked="checked" name="Warehousing" value="false" />
-                            </td>
-                            <td>中央子午线：</td>
-                            <td><input maxlength="50" name="CenterMeridian" id="centermeridian" /></td>
                         </tr>
                         <tr>
                             <td>完成时间：</td>
-                            <td><input type="date" name="Finishtime" id="finishtime" value="" /></td>
+                            <td><input type="date" name="Finishtime" id="finishtime" value="" class="red-border"/></td>
                             <td>完成人名称：</td>
                             <td><input maxlength="50" name="FinishPerson" id="finishperson" /></td>
                         </tr>
-                          <tr>
-                            <td>备注信息：</td>
-                            <td colspan="3" style="width:100%;max-width:100%;"><textarea style="width:100%;min-width:100%;" name="Mark" id="mark"></textarea></td>
-                        </tr>
                         <tr>
                             <td>成果说明：</td>
-                            <td colspan="3"><textarea style="max-width:100%;width:100%;" name="Explain" id="explain"></textarea></td>
+                            <td colspan="3"><textarea style="max-width:100%;width:100%;" name="Explain" id="explain" placeholder="选填项"></textarea></td>
 
                         </tr>
                         <tr>
                             <td>文件公开对象：</td>
                             <td colspan="3">
                                 <span>
-                                <select id="selectObjs" class="js-example-basic-multiple" multiple="multiple" style="min-width:176px">
+                                <select id="selectObjs" class="js-example-basic-multiple" multiple="multiple" style="min-width:176px" >
                                 </select>
                                 </span>
                             </td>
@@ -224,6 +212,7 @@
 
         $(".js-example-basic-multiple").select2().val(["市局测绘队","苏仙区测绘队","北湖区测绘队"]).trigger("change");
         $(".select2-container--default").css("width", "auto");
+        //$(".select2-selection--multiple").css("border", "1px solid #0972A7");
         //$("#surveyingunitname").val("苏仙区测绘队");
         $("#myModal").modal('show');
     };
@@ -297,25 +286,62 @@
                 return;
             }
             var arr = directory.split('\\');
-            fileinfo.Directory = "";
-            fileinfo.FileName = arr[arr.length - 1];
+            fileinfo.Directory = "";//后台程序设定
+            fileinfo.FileName = arr[arr.length - 1];//必填，文件读取
+            fileinfo.FileType = $("#filetype").val();
+            if (fileinfo.FileType == "") {
+                alert("文件类型为必填项！");
+                return;
+            }
             var obj = $("#CoodinateSystem");
-            fileinfo.CoodinateSystem = $("#CoodinateSystem").val();
+            fileinfo.CoodinateSystem = $("#CoodinateSystem").val();//必填平面坐标系
+            if (fileinfo.CoodinateSystem == "")
+            {
+                alert("平面坐标系为必填项！");
+                return;
+            }
             fileinfo.FinishtimeInfo = $("#finishtime").val();
             fileinfo.FinishPersonInfo = $("#finishperson").val();
-            fileinfo.MinCoodinate = $("#mincoodinate").val();
-            fileinfo.MaxCoodinate = $("#maxcoodinate").val();
-            fileinfo.ObjectNum = $("#objectnum").val();
-            fileinfo.Mark = $("#mark").val();
-            fileinfo.Warehousing = $("input[name=Warehousing]:checked").val();
-            fileinfo.ProjectName = $("#projectname").val();
-            fileinfo.FileType = $("#filetype").val();
             fileinfo.ProjectType = $("#projecttype").val();
+            if (fileinfo.ProjectType == "") {
+                alert("所属项目类型为必填项！");
+                return;
+            }
+            fileinfo.ProjectName = $("#projectname").val();
+            if (fileinfo.ProjectName == "") {
+                alert("所属项目名称为必填项！");
+                return;
+            }
             fileinfo.PcoodinateSystem = $("#CoodinateSystem").val();
-            fileinfo.CenterMeridian = $("#centermeridian").val();
+           
             fileinfo.Yoffset = $("#yoffset").val();
+            if (fileinfo.Yoffset == "")
+            {
+                alert("纵坐标偏移值为必填项！");
+                return;
+            }
             fileinfo.Xoffset = $("#xoffset").val();
+            if (fileinfo.Xoffset == "")
+            {
+                alert("水平坐标偏移值为必填项！");
+                return;
+            }
+            fileinfo.Warehousing = $("input[name=Warehousing]:checked").val();
+            if (fileinfo.Warehousing == "") {
+                alert("是否入库为必填项！");
+                return;
+            }
+            fileinfo.CenterMeridian = $("#centermeridian").val();
+            if (fileinfo.CenterMeridian == "") {
+                alert("中央子午线为必填项！");
+                return;
+            }
             fileinfo.Finishtime = $("#finishtime").val();
+            if (fileinfo.Finishtime == "")
+            {
+                alert("完成时间为必填项！");
+                return;
+            }
             fileinfo.FinishPerson = $("#finishperson").val();
             fileinfo.SurveyingUnitName = $("#surveyingunitname").val();
             fileinfo.Explain = $("#explain").val();
