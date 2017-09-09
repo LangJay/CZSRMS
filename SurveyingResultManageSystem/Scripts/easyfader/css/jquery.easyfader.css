@@ -28,7 +28,7 @@
     width: 50px;
     font-size: 100px;
     text-align: center;
-    color: #fff;
+    color: #7cb5fb;
     top: 50%;
     left: 0;
     z-index: 4;
@@ -64,7 +64,7 @@
     width: 15px;
     height: 15px;
     margin: 0 7px;
-    background: #fff;
+    background: #7cb5fb;
     opacity: .7;
     text-indent: -9999px;
     border-radius: 999px;

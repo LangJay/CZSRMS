@@ -179,7 +179,7 @@
             </div>
             <div class="modal-body">
 
-                <div id="dowebok" class="fader"  style="background-color:#0972A7">
+                <div id="dowebok" class="fader">
                     
                 </div>
 
@@ -483,7 +483,8 @@
                             //删除左边记录
                             for(var i =0;i < ids.length;i ++)
                             {
-                                $("#" + ids[i]).remove();
+                                var node = $("#" + ids[i]).parent().parent().parent();
+                                node.remove();
                             }
                             map.infoWindow.hide();
                         },
@@ -615,7 +616,7 @@
             	}
             	else
             	{
-            	    $(".map-table").remove();
+            	    $(".ccccn").remove();
             	}
             });
 

@@ -52,7 +52,7 @@
                         <td>
                             <div id="div-manager">
                                 <input type="button" id="input-edit" onclick="deleteUser(this)" class="div-manager-btn" value="删除" />|
-                                <input type="button" id="input-reset" onclick="Reset(this)" class="div-manager-btn" value="重制密码" />
+                                <input type="button" id="input-reset" onclick="Reset(this)" class="div-manager-btn" value="重置密码" />
                             </div>
                         </td>
                     </tr>
@@ -290,13 +290,13 @@
             async: false,
             data: JSON.stringify(user),
             success: function (data) {
-                    alert(data);
+                alert("密码重置为123");
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 if (XMLHttpRequest.state != 200)
                     window.location.href("/Home/Error");
                 else {
-                    alert("修改成功！");
+                    alert("密码重置为123");
                 }
             }
         });
