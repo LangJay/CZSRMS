@@ -290,3 +290,4 @@ __pycache__/
 /SurveyingResultManageSystem/Scripts/easyui.html
 /SurveyingResultManageSystem/Scripts/json.json
 /SurveyingResultManageSystem/Data/File
+/Model/CZSRMS_DB.edmx.sql

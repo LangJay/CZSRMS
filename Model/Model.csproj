@@ -138,6 +138,7 @@
       <DependentUpon>CZSRMS_DB.edmx</DependentUpon>
       <LastGenOutput>CZSRMS_DB.Context.cs</LastGenOutput>
     </Content>
+    <Content Include="CZSRMS_DB.edmx.sql" />
     <Content Include="CZSRMS_DB.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>CZSRMS_DB.edmx</DependentUpon>
