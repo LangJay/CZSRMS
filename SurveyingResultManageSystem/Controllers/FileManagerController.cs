@@ -162,20 +162,41 @@ namespace SurveyingResultManageSystem.Controllers
                     upObjectId = openauto.readshpfile(filename, fi2);
                     fileInfo.ObjectID = upObjectId;
                 }
-                //写入数据库
-                if (fileInfoService.Add(fileInfo) != null && upObjectId != "")
+                if (!string.IsNullOrEmpty(upObjectId))
                 {
-                    tb_LogInfo log = new tb_LogInfo()
+                    //写入数据库
+                    if (fileInfoService.Add(fileInfo) != null)
                     {
-                        UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value,
-                        Time = DateTime.Now.ToString(),
-                        Operation = LogOperations.UploadFile(),
-                        FileName = fileInfo.FileName,
-                        Explain = "上传成功！"
-                    };
-                    logInfoService.Add(log);
+                        tb_LogInfo log = new tb_LogInfo()
+                        {
+                            UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value,
+                            Time = DateTime.Now.ToString(),
+                            Operation = LogOperations.UploadFile(),
+                            FileName = fileInfo.FileName,
+                            Explain = "上传成功！"
+                        };
+                        logInfoService.Add(log);
 
-                    return "上传成功！";
+                        return "上传成功！";
+                    }
+                    else
+                    {
+                        tb_LogInfo log = new tb_LogInfo()
+                        {
+                            UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value,
+                            Time = DateTime.Now.ToString(),
+                            Operation = LogOperations.UploadFile(),
+                            FileName = fileInfo.FileName,
+                            Explain = "上传失败，写入数据库出错！"
+                        };
+                        logInfoService.Add(log);
+                        //删除文件
+                        if (Directory.Exists(fileSaveFolder))
+                        {
+                            Directory.Delete(fileSaveFolder, true);
+                        }
+                        return "上传失败，写入数据库出错！";
+                    }
                 }
                 else
                 {
@@ -185,11 +206,17 @@ namespace SurveyingResultManageSystem.Controllers
                         Time = DateTime.Now.ToString(),
                         Operation = LogOperations.UploadFile(),
                         FileName = fileInfo.FileName,
-                        Explain = "上传失败，写入数据库出错！"
+                        Explain = "上传失败，写入图形出错！"
                     };
                     logInfoService.Add(log);
-                    return "上传失败，写入数据库出错！";
+                    //删除文件
+                    if(Directory.Exists(fileSaveFolder))
+                    {
+                        Directory.Delete(fileSaveFolder,true);
+                    }
+                    return "上传失败，写入图形出错！";
                 }
+              
             }
             return "上传失败！";
         }
