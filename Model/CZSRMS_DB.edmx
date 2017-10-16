@@ -38,7 +38,7 @@
           <Property Name="FinishPerson" Type="varchar" MaxLength="50" />
           <Property Name="SurveyingUnitName" Type="varchar" MaxLength="50" />
           <Property Name="Explain" Type="varchar(max)" />
-          <Property Name="PublicOjbs" Type="varchar(max)" />
+          <Property Name="PublicObjs" Type="varchar(max)" />
           <Property Name="UploadTime" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="FileSize" Type="float" Nullable="false" />
           <Property Name="UserID" Type="int" Nullable="false" />
@@ -214,7 +214,7 @@
               <MappingFragment StoreEntitySet="tb_FileInfo">
                 <ScalarProperty Name="MD5" ColumnName="MD5" />
                 <ScalarProperty Name="ObjectID" ColumnName="ObjectID" />
-                <ScalarProperty Name="PublicObjs" ColumnName="PublicOjbs" />
+                <ScalarProperty Name="PublicObjs" ColumnName="PublicObjs" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="FileName" ColumnName="FileName" />
                 <ScalarProperty Name="Directory" ColumnName="Directory" />
