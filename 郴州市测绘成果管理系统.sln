@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SurveyingResultManageSystem", "SurveyingResultManageSystem\SurveyingResultManageSystem.csproj", "{63995EAC-A704-4085-BF38-6C8998CB1CE0}"
 EndProject
@@ -16,6 +16,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{7FD9B3BE-FBF4-403D-B0DE-51A7A93F03E9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArcServer", "ArcServer\ArcServer.csproj", "{0ADDE955-C55F-4F3C-896C-BA113721DB94}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "批量上传文件", "批量上传文件\批量上传文件.csproj", "{6E24B8CE-1A9B-4103-B682-5D09FF72B255}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{0ADDE955-C55F-4F3C-896C-BA113721DB94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0ADDE955-C55F-4F3C-896C-BA113721DB94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0ADDE955-C55F-4F3C-896C-BA113721DB94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E24B8CE-1A9B-4103-B682-5D09FF72B255}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E24B8CE-1A9B-4103-B682-5D09FF72B255}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E24B8CE-1A9B-4103-B682-5D09FF72B255}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E24B8CE-1A9B-4103-B682-5D09FF72B255}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

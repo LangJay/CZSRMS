@@ -114,16 +114,19 @@ namespace SurveyingResultManageSystem.Controllers
                 }
                 //  #warning 王军军 发布地图
                 var path1 = fileSaveFolder + "范围文件\\";
-                var upObjectId = "";
+                string upObjectId = null;
                 DirectoryInfo dir = new DirectoryInfo(path1);
-                FileInfo[] inf = dir.GetFiles();
                 var filename = "";
-                foreach (FileInfo finf in inf)
+                if (Directory.Exists(path1))
                 {
-                    if (finf.Extension.Equals(".shp"))
-                        //如果扩展名为“.xml”
-                        filename = finf.FullName;
-                    //读取文件的完整目录和文件名
+                    FileInfo[] inf = dir.GetFiles();
+                    foreach (FileInfo finf in inf)
+                    {
+                        if (finf.Extension.Equals(".shp"))
+                            //如果扩展名为“.xml”
+                            filename = finf.FullName;
+                        //读取文件的完整目录和文件名
+                    }
                 }
                 if (filename != "")
                 {
@@ -139,9 +142,9 @@ namespace SurveyingResultManageSystem.Controllers
                         fi2.Attributes.Add("FinishTime", fileInfo.Finishtime);
                     }//完成时间信息
                     fi2.Attributes.Add("FshPerson", fileInfo.FinishPerson);//完成人信息
+                    fi2.Attributes.Add("ObjectNum", fileInfo.ObjectNum);//文件中对象数量
                     fi2.Attributes.Add("MinCood", fileInfo.MinCoodinate);//最小坐标
                     fi2.Attributes.Add("MaxCood", fileInfo.MaxCoodinate);//最大坐标
-                    fi2.Attributes.Add("ObjectNum", fileInfo.ObjectNum);//文件中对象数量
                     fi2.Attributes.Add("Mark", fileInfo.Mark);// 备注信息
                     fi2.Attributes.Add("ProName", fileInfo.ProjectName);// 所属项目名称
                     fi2.Attributes.Add("FileType", fileInfo.FileType);// 文件类型，宗地图、供地红线图、报批红线图、地籍图、勘测定界报告、竣工验收测绘报告
@@ -162,7 +165,7 @@ namespace SurveyingResultManageSystem.Controllers
                     upObjectId = openauto.readshpfile(filename, fi2);
                     fileInfo.ObjectID = upObjectId;
                 }
-                if (!string.IsNullOrEmpty(upObjectId))
+                if (upObjectId !=null)
                 {
                     //写入数据库
                     if (fileInfoService.Add(fileInfo) != null)

@@ -16,6 +16,7 @@ using Newtonsoft.Json;
 using Ionic.Zip;
 using System.Configuration;
 using System.Transactions;
+using System.Text;
 
 namespace SurveyingResultManageSystem.Controllers
 {
@@ -313,21 +314,18 @@ namespace SurveyingResultManageSystem.Controllers
                 { 
                     //删除数据库 
                     bool success = fileInfoService.Delete(file);
-                    if(success)
+                    if (success)
                     {
-                        //删除图形
+                        //删除图形，考虑没有图形文件的情况
                         bool success1 = deleDWG(file.ObjectID);
-                        if(success1)
-                        {
-                            log.FileName = file.FileName;
-                            log.Explain = "删除成功！";
-                            logInfoService.Add(log);
-                            //删除文件
-                            DirectoryInfo dreInfo = new DirectoryInfo(file.Directory);
-                            dreInfo.Delete(true);
-                            //提交事务
-                            tran.Complete();
-                        }
+                        log.FileName = file.FileName;
+                        log.Explain = "删除成功！";
+                        logInfoService.Add(log);
+                        //删除文件
+                        DirectoryInfo dreInfo = new DirectoryInfo(file.Directory);
+                        dreInfo.Delete(true);
+                        //提交事务
+                        tran.Complete();
                     }
                 }
                 return true;
@@ -576,6 +574,13 @@ namespace SurveyingResultManageSystem.Controllers
             sr.Close();
             bool tt1 = DeleteFile(u => u.ObjectID.Contains(stream.Trim()));
             return tt1;
+        }
+        public static string get_uft8(string unicodeString)
+        {
+            UTF8Encoding utf8 = new UTF8Encoding();
+            Byte[] encodedBytes = utf8.GetBytes(unicodeString);
+            String decodedString = utf8.GetString(encodedBytes);
+            return decodedString;
         }
         /// <summary>
         /// 根据图形id删除图形

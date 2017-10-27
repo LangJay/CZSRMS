@@ -4,8 +4,8 @@
 
 @*<link rel="stylesheet" type="text/css" href="http://192.168.0.205:80/aspnet_client/API/3.21/3.21/esri/css/esri.css" />
 <script src="http://192.168.0.205:80/aspnet_client/API/3.21/3.21/init.js"></script>*@
-<link rel="stylesheet" type="text/css" href="http://192.168.0.231:8080/arcgis_js_api/library/3.21/3.21/esri/css/esri.css" />
-<script src="http://192.168.0.231:8080/arcgis_js_api/library/3.21/3.21/init.js"></script>
+<link rel="stylesheet" type="text/css" href="http://localhost:8080/arcgis_js_api/library/3.21/3.21/esri/css/esri.css" />
+<script src="http://localhost:8080/arcgis_js_api/library/3.21/3.21/init.js"></script>
 
 @Styles.Render("~/Content/style/MapManager.css")
 @Styles.Render("~/Content/style/FileManager.css")
@@ -344,7 +344,7 @@
     		btnn1.innerHTML = "测绘单位名称<span class='caret'></span>";
     		searchfield = "SUnitName";
     		searchtext = "根据测绘单位名称搜索";
-    		
+
     	}
     	if(name1=="CoodinateSystem")
     	{
@@ -497,9 +497,9 @@
         }
             fatch3.refresh();
     }
-    require(["esri/map", "esri/layers/ArcGISDynamicMapServiceLayer", "esri/layers/FeatureLayer", "esri/layers/GraphicsLayer", "esri/InfoTemplate", "esri/dijit/Search", "dojo/dom",
+    require(["esri/map", "esri/layers/ArcGISDynamicMapServiceLayer", "esri/layers/FeatureLayer", "esri/layers/GraphicsLayer", "esri/InfoTemplate", "esri/geometry/Point", "esri/dijit/Search", "dojo/dom",
           "dojo/on", "dojo/domReady!"],
-        function (Map, ArcGISDynamicMapServiceLayer, FeatureLayer, GraphicsLayer, InfoTemplate, Search, dom, on) {
+        function (Map, ArcGISDynamicMapServiceLayer, FeatureLayer, GraphicsLayer, InfoTemplate, Point, Search, dom, on) {
             map = new Map("mapDiv", { logo: false });
             map.infoWindow.resize(350, 400);
             graphiclayer = new GraphicsLayer();
@@ -523,24 +523,32 @@
             var tempstr;
             if (jx == "0") {
             	tempstr = "<table width='100%' style='table-layout:fixed'><tr height='15%' width='100%'><th width='60%' align='left'>文件名:${FileName} </th><th width='40%' align='left'>完成人:${FshPerson} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>坐标信息:${CoodSystem} </th><th width='40%' align='left'>完成时间:${FinishTime:DateFormat(selector: 'date', fullYear: true)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>中央子午线:${CenterMed} </th><th width='40%' align='left'>上传时间:${UploadTime:DateFormat(selector: 'date', fullYear: true)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>文件类型:${FileType} </th><th width='40%' align='left'>文件大小:${FileSize:NumberFormat(places:2)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>项目名称:${ProName} </th><th width='40%' align='left' id='tdid'>图形ID:${OBJECTID} </th></tr><tr height='15%' width='100%'><th width='100%' align='left'>备注:${Memo} </th></tr></table><button style='margin:5px 15px' type='button' onclick='SYT()' class='btn btn-primary btn-xs'>缩略图</button><button style='margin:5px 15px' type='button' onclick='Change()' class='btn btn-primary btn-xs'>修  改</button><button style='margin:5px 15px' type='button' onclick='dele()' class='btn btn-primary btn-xs'>删  除</button><button style='margin:5px 0px 5px 15px' type='button' onclick='Down()' class='btn btn-primary btn-xs'>下  载</button>";
-            	
+
             }
             else {
             	tempstr = "<table width='100%' style='table-layout:fixed'><tr height='15%' width='100%'><th width='60%' align='left'>文件名:${FileName} </th><th width='40%' align='left'>完成人:${FshPerson} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>坐标信息:${CoodSystem} </th><th width='40%' align='left'>完成时间:${FinishTime:DateFormat(selector: 'date', fullYear: true)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>中央子午线:${CenterMed} </th><th width='40%' align='left'>上传时间:${UploadTime:DateFormat(selector: 'date', fullYear: true)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>文件类型:${FileType} </th><th width='40%' align='left'>文件大小:${FileSize:NumberFormat(places:2)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>项目名称:${ProName} </th><th width='40%' align='left' id='tdid'>图形ID:${OBJECTID} </th></tr><tr height='15%' width='100%'><th width='100%' align='left'>备注:${Memo} </th></tr></table><button style='margin:5px 15px' type='button' onclick='SYT()' class='btn btn-primary btn-xs'>缩略图</button><button style='margin:5px 15px' type='button' onclick='Change()' class='btn btn-primary btn-xs a-delete-button'>修  改</button><button style='margin:5px 15px' type='button' onclick='dele()' class='btn btn-primary btn-xs a-delete-button'>删  除</button><button style='margin:5px 0px 5px 15px' type='button' onclick='Down()' class='btn btn-primary btn-xs'>下  载</button>";
             }
-            fatch3 = new FeatureLayer("http://192.168.0.231:6080/arcgis/rest/services/CZ/FeatureServer/0", {
+            fatch3 = new FeatureLayer("http://localhost:6080/arcgis/rest/services/sfsss/FeatureServer/0", {
             	mode: FeatureLayer.MODE_SNAPSHOT,
             	outFields: ["*"],
             	infoTemplate: new InfoTemplate("范围红线", tempstr)
 
             });
+            var baseURL = "http://172.26.9.66:6080/arcgis/rest/services/CZ_ZW_L9_L20_DLG_Map/MapServer"
+            var baseImageURL = "http://172.26.9.66:6080/arcgis/rest/services/CZ_ZW_L9_L20_DOM_Map/MapServer"
+           // 添加底图
+            var baseLayer = new ArcGISDynamicMapServiceLayer(baseURL, {
+                "showAttribution": false
+            });
+            map.addLayer(baseLayer);
             //不是管理员账户筛选要素显示
             if (ss[1].trim() != "0") {
                 fatch3.setDefinitionExpression("SUnitName like '%" + ss[0].trim() + "%' or PublicOB like '%" + ss[0].trim() + "%'");
             }
 
+          // var ss= map.spatialReference
 
-		
+            //var point = new Point({ "x": 451855.881, "y": 2852315.361, "spatialReference": { "wkt": "PROJCS['CGCS2000_3_Degree_GK_CM_11330E', GEOGCS['GCS_China_Geodetic_Coordinate_System_2000', DATUM['D_China_2000', SPHEROID['CGCS2000', 6378137'0, 298'257222101]], PRIMEM['Greenwich', 0'0], UNIT['Degree', 0'0174532925199433]], PROJECTION['Gauss_Kruger'], PARAMETER['False_Easting', 500000'0], PARAMETER['False_Northing', 0'0], PARAMETER['Central_Meridian', 113'5], PARAMETER['Scale_Factor', 1'0], PARAMETER['Latitude_Of_Origin', 0'0], UNIT['Meter', 1'0]]" } });
             // fatch3.setDefinitionExpression("FileName='ss03'");
             map.addLayer(fatch3);
             search = new Search({
@@ -811,7 +819,7 @@
         			image1.innerHTML = imagepath + "<div class='fader_controls'><div class='page prev' data-target='prev'>&lsaquo;</div><div class='page next' data-target='next'>&rsaquo;</div> <ul class='pager_list'></ul></div>";
         		}
         		else {
-        			
+
         			image1.innerHTML = "<img class='slide' src='~/Scripts/easyfader/images/img1.jpg'></img><img class='slide' src='~/Scripts/easyfader/images/img2.jpg'></img><img class='slide' src='~/Scripts/easyfader/images/img3.jpg'></img><div class='fader_controls'><div class='page prev' data-target='prev'>&lsaquo;</div><div class='page next' data-target='next'>&rsaquo;</div> <ul class='pager_list'></ul></div>";
         		}
         		//console.log(imagepath);
@@ -831,7 +839,7 @@
         //image1.innerHTML = imagepath + "<div class='fader_controls'><div class='page prev' data-target='prev'>&lsaquo;</div><div class='page next' data-target='next'>&rsaquo;</div> <ul class='pager_list'></ul></div>";
 
         //$("#myModal1").modal('show');
-      
+
         //$(function () {
         //	// $('#dowebok').easyFader();
         //	$('#dowebok').easyFader();
@@ -885,7 +893,7 @@
         	date2 = datae.toLocaleDateString();
         }
         var ss;
-        
+
         if (jx == "0") {
         	ss = "<table width='100%' style='table-layout:fixed'><tr height='15%' width='100%'><th width='60%' align='left'>文件名:" + searchresult.results[0][pointid].feature.attributes.FileName + "</th><th width='40%' align='left'>完成人:" + searchresult.results[0][pointid].feature.attributes.FshPerson + " </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>坐标信息:" + searchresult.results[0][pointid].feature.attributes.CoodSystem + " </th><th width='40%' align='left'>完成时间:" + date2 + " </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>中央子午线:" + searchresult.results[0][pointid].feature.attributes.CenterMed + " </th><th width='40%' align='left'>上传时间:" + date1 + " </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>文件类型:" + searchresult.results[0][pointid].feature.attributes.FileType + " </th><th width='40%' align='left'>文件大小:" + searchresult.results[0][pointid].feature.attributes.FileSize.toFixed(2) + " </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>项目名称:" + searchresult.results[0][pointid].feature.attributes.ProName + " </th><th width='40%' align='left' id='tdid'>图形ID:" + searchresult.results[0][pointid].feature.attributes.OBJECTID + " </th></tr><tr height='15%' width='100%'><th width='100%' align='left'>备注:" + searchresult.results[0][pointid].feature.attributes.Memo + " </th></tr></table><button style='margin:5px 8px' type='button' onclick='SYT()' class='btn btn-primary btn-xs'>缩略图</button><button style='margin:5px 8px' type='button' onclick='Change()' class='btn btn-primary btn-xs'>修  改</button><button style='margin:5px 8px' type='button' onclick='dele()' class='btn btn-primary btn-xs'>删  除</button><button style='margin:5px 0px 5px 8px' type='button' onclick='Down()' class='btn btn-primary btn-xs'>下  载</button>";
         }

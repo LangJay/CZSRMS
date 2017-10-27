@@ -45,7 +45,7 @@
                     <table>
                         <tr>
                             <td style="width:80px;">选择文件：</td>
-                            <td colspan="3"><input id="input_file" type="file" accept=".pak" name="file" /></td>
+                            <td colspan="3"><input id="input_file" type="file" accept=".pack" name="file" /></td>
                         </tr>
                         <tr>
                             <td>文件类型：</td>
@@ -73,22 +73,22 @@
                         </tr>
                         <tr>
                             <td>纵坐标偏移值：</td>
-                            <td><input type="number" name="Yoffset" id="yoffset" class="red-border"/></td>
+                            <td><input type="number" name="Yoffset" id="yoffset" class="red-border" value="0"/></td>
                             <td>水平坐标偏移值：</td>
-                            <td><input type="number" name="Xoffset" id="xoffset" class="red-border"/></td>
+                            <td><input type="number" name="Xoffset" id="xoffset" class="red-border" value="0"/></td>
                         </tr>
                       
                         <tr>
                             <td>是否需要进库：</td>
                             <td>
-                            是：<input style="min-width:initial;height:auto;" type="radio" name="Warehousing" value="true" class="red-border" /> 
-                            否：<input style="min-width:initial;height:auto;" type="radio"checked="checked" name="Warehousing" value="false" class="red-border" />
+                            是：<input style="min-width:initial;height:auto;" type="radio" checked="checked" name="Warehousing" value="true" class="red-border" /> 
+                            否：<input style="min-width:initial;height:auto;" type="radio" name="Warehousing" value="false" class="red-border" />
                             </td>
                             
                         </tr>
                         <tr>
                             <td>中央子午线：</td>
-                            <td><input maxlength="50" name="CenterMeridian" id="centermeridian" class="red-border"/></td>
+                            <td><input maxlength="50" name="CenterMeridian" id="centermeridian" class="red-border" value="113:30:00.00"/></td>
                             <td>测绘单位名称：</td>
                             <td>
                                 <span>
@@ -332,8 +332,14 @@
                 return;
             }
             fileinfo.CenterMeridian = $("#centermeridian").val();
+            var cmSta = /\d\d\d:\d\d:\d\d.\d\d/;
             if (fileinfo.CenterMeridian == "") {
                 alert("中央子午线为必填项！");
+                return;
+            }
+            else if (!cmSta.test(fileinfo.CenterMeridian))
+            {
+                alert("中央子午线格式好像不正确。例如：113:30:00.00");
                 return;
             }
             fileinfo.Finishtime = $("#finishtime").val();

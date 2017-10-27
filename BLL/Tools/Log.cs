@@ -25,7 +25,15 @@ namespace BLL.Tools
         public static void AddRecord(Exception e)
         {
             StreamWriter writer;
-            string rootPath = HttpRuntime.AppDomainAppPath.ToString();//E:\项目\郴州测绘成果管理项目\郴州市测绘成果项目管理系统\SurveyingResultManageSystem\
+            string rootPath = "";
+            try
+            {
+                rootPath = HttpRuntime.AppDomainAppPath.ToString();
+            }//E:\项目\郴州测绘成果管理项目\郴州市测绘成果项目管理系统\SurveyingResultManageSystem\
+            catch
+            {
+                return;
+            }
             try
             {
                 string path = rootPath + "\\Log";
@@ -50,7 +58,15 @@ namespace BLL.Tools
         public static void AddLog(String e)
         {
             StreamWriter writer;
-            string rootPath = HttpRuntime.AppDomainAppPath.ToString();//E:\项目\郴州测绘成果管理项目\郴州市测绘成果项目管理系统\SurveyingResultManageSystem\
+            string rootPath = "";
+            try
+            {
+                rootPath = HttpRuntime.AppDomainAppPath.ToString();
+            }//E:\项目\郴州测绘成果管理项目\郴州市测绘成果项目管理系统\SurveyingResultManageSystem\
+            catch
+            {
+                return;
+            }
             try
             {
                 string path = rootPath + "\\Log";

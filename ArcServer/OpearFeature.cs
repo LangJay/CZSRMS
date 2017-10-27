@@ -307,9 +307,9 @@ namespace ArcServer
             while (shp1.MoveNext())
             {
                 var Feature1 = shp1.CurrentFeature;
+                //Feature1.Geometry.MinX;
                 var Geometry1 = (GeoShape.Polygon)Feature1.Geometry;
-                var length = Geometry1.m_partsIdx.Length;
-               
+                var length = Geometry1.m_partsIdx.Length;              
                 for (var i = 0; i < Geometry1.m_partsIdx.Length; i++)
                 {
                     int start = 0;
@@ -318,7 +318,6 @@ namespace ArcServer
                     {
                         start = Geometry1.m_partsIdx[i];
                         end = Geometry1.m_partsIdx[i + 1];
-
                     }
                     if (i == Geometry1.m_partsIdx.Length - 1)
                     {
@@ -336,15 +335,13 @@ namespace ArcServer
                     }
                     postion = postion.Substring(0, postion.Length - 1);
                     postion = postion + "],";
-
-                }
-                
+                }           
             }
             postion = postion.Substring(0, postion.Length - 1);
             postion = postion + "]";
-            postion = "[{ \"geometry\":{ \"spatialReference\":{ \"wkid\": 4546},\"rings\":" + postion + "}}]";
+            postion = "[{ \"geometry\":{ \"spatialReference\":{\"wkt\":\"PROJCS[\\\"CGCS2000_3_Degree_GK_CM_11330E\\\",GEOGCS[\\\"GCS_China_Geodetic_Coordinate_System_2000\\\",DATUM[\\\"D_China_2000\\\",SPHEROID[\\\"CGCS2000\\\",6378137.0,298.257222101]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],PROJECTION[\\\"Gauss_Kruger\\\"],PARAMETER[\\\"False_Easting\\\",500000.0],PARAMETER[\\\"False_Northing\\\",0.0],PARAMETER[\\\"Central_Meridian\\\",113.5],PARAMETER[\\\"Scale_Factor\\\",1.0],PARAMETER[\\\"Latitude_Of_Origin\\\",0.0],UNIT[\\\"Meter\\\",1.0]]\"},\"rings\":" + postion + "}}]";
+           // spatialReference\":{\"wkt\":\"PROJCS[\\\"CGCS2000_3_Degree_GK_CM_11330E\\\",GEOGCS[\\\"GCS_China_Geodetic_Coordinate_System_2000\\\",DATUM[\\\"D_China_2000\\\",SPHEROID[\\\"CGCS2000\\\",6378137.0,298.257222101]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],PROJECTION[\\\"Gauss_Kruger\\\"],PARAMETER[\\\"False_Easting\\\",500000.0],PARAMETER[\\\"False_Northing\\\",0.0],PARAMETER[\\\"Central_Meridian\\\",113.5],PARAMETER[\\\"Scale_Factor\\\",1.0],PARAMETER[\\\"Latitude_Of_Origin\\\",0.0],UNIT[\\\"Meter\\\",1.0]]\"}
             string url = featureItem.url;
-
             //  FeatureItem1 fi = new FeatureItem1();
             featureItem.Geometry = postion;
             // fi.Attributes = new Dictionary<string, object>();
