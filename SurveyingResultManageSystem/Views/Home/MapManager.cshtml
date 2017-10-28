@@ -497,7 +497,7 @@
         }
             fatch3.refresh();
     }
-    require(["esri/map", "esri/layers/ArcGISDynamicMapServiceLayer", "esri/layers/FeatureLayer", "esri/layers/GraphicsLayer", "esri/InfoTemplate", "esri/geometry/Point", "esri/dijit/Search", "dojo/dom",
+    require(["esri/map", "esri/layers/ArcGISDynamicMapServiceLayer","esri/layers/FeatureLayer", "esri/layers/GraphicsLayer", "esri/InfoTemplate", "esri/geometry/Point", "esri/dijit/Search", "dojo/dom",
           "dojo/on", "dojo/domReady!"],
         function (Map, ArcGISDynamicMapServiceLayer, FeatureLayer, GraphicsLayer, InfoTemplate, Point, Search, dom, on) {
             map = new Map("mapDiv", { logo: false });
@@ -536,11 +536,13 @@
             });
             var baseURL = "http://172.26.9.66:6080/arcgis/rest/services/CZ_ZW_L9_L20_DLG_Map/MapServer"
             var baseImageURL = "http://172.26.9.66:6080/arcgis/rest/services/CZ_ZW_L9_L20_DOM_Map/MapServer"
-           // 添加底图
-            var baseLayer = new ArcGISDynamicMapServiceLayer(baseURL, {
-                "showAttribution": false
-            });
-            map.addLayer(baseLayer);
+            //var imageLayer = new ArcGISImageMapserviceLayer(baseImageURL, {
+            //});
+            //添加底图
+            //var baseLayer = new ArcGISDynamicMapServiceLayer(baseURL, {
+            //    "showAttribution": false
+            //});
+           // map.addLayer(baseLayer);
             //不是管理员账户筛选要素显示
             if (ss[1].trim() != "0") {
                 fatch3.setDefinitionExpression("SUnitName like '%" + ss[0].trim() + "%' or PublicOB like '%" + ss[0].trim() + "%'");
@@ -754,31 +756,32 @@
         var idh = id.split(':');
         id = idh[1];
         var info;
-        $.ajax({
-            url: "/Home/delefeature",
-            type: "post",
-            dataType: "text",
-            async: false,
-            data: id,
-            success: function (data) {
-                info = data;
-                $("#" + id).remove();
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                alert(XMLHttpRequest.status);
-                //alert(XMLHttpRequest.readyState);
-                //alert(textStatus);
+        if (confirm("你确定要删除该文件吗？")) {
+            $.ajax({
+                url: "/Home/delefeature",
+                type: "post",
+                dataType: "text",
+                async: false,
+                data: id,
+                success: function (data) {
+                    info = data;
+                    $("#" + id).remove();
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(XMLHttpRequest.status);
+                    //alert(XMLHttpRequest.readyState);
+                    //alert(textStatus);
+                }
+            });
+            if (info == "True") {
+                map.infoWindow.hide();
+                alert("删除成功！");
             }
-        });
-
-        if (info == "True") {
-            map.infoWindow.hide();
-            alert("删除成功！");
+            else {
+                alert("删除失败！");
+            }
+            fatch3.refresh();
         }
-        else {
-            alert("删除失败！");
-        }
-        fatch3.refresh();
     };
     function Down() {
         var id = document.getElementById("tdid").innerHTML;
