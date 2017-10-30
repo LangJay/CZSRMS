@@ -5,6 +5,42 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--生成过程中发现错误:
+警告 6013: 表/视图“CZSRMS_DB.dbo.Export_Output$”未定义主键，并且无法推断有效的主键。已排除了此表/视图。若要使用实体，将需要检查您的架构、添加正确的键并取消对实体的注释。
+        <EntityType Name="Export_Output$">
+          <Property Name="OBJECTID" Type="float" />
+          <Property Name="FileName" Type="nvarchar" MaxLength="255" />
+          <Property Name="Directory" Type="nvarchar" MaxLength="255" />
+          <Property Name="CoodSystem" Type="nvarchar" MaxLength="255" />
+          <Property Name="FinishTime" Type="datetime" />
+          <Property Name="FshPerson" Type="nvarchar" MaxLength="255" />
+          <Property Name="MinCood" Type="float" />
+          <Property Name="MaxCood" Type="float" />
+          <Property Name="ObjectNum" Type="float" />
+          <Property Name="Mark" Type="nvarchar" MaxLength="255" />
+          <Property Name="ProName" Type="nvarchar" MaxLength="255" />
+          <Property Name="FileType" Type="nvarchar" MaxLength="255" />
+          <Property Name="ProType" Type="nvarchar" MaxLength="255" />
+          <Property Name="CenterMed" Type="nvarchar" MaxLength="255" />
+          <Property Name="Yoffset" Type="float" />
+          <Property Name="Xoffset" Type="float" />
+          <Property Name="SUnitName" Type="nvarchar" MaxLength="255" />
+          <Property Name="Memo" Type="nvarchar" MaxLength="255" />
+          <Property Name="IsPublic" Type="float" />
+          <Property Name="UploadTime" Type="datetime" />
+          <Property Name="FileSize" Type="float" />
+          <Property Name="UserID" Type="float" />
+          <Property Name="PublicOB" Type="nvarchar" MaxLength="255" />
+          <Property Name="Shape_STAr" Type="float" />
+          <Property Name="Shape_STLe" Type="float" />
+          <Property Name="Shape_ST_1" Type="float" />
+          <Property Name="Shape_ST_2" Type="float" />
+          <Property Name="yuyty" Type="nvarchar" MaxLength="255" />
+          <Property Name="Shape_ST_3" Type="float" />
+          <Property Name="Shape_ST_4" Type="float" />
+          <Property Name="Shape_ST_5" Type="float" />
+          <Property Name="Shape_ST_6" Type="float" />
+        </EntityType>-->
         <EntityType Name="tb_CoodinateSystem">
           <Key>
             <PropertyRef Name="ID" />
@@ -44,6 +80,7 @@
           <Property Name="UserID" Type="int" Nullable="false" />
           <Property Name="ObjectID" Type="varchar" MaxLength="50" />
           <Property Name="MD5" Type="varchar(max)" />
+          <Property Name="WasDeleted" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="tb_FileType">
           <Key>
@@ -141,6 +178,7 @@
           <Property Name="UserID" Type="Int32" Nullable="false" />
           <Property Name="ObjectID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="MD5" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="WasDeleted" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="tb_FileType">
           <Key>
@@ -212,6 +250,7 @@
           <EntitySetMapping Name="tb_FileInfo">
             <EntityTypeMapping TypeName="Model.tb_FileInfo">
               <MappingFragment StoreEntitySet="tb_FileInfo">
+                <ScalarProperty Name="WasDeleted" ColumnName="WasDeleted" />
                 <ScalarProperty Name="MD5" ColumnName="MD5" />
                 <ScalarProperty Name="ObjectID" ColumnName="ObjectID" />
                 <ScalarProperty Name="PublicObjs" ColumnName="PublicObjs" />

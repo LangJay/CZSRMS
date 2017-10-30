@@ -696,38 +696,44 @@
                 }
             }
         }
-    }
+    };
+    ///单点文件下载
+    function downloadFile(fileId)
+    {
+        var ids = new Array();
+        ids[0] = fileId;
+        var idsjson = JSON.stringify(ids);
+        download(idsjson);
+    };
     ///文件管理下载多文件
     function downloadFiles()
     {
         //获取所有id
         var ids = JSON.parse(sessionStorage.getItem('selectimg'));
-        if (ids != null && ids.length > 0)
-        {
-            $.ajax({
-                url: '/Home/Downloads',
-                type: "post",
-                dataType: "text",
-                data: JSON.stringify(ids),
-                async: false,
-                success: function (data) {
-                    var json = JSON.parse(data);
-                    if (json.code == 4)
-                    {
-                        for(var i = 0;i< json.url.length;i ++)
-                        {
-                            var ulr = json.url[i];
-                            window.open(json.url[i]);
-                        }
-                    }
-                    else
-                        alert("下载失败!");
-                },
-                error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert("下载失败!");
-                }
-            });
-        }
-    }
 
+        if (ids != null && ids.length > 0) {
+            var idsjson = JSON.stringify(ids);
+            download(idsjson);
+        }
+        
+    };
+    function download(idsjson) {
+        //window.open("/Home/Downloads?idsjson=" + idsjson);
+        $.ajax({
+            url: '/Home/Downloads',
+            type: "post",
+            dataType: "text",
+            data: idsjson,
+            async: false,
+            success: function (data) {
+                if (data != "")
+                    window.open(data);
+                else
+                    alert("下载失败!");
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("下载失败!");
+            }
+        });
+    }
 </script>

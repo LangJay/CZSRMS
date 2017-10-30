@@ -168,6 +168,7 @@ namespace SurveyingResultManageSystem.Controllers
                 if (upObjectId !=null)
                 {
                     //写入数据库
+                    fileInfo.WasDeleted = false;
                     if (fileInfoService.Add(fileInfo) != null)
                     {
                         tb_LogInfo log = new tb_LogInfo()

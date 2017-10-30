@@ -16,21 +16,20 @@ namespace Model
 
     public partial class tb_UserInfo
     {
-
         public int ID { set; get; }
         /// <summary>
         /// 用户名
         /// </summary>
         [Required(ErrorMessage = "必填")]
-        [DisplayName("用户名：")]
+        [DisplayName("用户：")]
         public string UserName { set; get; }
-        
+
 
         /// <summary>
         /// 登录密码，管理员创建时设置初始密码，后来可更改
         /// </summary>
         [Required(ErrorMessage = "必填")]
-        [DisplayName("密    码：")]
+        [DisplayName("密码：")]
         [DataType(DataType.Password)]
         public string Password { set; get; }
         /// <summary>

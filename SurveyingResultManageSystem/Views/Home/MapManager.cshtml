@@ -321,7 +321,7 @@
         }
         else
             sessionStorage.setItem('selectimg', JSON.stringify(arrnew));
-    }
+    };
     //删除记录
     function deleterecord(e) {
         var arrold = JSON.parse(sessionStorage.getItem('selectimg'));
@@ -330,11 +330,11 @@
         arrold.splice(index, 1);
         sessionStorage.clear();
         sessionStorage.setItem('selectimg', JSON.stringify(arrold));
-    }
+    };
     //选择一个
     function selectimg(e) {
         setselect(e);
-    }
+    };
     function searchbtn1(name1) {
     	var searchtext = "根据文件名搜索";
     	var btnn1 = document.getElementById("dropdowntoggle1");
@@ -394,7 +394,7 @@
     	//search.params.sources[0].placeholder = searchtext;
     	search.params.sources[0].searchFields[0] = searchfield;
     	search.startup();
-    }
+    };
     //设置选择效果
     function setselect(e) {
         var obj = $(e);
@@ -412,7 +412,7 @@
             var selectimg = src.replace("selected.png", "select.png");
             obj.attr('src', selectimg);
         }
-    }
+    };
     //选择全部
     function selectallimg(e) {
         //将当前页所有img换颜色
@@ -436,36 +436,37 @@
             }
             $(e).attr('src', selectimg);
         }
-    }
+    };
     //Jimmy 2017/8/31 17:30  增加函数 下载多文件
     function downloadFiles() {
         //获取所有id
         var ids = JSON.parse(sessionStorage.getItem('selectimg'));
+
         if (ids != null && ids.length > 0) {
-            $.ajax({
-                url: '/Home/DownloadsWithObjId',
-                type: "post",
-                dataType: "text",
-                data: JSON.stringify(ids),
-                async: false,
-                success: function (data) {
-                    var json = JSON.parse(data);
-                    if (json.code == 4) {
-                        for (var i = 0; i < json.url.length; i++) {
-                            var ulr = json.url[i];
-                            window.open(json.url[i]);
-                        }
-                    }
-                    else
-                        alert("下载失败!");
-                },
-                error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert("下载失败!");
-                }
-            });
+            var idsjson = JSON.stringify(ids);
+            download(idsjson);
         }
-    }
-    //Jimmy 2017/8/31 17:30  增加函数 删除所选文件
+    };
+    function download(idsjson) {
+        //window.open("/Home/Downloads?idsjson=" + idsjson);
+        $.ajax({
+            url: '/Home/Downloads',
+            type: "post",
+            dataType: "text",
+            data: idsjson,
+            async: false,
+            success: function (data) {
+                if (data != "")
+                    window.open(data);
+                else
+                    alert("下载失败!");
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("下载失败!");
+            }
+        })
+    };
+        //Jimmy 2017/8/31 17:30  增加函数 删除所选文件
     function deleteFiles() {
         //获取所有id
         var ids = JSON.parse(sessionStorage.getItem('selectimg'));
@@ -481,8 +482,7 @@
                         success: function (data) {
                             var arr = JSON.parse(data);
                             //删除左边记录
-                            for(var i =0;i < ids.length;i ++)
-                            {
+                            for (var i = 0; i < ids.length; i++) {
                                 var node = $("#" + ids[i]).parent().parent().parent();
                                 node.remove();
                             }
@@ -495,10 +495,10 @@
                 }
             }
         }
-            fatch3.refresh();
-    }
-    require(["esri/map", "esri/layers/ArcGISDynamicMapServiceLayer","esri/layers/FeatureLayer", "esri/layers/GraphicsLayer", "esri/InfoTemplate", "esri/geometry/Point", "esri/dijit/Search", "dojo/dom",
-          "dojo/on", "dojo/domReady!"],
+        fatch3.refresh();
+    };
+    require(["esri/map", "esri/layers/ArcGISDynamicMapServiceLayer", "esri/layers/FeatureLayer", "esri/layers/GraphicsLayer", "esri/InfoTemplate", "esri/geometry/Point", "esri/dijit/Search", "dojo/dom",
+        "dojo/on", "dojo/domReady!"],
         function (Map, ArcGISDynamicMapServiceLayer, FeatureLayer, GraphicsLayer, InfoTemplate, Point, Search, dom, on) {
             map = new Map("mapDiv", { logo: false });
             map.infoWindow.resize(350, 400);
@@ -522,16 +522,16 @@
             jx = ss[1].trim();
             var tempstr;
             if (jx == "0") {
-            	tempstr = "<table width='100%' style='table-layout:fixed'><tr height='15%' width='100%'><th width='60%' align='left'>文件名:${FileName} </th><th width='40%' align='left'>完成人:${FshPerson} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>坐标信息:${CoodSystem} </th><th width='40%' align='left'>完成时间:${FinishTime:DateFormat(selector: 'date', fullYear: true)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>中央子午线:${CenterMed} </th><th width='40%' align='left'>上传时间:${UploadTime:DateFormat(selector: 'date', fullYear: true)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>文件类型:${FileType} </th><th width='40%' align='left'>文件大小:${FileSize:NumberFormat(places:2)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>项目名称:${ProName} </th><th width='40%' align='left' id='tdid'>图形ID:${OBJECTID} </th></tr><tr height='15%' width='100%'><th width='100%' align='left'>备注:${Memo} </th></tr></table><button style='margin:5px 15px' type='button' onclick='SYT()' class='btn btn-primary btn-xs'>缩略图</button><button style='margin:5px 15px' type='button' onclick='Change()' class='btn btn-primary btn-xs'>修  改</button><button style='margin:5px 15px' type='button' onclick='dele()' class='btn btn-primary btn-xs'>删  除</button><button style='margin:5px 0px 5px 15px' type='button' onclick='Down()' class='btn btn-primary btn-xs'>下  载</button>";
+                tempstr = "<table width='100%' style='table-layout:fixed'><tr height='15%' width='100%'><th width='60%' align='left'>文件名:${FileName} </th><th width='40%' align='left'>完成人:${FshPerson} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>坐标信息:${CoodSystem} </th><th width='40%' align='left'>完成时间:${FinishTime:DateFormat(selector: 'date', fullYear: true)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>中央子午线:${CenterMed} </th><th width='40%' align='left'>上传时间:${UploadTime:DateFormat(selector: 'date', fullYear: true)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>文件类型:${FileType} </th><th width='40%' align='left'>文件大小:${FileSize:NumberFormat(places:2)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>项目名称:${ProName} </th><th width='40%' align='left' id='tdid'>图形ID:${OBJECTID} </th></tr><tr height='15%' width='100%'><th width='100%' align='left'>备注:${Memo} </th></tr></table><button style='margin:5px 15px' type='button' onclick='SYT()' class='btn btn-primary btn-xs'>缩略图</button><button style='margin:5px 15px' type='button' onclick='Change()' class='btn btn-primary btn-xs'>修  改</button><button style='margin:5px 15px' type='button' onclick='dele()' class='btn btn-primary btn-xs'>删  除</button><button style='margin:5px 0px 5px 15px' type='button' onclick='Down()' class='btn btn-primary btn-xs'>下  载</button>";
 
             }
             else {
-            	tempstr = "<table width='100%' style='table-layout:fixed'><tr height='15%' width='100%'><th width='60%' align='left'>文件名:${FileName} </th><th width='40%' align='left'>完成人:${FshPerson} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>坐标信息:${CoodSystem} </th><th width='40%' align='left'>完成时间:${FinishTime:DateFormat(selector: 'date', fullYear: true)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>中央子午线:${CenterMed} </th><th width='40%' align='left'>上传时间:${UploadTime:DateFormat(selector: 'date', fullYear: true)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>文件类型:${FileType} </th><th width='40%' align='left'>文件大小:${FileSize:NumberFormat(places:2)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>项目名称:${ProName} </th><th width='40%' align='left' id='tdid'>图形ID:${OBJECTID} </th></tr><tr height='15%' width='100%'><th width='100%' align='left'>备注:${Memo} </th></tr></table><button style='margin:5px 15px' type='button' onclick='SYT()' class='btn btn-primary btn-xs'>缩略图</button><button style='margin:5px 15px' type='button' onclick='Change()' class='btn btn-primary btn-xs a-delete-button'>修  改</button><button style='margin:5px 15px' type='button' onclick='dele()' class='btn btn-primary btn-xs a-delete-button'>删  除</button><button style='margin:5px 0px 5px 15px' type='button' onclick='Down()' class='btn btn-primary btn-xs'>下  载</button>";
+                tempstr = "<table width='100%' style='table-layout:fixed'><tr height='15%' width='100%'><th width='60%' align='left'>文件名:${FileName} </th><th width='40%' align='left'>完成人:${FshPerson} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>坐标信息:${CoodSystem} </th><th width='40%' align='left'>完成时间:${FinishTime:DateFormat(selector: 'date', fullYear: true)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>中央子午线:${CenterMed} </th><th width='40%' align='left'>上传时间:${UploadTime:DateFormat(selector: 'date', fullYear: true)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>文件类型:${FileType} </th><th width='40%' align='left'>文件大小:${FileSize:NumberFormat(places:2)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>项目名称:${ProName} </th><th width='40%' align='left' id='tdid'>图形ID:${OBJECTID} </th></tr><tr height='15%' width='100%'><th width='100%' align='left'>备注:${Memo} </th></tr></table><button style='margin:5px 15px' type='button' onclick='SYT()' class='btn btn-primary btn-xs'>缩略图</button><button style='margin:5px 15px' type='button' onclick='Change()' class='btn btn-primary btn-xs a-delete-button'>修  改</button><button style='margin:5px 15px' type='button' onclick='dele()' class='btn btn-primary btn-xs a-delete-button'>删  除</button><button style='margin:5px 0px 5px 15px' type='button' onclick='Down()' class='btn btn-primary btn-xs'>下  载</button>";
             }
             fatch3 = new FeatureLayer("http://localhost:6080/arcgis/rest/services/sfsss/FeatureServer/0", {
-            	mode: FeatureLayer.MODE_SNAPSHOT,
-            	outFields: ["*"],
-            	infoTemplate: new InfoTemplate("范围红线", tempstr)
+                mode: FeatureLayer.MODE_SNAPSHOT,
+                outFields: ["*"],
+                infoTemplate: new InfoTemplate("范围红线", tempstr)
 
             });
             var baseURL = "http://172.26.9.66:6080/arcgis/rest/services/CZ_ZW_L9_L20_DLG_Map/MapServer"
@@ -542,230 +542,109 @@
             //var baseLayer = new ArcGISDynamicMapServiceLayer(baseURL, {
             //    "showAttribution": false
             //});
-           // map.addLayer(baseLayer);
+            // map.addLayer(baseLayer);
             //不是管理员账户筛选要素显示
             if (ss[1].trim() != "0") {
                 fatch3.setDefinitionExpression("SUnitName like '%" + ss[0].trim() + "%' or PublicOB like '%" + ss[0].trim() + "%'");
             }
 
-          // var ss= map.spatialReference
+            // var ss= map.spatialReference
 
             //var point = new Point({ "x": 451855.881, "y": 2852315.361, "spatialReference": { "wkt": "PROJCS['CGCS2000_3_Degree_GK_CM_11330E', GEOGCS['GCS_China_Geodetic_Coordinate_System_2000', DATUM['D_China_2000', SPHEROID['CGCS2000', 6378137'0, 298'257222101]], PRIMEM['Greenwich', 0'0], UNIT['Degree', 0'0174532925199433]], PROJECTION['Gauss_Kruger'], PARAMETER['False_Easting', 500000'0], PARAMETER['False_Northing', 0'0], PARAMETER['Central_Meridian', 113'5], PARAMETER['Scale_Factor', 1'0], PARAMETER['Latitude_Of_Origin', 0'0], UNIT['Meter', 1'0]]" } });
             // fatch3.setDefinitionExpression("FileName='ss03'");
             map.addLayer(fatch3);
             search = new Search({
                 sources: [{
-                    featureLayer:fatch3,
+                    featureLayer: fatch3,
                     exactMatch: false,//精确查找
-                	// outFields: ["OBJECTID", "FileName", "Directory", "CoodSystem", "FinishTime", "FshPerson", "MinCood", "MaxCood", "ObjectNum", "Mark", "ProName", "FileType", "ProType", "CenterMed", "Yoffset", "Xoffset", "SUnitName", "Memo", "IsPublic", "UploadTime", "FileSize"],
+                    // outFields: ["OBJECTID", "FileName", "Directory", "CoodSystem", "FinishTime", "FshPerson", "MinCood", "MaxCood", "ObjectNum", "Mark", "ProName", "FileType", "ProType", "CenterMed", "Yoffset", "Xoffset", "SUnitName", "Memo", "IsPublic", "UploadTime", "FileSize"],
                     outFields: ["*"],
                     searchFields: ["FileName"],//查找的关键字
-                 //   suggestionTemplate: "${FileName}",
-                  //  displayField: "FileName",
-                  //  suggestionTemplate: "${FileName}",
+                    //   suggestionTemplate: "${FileName}",
+                    //  displayField: "FileName",
+                    //  suggestionTemplate: "${FileName}",
                     name: "",
                     placeholder: "根据关键字搜索",//搜索提示
                     maxResults: 6,
                     maxSuggestions: true,
                     minCharacters: 0,
                     enableInfoWindow: false,
-                    enableHighlight:false,
+                    enableHighlight: false,
                     searchQueryParams: { distance: 5000, maxAllowableOffset: 1 }
                     //enableSuggestions: true
 
                 }],
                 map: map
             }, "search");
-           // search.params.sources[0].searchFields[0] = searchfield;
+            // search.params.sources[0].searchFields[0] = searchfield;
             search.startup();
             on(search, 'search-results', function (e) {
-            	if (e.results != null) {
-            		//查看用户权限，分配功能
-            		$.get("/UserInfoManager/GetUserLevels", function (data, status) {
-            			if (status == "success") {
-            				if (data == 0) {
-            					$(".a-delete-button").css("display", "inline");
-            				}
-            			}
-            		});
-            		//Jimmy 2017/8/31 17:30 删除选择记录
-            		sessionStorage.clear();
-            		var aa1 = document.getElementById("div-table");
-            		var aa = aa1.childNodes;
-            		if (aa != null) {
-            			for (var i = 0; i < aa.length; i++) { aa1.removeChild(aa[i]); }
+                if (e.results != null) {
+                    //查看用户权限，分配功能
+                    $.get("/UserInfoManager/GetUserLevels", function (data, status) {
+                        if (status == "success") {
+                            if (data == 0) {
+                                $(".a-delete-button").css("display", "inline");
+                            }
+                        }
+                    });
+                    //Jimmy 2017/8/31 17:30 删除选择记录
+                    sessionStorage.clear();
+                    var aa1 = document.getElementById("div-table");
+                    var aa = aa1.childNodes;
+                    if (aa != null) {
+                        for (var i = 0; i < aa.length; i++) { aa1.removeChild(aa[i]); }
 
-            		}
-            		searchresult = e;
-            		var resultStr = "";
-            		for (var i = 0; i < searchresult.results[0].length; i++) {
-            			//Jimmy 2017/8/31 17:30 给tr增加id，值为文件的id
-            		    var id = searchresult.results[0][i].feature.attributes.OBJECTID;
-            		    var sun = searchresult.results[0][i].feature.attributes.SUnitName;//文件所属单位
-            		    var pob = searchresult.results[0][i].feature.attributes.PublicOB;//公开单位
-            		    if (ss[1].trim() == "0")
-            		    {
-            		        resultStr += "<div class='ccccn' id='divid" + (i + 1) + "' onclick='openid(" + i + ",this)' onmouseover='openMarkerTipById1(" + i + ",this)' onmouseout='onmouseout_MarkerStyle(" + (i + 1) + ",this)' style=\"font-size: 10px;cursor:pointer;padding:0px 0 2px 2px; border-bottom:1px solid #403d3d;\"><table class='map-table'><tr id=" + id + "><td textalign='left'>" + (i + 1) + "、" + searchresult.results[0][i].feature.attributes.FileName;
-            		        resultStr += "</td><td><img class='select_img' src='../Sources/Images/select.png' onclick='selectimg(this)'></img></td></tr></table></div>";
-            		    }
-            		    else if(sun == ss[0].trim() || pob.indexOf(ss[0].trim()) != -1)
-            		    {
-            		        resultStr += "<div class='ccccn' id='divid" + (i + 1) + "' onclick='openid(" + i + ",this)' onmouseover='openMarkerTipById1(" + i + ",this)' onmouseout='onmouseout_MarkerStyle(" + (i + 1) + ",this)' style=\"font-size: 10px;cursor:pointer;padding:0px 0 2px 2px; border-bottom:1px solid #403d3d;\"><table class='map-table'><tr id=" + id + "><td textalign='left'>" + (i + 1) + "、" + searchresult.results[0][i].feature.attributes.FileName;
-            		        resultStr += "</td><td><img class='select_img' src='../Sources/Images/select.png' onclick='selectimg(this)'></img></td></tr></table></div>";
-            		    }
+                    }
+                    searchresult = e;
+                    var resultStr = "";
+                    for (var i = 0; i < searchresult.results[0].length; i++) {
+                        //Jimmy 2017/8/31 17:30 给tr增加id，值为文件的id
+                        var id = searchresult.results[0][i].feature.attributes.OBJECTID;
+                        var sun = searchresult.results[0][i].feature.attributes.SUnitName;//文件所属单位
+                        var pob = searchresult.results[0][i].feature.attributes.PublicOB;//公开单位
+                        if (ss[1].trim() == "0") {
+                            resultStr += "<div class='ccccn' id='divid" + (i + 1) + "' onclick='openid(" + i + ",this)' onmouseover='openMarkerTipById1(" + i + ",this)' onmouseout='onmouseout_MarkerStyle(" + (i + 1) + ",this)' style=\"font-size: 10px;cursor:pointer;padding:0px 0 2px 2px; border-bottom:1px solid #403d3d;\"><table class='map-table'><tr id=" + id + "><td textalign='left'>" + (i + 1) + "、" + searchresult.results[0][i].feature.attributes.FileName;
+                            resultStr += "</td><td><img class='select_img' src='../Sources/Images/select.png' onclick='selectimg(this)'></img></td></tr></table></div>";
+                        }
+                        else if (sun == ss[0].trim() || pob.indexOf(ss[0].trim()) != -1) {
+                            resultStr += "<div class='ccccn' id='divid" + (i + 1) + "' onclick='openid(" + i + ",this)' onmouseover='openMarkerTipById1(" + i + ",this)' onmouseout='onmouseout_MarkerStyle(" + (i + 1) + ",this)' style=\"font-size: 10px;cursor:pointer;padding:0px 0 2px 2px; border-bottom:1px solid #403d3d;\"><table class='map-table'><tr id=" + id + "><td textalign='left'>" + (i + 1) + "、" + searchresult.results[0][i].feature.attributes.FileName;
+                            resultStr += "</td><td><img class='select_img' src='../Sources/Images/select.png' onclick='selectimg(this)'></img></td></tr></table></div>";
+                        }
 
-            		}
-            		document.getElementById("div-table").innerHTML = resultStr;
-            	}
-            	else
-            	{
-            	    $(".ccccn").remove();
-            	}
+                    }
+                    document.getElementById("div-table").innerHTML = resultStr;
+                }
+                else {
+                    $(".ccccn").remove();
+                }
             });
 
 
-            function getCookie(name) {
-                var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-                if (arr = document.cookie.match(reg))
-                    return unescape(arr[2]);
-                else
-                    return null;
-            };
+
 
         });
-    var idhh;
-    var info1;
-    function Change() {
-        var id = document.getElementById("tdid").innerHTML;
-        var idh = id.split(':');
-        idhh = idh[1];
-        map.infoWindow.hide();
-        var dialogwdith = $(window).width() + $(".modal-dialog").width();
-        $(".modal-content").css({
-            left: (dialogwdith - $(".modal-content").width()) / 2,
-        });
-        var info;
-        $.ajax({
-            url: "/Home/getfileinfo",
-            type: "post",
-            dataType: "text",
-            async: false,
-            data: idh[1],
-            success: function (data) {
-                info = data;
-
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                alert(XMLHttpRequest.status);
-                //alert(XMLHttpRequest.readyState);
-                //alert(textStatus);
-            }
-        });
-        info1 = eval("(" + info + ")");
-        //$("#CoodinateSystem").combobox("setValue","dsfasd");
-        $('#CoodinateSystem').val(info1.CoodinateSystem);
-        $('#filename').val(info1.FileName);
-        $("#_easyui_textbox_input1").val(info1.CoodinateSystem);
-        var check = "";
-        if (info1.Warehousing)
-        {
-            check = "checked";
-        }
-        $("input[name='Warehousing']").attr("checked", check);
-        $("#projectname").val(info1.ProjectName);
-        $("#filetype").val(info1.FileType);
-        $("#projecttype").val(info1.ProjectType);
-        $("#centermeridian").val(info1.CenterMeridian);
-        $("#yoffset").val(info1.Yoffset);
-        $("#xoffset").val(info1.Xoffset);
-        $("#finishtime").val(info1.Finishtime);
-        $("#finishperson").val(info1.FinishPerson);
-        $("#surveyingunitname").val(info1.SurveyingUnitName);
-        $("#explain").val(info1.Explain);
-        var arr = new Array();
-        if (info1.PublicObjs.indexOf("|") > 0) {
-            arr = info1.PublicObjs.split("|");
-        }
-        else {
-            if (info1.PublicObjs != "") {
-                arr[0] = info1.PublicObjs;
-            }
-            else {
-                arr[0] = "";
-            }
-        }
-
-        $("#selectObjs").select2().val(arr).trigger('change');
-
-        //IE上出现width:4px,内嵌
-        $(".select2-container--default").css("width", "auto");
-        $("#myModal").modal('show');
-    };
-    function changeInfo() {
-        info1.CoodinateSystem = $("#CoodinateSystem").val();
-        info1.FinishtimeInfo = $("#finishtime").val();
-        info1.FinishPersonInfo = $("#finishperson").val();
-        info1.Warehousing = $("input[name=Warehousing]:checked").val();
-        info1.ProjectName = $("#projectname").val();
-        info1.FileType = $("#filetype").val();
-        info1.ProjectType = $("#projecttype").val();
-        info1.CenterMeridian = $("#centermeridian").val();
-        info1.Yoffset = $("#yoffset").val();
-        info1.Xoffset = $("#xoffset").val();
-        info1.Finishtime = $("#finishtime").val();
-        info1.FinishPerson = $("#finishperson").val();
-        info1.SurveyingUnitName = $("#surveyingunitname").val();
-        info1.Explain = $("#explain").val();
-        var objarr = $("#selectObjs").val();
-        info1.PublicObjs = "";
-        for (var i = 0; i < objarr.length; i++) {
-            var text = objarr[i];
-            if (i > 0)
-                text = "|" + objarr[i];
-            info1.PublicObjs += text;
-        }
-        //var formData = new FormData();
-        //  formData.append("fileinfo", JSON.stringify(file));
-        var fileinfomation = JSON.stringify(info1);
-        $.ajax({
-            url: "/Home/setfileinfo",
-            type: "post",
-            dataType: "text",
-            async: false,
-            data: fileinfomation,
-            success: function (data) {
-                info = data;
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                alert(XMLHttpRequest.status);
-            }
-        });
-        if (info == "True") {
-            fatch3.refresh();
-            $("#myModal").modal('hide');
-            alert("修改成功！");
-        }
-        else {
-            $("#myModal").modal('hide');
-            alert("修改失败！");
-        }
-
-    };
-    function dele() {
-        var id = document.getElementById("tdid").innerHTML;
-        var idh = id.split(':');
-        id = idh[1];
-        var info;
-        if (confirm("你确定要删除该文件吗？")) {
+        var idhh;
+        var info1;
+        function Change() {
+            var id = document.getElementById("tdid").innerHTML;
+            var idh = id.split(':');
+            idhh = idh[1];
+            map.infoWindow.hide();
+            var dialogwdith = $(window).width() + $(".modal-dialog").width();
+            $(".modal-content").css({
+                left: (dialogwdith - $(".modal-content").width()) / 2,
+            });
+            var info;
             $.ajax({
-                url: "/Home/delefeature",
+                url: "/Home/getfileinfo",
                 type: "post",
                 dataType: "text",
                 async: false,
-                data: id,
+                data: idh[1],
                 success: function (data) {
                     info = data;
-                    $("#" + id).remove();
+
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     alert(XMLHttpRequest.status);
@@ -773,144 +652,283 @@
                     //alert(textStatus);
                 }
             });
-            if (info == "True") {
-                map.infoWindow.hide();
-                alert("删除成功！");
+            info1 = eval("(" + info + ")");
+            //$("#CoodinateSystem").combobox("setValue","dsfasd");
+            $('#CoodinateSystem').val(info1.CoodinateSystem);
+            $('#filename').val(info1.FileName);
+            $("#_easyui_textbox_input1").val(info1.CoodinateSystem);
+            var check = "";
+            if (info1.Warehousing) {
+                check = "checked";
+            }
+            $("input[name='Warehousing']").attr("checked", check);
+            $("#projectname").val(info1.ProjectName);
+            $("#filetype").val(info1.FileType);
+            $("#projecttype").val(info1.ProjectType);
+            $("#centermeridian").val(info1.CenterMeridian);
+            $("#yoffset").val(info1.Yoffset);
+            $("#xoffset").val(info1.Xoffset);
+            $("#finishtime").val(info1.Finishtime);
+            $("#finishperson").val(info1.FinishPerson);
+            $("#surveyingunitname").val(info1.SurveyingUnitName);
+            $("#explain").val(info1.Explain);
+            var arr = new Array();
+            if (info1.PublicObjs.indexOf("|") > 0) {
+                arr = info1.PublicObjs.split("|");
             }
             else {
-                alert("删除失败！");
+                if (info1.PublicObjs != "") {
+                    arr[0] = info1.PublicObjs;
+                }
+                else {
+                    arr[0] = "";
+                }
             }
-            fatch3.refresh();
+
+            $("#selectObjs").select2().val(arr).trigger('change');
+
+            //IE上出现width:4px,内嵌
+            $(".select2-container--default").css("width", "auto");
+            $("#myModal").modal('show');
+        };
+        function changeInfo() {
+            info1.CoodinateSystem = $("#CoodinateSystem").val();
+            info1.FinishtimeInfo = $("#finishtime").val();
+            info1.FinishPersonInfo = $("#finishperson").val();
+            info1.Warehousing = $("input[name=Warehousing]:checked").val();
+            info1.ProjectName = $("#projectname").val();
+            info1.FileType = $("#filetype").val();
+            info1.ProjectType = $("#projecttype").val();
+            info1.CenterMeridian = $("#centermeridian").val();
+            info1.Yoffset = $("#yoffset").val();
+            info1.Xoffset = $("#xoffset").val();
+            info1.Finishtime = $("#finishtime").val();
+            info1.FinishPerson = $("#finishperson").val();
+            info1.SurveyingUnitName = $("#surveyingunitname").val();
+            info1.Explain = $("#explain").val();
+            var objarr = $("#selectObjs").val();
+            info1.PublicObjs = "";
+            for (var i = 0; i < objarr.length; i++) {
+                var text = objarr[i];
+                if (i > 0)
+                    text = "|" + objarr[i];
+                info1.PublicObjs += text;
+            }
+            //var formData = new FormData();
+            //  formData.append("fileinfo", JSON.stringify(file));
+            var fileinfomation = JSON.stringify(info1);
+            $.ajax({
+                url: "/Home/setfileinfo",
+                type: "post",
+                dataType: "text",
+                async: false,
+                data: fileinfomation,
+                success: function (data) {
+                    info = data;
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(XMLHttpRequest.status);
+                }
+            });
+            if (info == "True") {
+                fatch3.refresh();
+                $("#myModal").modal('hide');
+                alert("修改成功！");
+            }
+            else {
+                $("#myModal").modal('hide');
+                alert("修改失败！");
+            }
+
+        };
+        function dele() {
+            var id = document.getElementById("tdid").innerHTML;
+            var idh = id.split(':');
+            id = idh[1];
+            var info;
+            if (confirm("你确定要删除该文件吗？")) {
+                $.ajax({
+                    url: "/Home/delefeature",
+                    type: "post",
+                    dataType: "text",
+                    async: false,
+                    data: id,
+                    success: function (data) {
+                        info = data;
+                        $("#" + id).remove();
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert(XMLHttpRequest.status);
+                        //alert(XMLHttpRequest.readyState);
+                        //alert(textStatus);
+                    }
+                });
+                if (info == "True") {
+                    map.infoWindow.hide();
+                    alert("删除成功！");
+                }
+                else {
+                    alert("删除失败！");
+                }
+                fatch3.refresh();
+            }
+        };
+        function Down() {
+            var id = document.getElementById("tdid").innerHTML;
+            var idh = id.split(':');
+            var ids = new Array();
+            ids[0] = idh[1];
+            var idsjson = JSON.stringify(ids);
+            download(idsjson);
+        };
+        function SYT() {
+            var id = document.getElementById("tdid").innerHTML;
+            var idh = id.split(':');
+            var idd = idh[1].trim();
+            // console.log(idh[1]);
+            map.infoWindow.hide();
+            var dialogwdith = $(window).width() + $(".modal-dialog").width();
+            $(".modal-content").css({
+                left: (dialogwdith - $(".modal-content").width()) / 2,
+            })
+            var image1 = document.getElementById("dowebok")
+            if (image1.childNodes.length > 0) {
+                $("#dowebok").children().remove();
+
+            }
+            var info;
+            var imagepath = "";
+            $.ajax({
+                url: "/Home/getimginfo",
+                type: "post",
+                dataType: "text",
+                async: false,
+                data: idd,
+                success: function (data) {
+                    info = data;
+                    var img = info.split("%$%");
+                    if (img.length > 0) {
+                        for (var i = 0; i < img.length; i++) {
+                            imagepath = imagepath + "<img class='slide' src='" + img[i] + "'></img>";
+                        }
+                        image1.innerHTML = imagepath + "<div class='fader_controls'><div class='page prev' data-target='prev'>&lsaquo;</div><div class='page next' data-target='next'>&rsaquo;</div> <ul class='pager_list'></ul></div>";
+                    }
+                    else {
+
+                        image1.innerHTML = "<img class='slide' src='~/Scripts/easyfader/images/img1.jpg'></img><img class='slide' src='~/Scripts/easyfader/images/img2.jpg'></img><img class='slide' src='~/Scripts/easyfader/images/img3.jpg'></img><div class='fader_controls'><div class='page prev' data-target='prev'>&lsaquo;</div><div class='page next' data-target='next'>&rsaquo;</div> <ul class='pager_list'></ul></div>";
+                    }
+                    //console.log(imagepath);
+                    $("#myModal1").modal('show');
+                    $('#dowebok').easyFader();
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(XMLHttpRequest.status);
+                    //alert(XMLHttpRequest.readyState);
+                    //alert(textStatus);
+                }
+            });
+
+
+
+
+            //image1.innerHTML = imagepath + "<div class='fader_controls'><div class='page prev' data-target='prev'>&lsaquo;</div><div class='page next' data-target='next'>&rsaquo;</div> <ul class='pager_list'></ul></div>";
+
+            //$("#myModal1").modal('show');
+
+            //$(function () {
+            //	// $('#dowebok').easyFader();
+            //	$('#dowebok').easyFader();
+            //});
+
+        };
+        function openMarkerTipById1(pointid, thiss) {  //根据id 打开搜索结果点tip
+            thiss.style.background = '#CAE1FF';
+
+        };
+        function onmouseout_MarkerStyle(pointid, thiss) { //鼠标移开后点样式恢复
+            thiss.style.background = "";
         }
-    };
-    function Down() {
-        var id = document.getElementById("tdid").innerHTML;
-        var idh = id.split(':');
-        window.open("/Home/DownloadWithObjectId?objId=" + idh[1]);
-        console.log(idh[1]);
-    };
-    function SYT() {
-        var id = document.getElementById("tdid").innerHTML;
-        var idh = id.split(':');
-        var idd = idh[1].trim();
-    	// console.log(idh[1]);
-        map.infoWindow.hide();
-        var dialogwdith = $(window).width() + $(".modal-dialog").width();
-        $(".modal-content").css({
-            left: (dialogwdith - $(".modal-content").width()) / 2,
-        })
-        var image1 = document.getElementById("dowebok")
-        if (image1.childNodes.length > 0) {
-        	$("#dowebok").children().remove();
+        //输入提示框鼠标滑过时的样式
+        function openMarkerTipById(pointid, thiss) {  //根据id打开搜索结果点tip
+            thiss.style.background = '#CAE1FF';
+        };
+        //输入提示框鼠标移出时的样式
+        function onmouseout_MarkerStyle(pointid, thiss) {  //鼠标移开后点样式恢复
+            thiss.style.background = "";
+        };
+        function openid(pointid, thiss) {
+            // var ss=document.getElementsByClassName("sizer")[0].style.display="none";
+            map.graphics.clear();
+            // console.log(ss[0]);
+            // console.log(searchresult);
+            // search.searchClear();
+            thiss.style.background = '#CAE1FF';
+            var cPoint = new esri.geometry.Point();
+            var polyline1 = new esri.geometry.Polygon(searchresult.results[0][pointid].feature.geometry);
+            cPoint = polyline1.getExtent().getCenter();
+            // cPoint.x = parseFloat(searchresult.results[0][pointid].feature.geometry.x);
+            // cPoint.y = parseFloat(searchresult.results[0][pointid].feature.geometry.y);
+            // var sr = new esri.SpatialReference(searchresult.results[0][pointid].feature.spatialReference);
+            // cPoint.setSpatialReference(sr);
 
+            var graphic = searchresult.results[0][pointid].feature;
+            //graphic.setSymbol(defaultSymbol);
+            //graphic.setInfoTemplate("编号: " + searchresult.results[0][pointid].feature.attributes.OBJECTID + "<br>地名:" + searchresult.results[0][pointid].name + "<br>");
+            var ss1 = searchresult.results[0][pointid].feature.attributes.UploadTime;
+            var ss2 = searchresult.results[0][pointid].feature.attributes.FinishTime;
+            var date1 = "";
+            var date2 = "";
+            var datae;
+            var username = getCookie("username");
+            var userid = "";
+            $.ajax({
+                url: "/Home/GetUserID",
+                type: "post",
+                dataType: "text",
+                async: false,
+                data: username,
+                success: function (data) {
+                    if (data != null) {
+                        userid = data;
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(XMLHttpRequest.status);
+                }
+            });
+            if (ss1 != "" && ss1 != null) {
+                datae = new Date(searchresult.results[0][pointid].feature.attributes.UploadTime);
+                date1 = datae.toLocaleDateString();
+            }
+            if (ss2 != "" && ss2 != null) {
+                datae = new Date(searchresult.results[0][pointid].feature.attributes.FinishTime);
+                date2 = datae.toLocaleDateString();
+            }
+            var ss;
+
+            if (jx == "0") {
+                ss = "<table width='100%' style='table-layout:fixed'><tr height='15%' width='100%'><th width='60%' align='left'>文件名:" + searchresult.results[0][pointid].feature.attributes.FileName + "</th><th width='40%' align='left'>完成人:" + searchresult.results[0][pointid].feature.attributes.FshPerson + " </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>坐标信息:" + searchresult.results[0][pointid].feature.attributes.CoodSystem + " </th><th width='40%' align='left'>完成时间:" + date2 + " </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>中央子午线:" + searchresult.results[0][pointid].feature.attributes.CenterMed + " </th><th width='40%' align='left'>上传时间:" + date1 + " </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>文件类型:" + searchresult.results[0][pointid].feature.attributes.FileType + " </th><th width='40%' align='left'>文件大小:" + searchresult.results[0][pointid].feature.attributes.FileSize.toFixed(2) + " </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>项目名称:" + searchresult.results[0][pointid].feature.attributes.ProName + " </th><th width='40%' align='left' id='tdid'>图形ID:" + searchresult.results[0][pointid].feature.attributes.OBJECTID + " </th></tr><tr height='15%' width='100%'><th width='100%' align='left'>备注:" + searchresult.results[0][pointid].feature.attributes.Memo + " </th></tr></table><button style='margin:5px 8px' type='button' onclick='SYT()' class='btn btn-primary btn-xs'>缩略图</button><button style='margin:5px 8px' type='button' onclick='Change()' class='btn btn-primary btn-xs'>修  改</button><button style='margin:5px 8px' type='button' onclick='dele()' class='btn btn-primary btn-xs'>删  除</button><button style='margin:5px 0px 5px 8px' type='button' onclick='Down()' class='btn btn-primary btn-xs'>下  载</button>";
+            }
+            else if (searchresult.results[0][pointid].feature.attributes.UserID == userid) {
+                ss = "<table width='100%' style='table-layout:fixed'><tr height='15%' width='100%'><th width='60%' align='left'>文件名:" + searchresult.results[0][pointid].feature.attributes.FileName + "</th><th width='40%' align='left'>完成人:" + searchresult.results[0][pointid].feature.attributes.FshPerson + " </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>坐标信息:" + searchresult.results[0][pointid].feature.attributes.CoodSystem + " </th><th width='40%' align='left'>完成时间:" + date2 + " </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>中央子午线:" + searchresult.results[0][pointid].feature.attributes.CenterMed + " </th><th width='40%' align='left'>上传时间:" + date1 + " </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>文件类型:" + searchresult.results[0][pointid].feature.attributes.FileType + " </th><th width='40%' align='left'>文件大小:" + searchresult.results[0][pointid].feature.attributes.FileSize.toFixed(2) + " </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>项目名称:" + searchresult.results[0][pointid].feature.attributes.ProName + " </th><th width='40%' align='left' id='tdid'>图形ID:" + searchresult.results[0][pointid].feature.attributes.OBJECTID + " </th></tr><tr height='15%' width='100%'><th width='100%' align='left'>备注:" + searchresult.results[0][pointid].feature.attributes.Memo + " </th></tr></table><button style='margin:5px 8px' type='button' onclick='SYT()' class='btn btn-primary btn-xs'>缩略图</button><button style='margin:5px 8px' type='button' onclick='Change()' class='btn btn-primary btn-xs'>修  改</button><button style='margin:5px 8px' type='button' onclick='dele()' class='btn btn-primary btn-xs a-delete-button'>删  除</button><button style='margin:5px 0px 5px 8px' type='button' onclick='Down()' class='btn btn-primary btn-xs'>下  载</button>";
+            }
+            else {
+                ss = "<table width='100%' style='table-layout:fixed'><tr height='15%' width='100%'><th width='60%' align='left'>文件名:" + searchresult.results[0][pointid].feature.attributes.FileName + "</th><th width='40%' align='left'>完成人:" + searchresult.results[0][pointid].feature.attributes.FshPerson + " </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>坐标信息:" + searchresult.results[0][pointid].feature.attributes.CoodSystem + " </th><th width='40%' align='left'>完成时间:" + date2 + " </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>中央子午线:" + searchresult.results[0][pointid].feature.attributes.CenterMed + " </th><th width='40%' align='left'>上传时间:" + date1 + " </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>文件类型:" + searchresult.results[0][pointid].feature.attributes.FileType + " </th><th width='40%' align='left'>文件大小:" + searchresult.results[0][pointid].feature.attributes.FileSize.toFixed(2) + " </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>项目名称:" + searchresult.results[0][pointid].feature.attributes.ProName + " </th><th width='40%' align='left' id='tdid'>图形ID:" + searchresult.results[0][pointid].feature.attributes.OBJECTID + " </th></tr><tr height='15%' width='100%'><th width='100%' align='left'>备注:" + searchresult.results[0][pointid].feature.attributes.Memo + " </th></tr></table><button style='margin:5px 8px' type='button' onclick='SYT()' class='btn btn-primary btn-xs'>缩略图</button><button style='margin:5px 8px' type='button' onclick='Change()' class='btn btn-primary btn-xs a-delete-button'>修  改</button><button style='margin:5px 8px' type='button' onclick='dele()' class='btn btn-primary btn-xs a-delete-button'>删  除</button><button style='margin:5px 0px 5px 8px' type='button' onclick='Down()' class='btn btn-primary btn-xs'>下  载</button>";
+
+            }
+            map.infoWindow.setContent(ss);
+            map.infoWindow.setTitle("范围红线");
+            map.infoWindow.show(cPoint, map.getInfoWindowAnchor(cPoint));
+            graphiclayer.add(graphic);
+            // console.log(map.infoWindow.anchor);
+            map.setScale(100);
+            map.centerAt(cPoint);
+        };
+        function getCookie(name) {
+            var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return unescape(arr[2]);
+            else
+                return null;
         }
-        var info;
-        var imagepath="";
-        $.ajax({
-        	url: "/Home/getimginfo",
-        	type: "post",
-        	dataType: "text",
-        	async: false,
-        	data: idd,
-        	success: function (data) {
-        		info = data;
-        		var img = info.split("%$%");
-        		if (img.length > 0) {
-        			for (var i = 0; i < img.length; i++) {
-        				imagepath = imagepath + "<img class='slide' src='" + img[i] + "'></img>";
-        			}
-        			image1.innerHTML = imagepath + "<div class='fader_controls'><div class='page prev' data-target='prev'>&lsaquo;</div><div class='page next' data-target='next'>&rsaquo;</div> <ul class='pager_list'></ul></div>";
-        		}
-        		else {
-
-        			image1.innerHTML = "<img class='slide' src='~/Scripts/easyfader/images/img1.jpg'></img><img class='slide' src='~/Scripts/easyfader/images/img2.jpg'></img><img class='slide' src='~/Scripts/easyfader/images/img3.jpg'></img><div class='fader_controls'><div class='page prev' data-target='prev'>&lsaquo;</div><div class='page next' data-target='next'>&rsaquo;</div> <ul class='pager_list'></ul></div>";
-        		}
-        		//console.log(imagepath);
-        		$("#myModal1").modal('show');
-        		$('#dowebok').easyFader();
-        	},
-        	error: function (XMLHttpRequest, textStatus, errorThrown) {
-        		alert(XMLHttpRequest.status);
-        		//alert(XMLHttpRequest.readyState);
-        		//alert(textStatus);
-        	}
-        });
-
-
-
-
-        //image1.innerHTML = imagepath + "<div class='fader_controls'><div class='page prev' data-target='prev'>&lsaquo;</div><div class='page next' data-target='next'>&rsaquo;</div> <ul class='pager_list'></ul></div>";
-
-        //$("#myModal1").modal('show');
-
-        //$(function () {
-        //	// $('#dowebok').easyFader();
-        //	$('#dowebok').easyFader();
-        //});
-
-    };
-    function openMarkerTipById1(pointid, thiss) {  //根据id 打开搜索结果点tip
-        thiss.style.background = '#CAE1FF';
-
-    }
-    function onmouseout_MarkerStyle(pointid, thiss) { //鼠标移开后点样式恢复
-        thiss.style.background = "";
-    }
-    //输入提示框鼠标滑过时的样式
-    function openMarkerTipById(pointid, thiss) {  //根据id打开搜索结果点tip
-        thiss.style.background = '#CAE1FF';
-    }
-    //输入提示框鼠标移出时的样式
-    function onmouseout_MarkerStyle(pointid, thiss) {  //鼠标移开后点样式恢复
-        thiss.style.background = "";
-    }
-    function openid(pointid, thiss) {
-        // var ss=document.getElementsByClassName("sizer")[0].style.display="none";
-        map.graphics.clear();
-        // console.log(ss[0]);
-        // console.log(searchresult);
-        // search.searchClear();
-        thiss.style.background = '#CAE1FF';
-        var cPoint = new esri.geometry.Point();
-        var polyline1 = new esri.geometry.Polygon(searchresult.results[0][pointid].feature.geometry);
-        cPoint = polyline1.getExtent().getCenter();
-        // cPoint.x = parseFloat(searchresult.results[0][pointid].feature.geometry.x);
-        // cPoint.y = parseFloat(searchresult.results[0][pointid].feature.geometry.y);
-        // var sr = new esri.SpatialReference(searchresult.results[0][pointid].feature.spatialReference);
-        // cPoint.setSpatialReference(sr);
-
-        var graphic = searchresult.results[0][pointid].feature;
-        //graphic.setSymbol(defaultSymbol);
-        //graphic.setInfoTemplate("编号: " + searchresult.results[0][pointid].feature.attributes.OBJECTID + "<br>地名:" + searchresult.results[0][pointid].name + "<br>");
-        var ss1 = searchresult.results[0][pointid].feature.attributes.UploadTime;
-        var ss2 = searchresult.results[0][pointid].feature.attributes.FinishTime;
-        var date1 = "";
-        var date2 = "";
-        var datae;
-        if (ss1 != ""&&ss1!= null) {
-        	datae = new Date(searchresult.results[0][pointid].feature.attributes.UploadTime);
-        	date1 = datae.toLocaleDateString();
-        }
-        if (ss2 != ""&&ss2!=null) {
-        	datae = new Date(searchresult.results[0][pointid].feature.attributes.FinishTime);
-        	date2 = datae.toLocaleDateString();
-        }
-        var ss;
-
-        if (jx == "0") {
-        	ss = "<table width='100%' style='table-layout:fixed'><tr height='15%' width='100%'><th width='60%' align='left'>文件名:" + searchresult.results[0][pointid].feature.attributes.FileName + "</th><th width='40%' align='left'>完成人:" + searchresult.results[0][pointid].feature.attributes.FshPerson + " </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>坐标信息:" + searchresult.results[0][pointid].feature.attributes.CoodSystem + " </th><th width='40%' align='left'>完成时间:" + date2 + " </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>中央子午线:" + searchresult.results[0][pointid].feature.attributes.CenterMed + " </th><th width='40%' align='left'>上传时间:" + date1 + " </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>文件类型:" + searchresult.results[0][pointid].feature.attributes.FileType + " </th><th width='40%' align='left'>文件大小:" + searchresult.results[0][pointid].feature.attributes.FileSize.toFixed(2) + " </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>项目名称:" + searchresult.results[0][pointid].feature.attributes.ProName + " </th><th width='40%' align='left' id='tdid'>图形ID:" + searchresult.results[0][pointid].feature.attributes.OBJECTID + " </th></tr><tr height='15%' width='100%'><th width='100%' align='left'>备注:" + searchresult.results[0][pointid].feature.attributes.Memo + " </th></tr></table><button style='margin:5px 8px' type='button' onclick='SYT()' class='btn btn-primary btn-xs'>缩略图</button><button style='margin:5px 8px' type='button' onclick='Change()' class='btn btn-primary btn-xs'>修  改</button><button style='margin:5px 8px' type='button' onclick='dele()' class='btn btn-primary btn-xs'>删  除</button><button style='margin:5px 0px 5px 8px' type='button' onclick='Down()' class='btn btn-primary btn-xs'>下  载</button>";
-        }
-        else {
-        	ss = "<table width='100%' style='table-layout:fixed'><tr height='15%' width='100%'><th width='60%' align='left'>文件名:" + searchresult.results[0][pointid].feature.attributes.FileName + "</th><th width='40%' align='left'>完成人:" + searchresult.results[0][pointid].feature.attributes.FshPerson + " </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>坐标信息:" + searchresult.results[0][pointid].feature.attributes.CoodSystem + " </th><th width='40%' align='left'>完成时间:" + date2 + " </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>中央子午线:" + searchresult.results[0][pointid].feature.attributes.CenterMed + " </th><th width='40%' align='left'>上传时间:" + date1 + " </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>文件类型:" + searchresult.results[0][pointid].feature.attributes.FileType + " </th><th width='40%' align='left'>文件大小:" + searchresult.results[0][pointid].feature.attributes.FileSize.toFixed(2) + " </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>项目名称:" + searchresult.results[0][pointid].feature.attributes.ProName + " </th><th width='40%' align='left' id='tdid'>图形ID:" + searchresult.results[0][pointid].feature.attributes.OBJECTID + " </th></tr><tr height='15%' width='100%'><th width='100%' align='left'>备注:" + searchresult.results[0][pointid].feature.attributes.Memo + " </th></tr></table><button style='margin:5px 8px' type='button' onclick='SYT()' class='btn btn-primary btn-xs'>缩略图</button><button style='margin:5px 8px' type='button' onclick='Change()' class='btn btn-primary btn-xs a-delete-button'>修  改</button><button style='margin:5px 8px' type='button' onclick='dele()' class='btn btn-primary btn-xs a-delete-button'>删  除</button><button style='margin:5px 0px 5px 8px' type='button' onclick='Down()' class='btn btn-primary btn-xs'>下  载</button>";
-
-        }
-        map.infoWindow.setContent(ss);
-        map.infoWindow.setTitle("范围红线");
-        map.infoWindow.show(cPoint, map.getInfoWindowAnchor(cPoint));
-        graphiclayer.add(graphic);
-        // console.log(map.infoWindow.anchor);
-        map.setScale(100);
-        map.centerAt(cPoint);
-    }
-
 </script>

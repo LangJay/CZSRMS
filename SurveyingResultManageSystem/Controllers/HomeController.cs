@@ -121,7 +121,7 @@ namespace SurveyingResultManageSystem.Controllers
                 unit = "";
             pageInfo.pageList = fileInfoService.FindPageList(pageInfo.pageIndex, pageInfo.pageSize, out totalRecord,
                 f => f.PublicObjs.Contains(unit), "ID", false);
-            if (keywords != null && keywords != "")
+            if (!string.IsNullOrEmpty(keywords) || key == "MyFile")
             {
                 //把keywords存到cookies中
                 HttpCookie cook = new HttpCookie("keywords", keywords);
@@ -133,6 +133,10 @@ namespace SurveyingResultManageSystem.Controllers
                 IEnumerable<tb_FileInfo> iEn;
                 switch (key)
                 {
+
+                    case "MyFile":
+                        iEn = pageInfo.pageList.Where(f => f.UserID == user.ID);
+                        break;
                     case "SurveyingUnitName":
                         iEn = pageInfo.pageList.Where(f => f.SurveyingUnitName.Contains(keywords));
                         break;
@@ -296,7 +300,7 @@ namespace SurveyingResultManageSystem.Controllers
             {
                 var file = fileInfoService.Find(whereLamdba);
                 if (!AuthenLevel(file.SurveyingUnitName)) return false;//没有权限删除
-                //记录下载
+                //记录删除
                 tb_LogInfo log = new tb_LogInfo
                 {
                     UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value,
@@ -332,7 +336,7 @@ namespace SurveyingResultManageSystem.Controllers
             }
             catch (Exception e)
             {
-                //记录下载
+                //记录删除
                 tb_LogInfo log = new tb_LogInfo
                 {
                     UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value,
@@ -346,187 +350,120 @@ namespace SurveyingResultManageSystem.Controllers
                 return false;
             }
         }
+       
+        //地图管理多选下载
+        [Authentication]
+        public void DownloadsWithObjId()
+        {
+            var sr = new StreamReader(Request.InputStream);
+            var stream = sr.ReadToEnd();
+            string[] ids = JsonConvert.DeserializeObject<string[]>(stream) as string[];
+            sr.Close();
+            try
+            {
+                List<tb_FileInfo> list = new List<tb_FileInfo>();
+                tb_FileInfo file = new tb_FileInfo();
+                for (int i = 0; i < ids.Length; i++)
+                {
+                    string objid = ids[i];
+                    file = fileInfoService.Find(u => u.ObjectID == objid);
+                    if (file != null)
+                        list.Add(file);
+                }
+                if (list.Count > 0)
+                {
+                    string url = ZipFile(list);
+                    Response.Write(url);
+                }
+            }
+            catch (Exception e)
+            {
+                Log.AddRecord(e);
+                Response.Write("");
+            }
+        } 
         /// <summary>
         /// code的数字带表意思：
         /// code=1：参数错误；
         /// code=2：文件不存在；
         /// code=3：服务器错误；
         /// code=4：下载成功；
-        /// 文件管理多选下载
+        /// 文件管理下载
         /// </summary>
         [Authentication]
         [HttpPost]
         public void Downloads()
         {
+            var sr = new StreamReader(Request.InputStream);
+            var stream = sr.ReadToEnd();
+            string[] ids = JsonConvert.DeserializeObject<string[]>(stream) as string[];
+            sr.Close();
             try
             {
-                var sr = new StreamReader(Request.InputStream);
-                var stream = sr.ReadToEnd();
-                string[] ids = JsonConvert.DeserializeObject<string[]>(stream) as string[];
-                sr.Close();
-                if (ids == null)
-                {
-                    var response1 = new { code = 1 };
-                    Response.Write(new JavaScriptSerializer().Serialize(response1));
-                    return;
-                }
-                List<string> urls = new List<string>();
+                List<tb_FileInfo> list = new List<tb_FileInfo>();
+                tb_FileInfo file = new tb_FileInfo();
                 for (int i = 0; i < ids.Length; i++)
                 {
-                    string url = "/Home/DownloadWithId?fileId=" + ids[i];
-                    urls.Add(url);
+                    int id = int.Parse(ids[i]);
+                    file = fileInfoService.Find(u => u.ID == id);
+                    if (file != null)
+                        list.Add(file);
                 }
-                var response = new { code = 4, url = urls };
-                Response.Write(new JavaScriptSerializer().Serialize(response));
+                if (list.Count > 0)
+                {
+                    string url = ZipFile(list);
+                    Response.Write(url);
+                }
             }
             catch (Exception e)
             {
                 Log.AddRecord(e);
-                var response = new { code = 3 };
-                Response.Write(new JavaScriptSerializer().Serialize(response));
+                Response.Write("");
             }
         }
-        //地图管理多选下载
-        [Authentication]
-        [HttpPost]
-        public void DownloadsWithObjId()
+        private string ZipFile(List<tb_FileInfo> list)
         {
-            try
+            string direct = HttpRuntime.AppDomainAppPath.ToString() + "/Home/Data/File/";
+            string savePath = HttpRuntime.AppDomainAppPath.ToString() + "/Home/Data/File/下载.zip";//压缩文件保存路径
+            if (!Directory.Exists(direct))
             {
-                var sr = new StreamReader(Request.InputStream);
-                var stream = sr.ReadToEnd();
-                string[] ids = JsonConvert.DeserializeObject<string[]>(stream) as string[];
-                sr.Close();
-                if (ids == null)
+                Directory.CreateDirectory(direct);
+            }
+            if (System.IO.File.Exists(savePath))
+            {
+                try
                 {
-                    var response1 = new { code = 1 };
-                    Response.Write(new JavaScriptSerializer().Serialize(response1));
-                    return;
+                    System.IO.File.Delete(savePath);
                 }
-                List<string> urls = new List<string>();
-                List<string> objIds = ids.ToList();
-                //这里的有的id是属于同一个文件，不应该同时下载。
-                for(int i = 0;i <ids.Length;i ++)
+                catch (Exception e)
                 {
-                    string objId = ids[i];
-                    tb_FileInfo fileInfo = fileInfoService.Find(u => u.ObjectID.Contains(objId));
-                    if(fileInfo != null)
-                    {
-                        string objIdStr = fileInfo.ObjectID;
-                        for (int j = i + 1; j < ids.Length; j++)
-                        {
-                            if (objIdStr.Contains(ids[j]))
-                            {
-                                objIds.Remove(ids[i]);
-                            }
-                        }
-                    }
-                    
-                }
-                for (int i = 0; i < objIds.Count; i++)
-                {
-                    string url = "/Home/DownloadWithObjectId?objId=" + objIds[i];
-                    urls.Add(url);
-                }
-                var response = new { code = 4, url = urls };
-                Response.Write(new JavaScriptSerializer().Serialize(response));
-            }
-            catch (Exception e)
-            {
-                Log.AddRecord(e);
-                var response = new { code = 3 };
-                Response.Write(new JavaScriptSerializer().Serialize(response));
-            }
-        }
-        [Authentication]
-        public void Download()
-        {
-            try
-            {
-                string filename = "下载.zip";
-                string directory = HttpRuntime.AppDomainAppPath.ToString() + "/Data/File/下载.zip";
-                DownloadTask(filename, directory);
-            }
-            catch (Exception e)
-            {
-                Log.AddRecord(e);
-            }
-        }
-        /// <summary>
-        /// 根据objid下载文件，供mapManager使用
-        /// </summary>
-        /// <param name="objId"></param>
-        [Authentication]
-        public void DownloadWithObjectId(string objId)
-        {
-            tb_FileInfo f = fileInfoService.Find(u => u.ObjectID.Contains(objId.Trim()));
-            if (f != null)
-            {
-                DownloadWithId(f.ID.ToString());
-            }
-        }
-        /// <summary>
-        /// 单点文件记录下载
-        /// </summary>
-        /// <param name="fileId"></param>
-        [Authentication]
-        public void DownloadWithId(string fileId)
-        {
-            tb_FileInfo file = null;
-            if (!string.IsNullOrEmpty(fileId))
-            {
-                int id = Convert.ToInt32(fileId);
-                file = fileInfoService.Find(u => u.ID == id);
-            }
-            if (file == null)
-            {
-                AlertMsg("文件不存在");
-                return;
-            }
-            string filename = file.FileName;
-            string directory = file.Directory;
-            try
-            {
-                DownloadTask(filename, directory);
-            }
-            catch (Exception e)
-            {
-                //记录下载
-                tb_LogInfo log = new tb_LogInfo
-                {
-                    UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value,
-                    FileName = filename,
-                    Explain = "下载失败！",
-                    Time = DateTime.Now.ToString(),
-                    Operation = LogOperations.DownloadFile()
-                };
-                logInfoService.Add(log);
-                Log.AddRecord(e);
-            }
-        }
-        private void DownloadTask(string filename, string directory)
-        {
-            string safeFileName = filename.Substring(0, filename.IndexOf('.'));//压缩文件的文件名
-            string savaPath = Path.Combine(directory, safeFileName + ".zip");//压缩文件保存路径
-            if (!System.IO.File.Exists(savaPath))
-            {
-                //把下载文件压缩成文件夹
-                using (ZipFile zipFile = new ZipFile(System.Text.Encoding.Default))
-                {
-                    zipFile.AddDirectory(Path.Combine(directory, "原始文件"), safeFileName);
-                    zipFile.Save(savaPath);//太费时
+                    savePath  = HttpRuntime.AppDomainAppPath.ToString() + "/Data/File/temp.zip";//压缩文件保存路径
                 }
             }
+            //把下载文件压缩成文件夹
+            using (ZipFile zipFile = new ZipFile(Encoding.Default))
+            {
+                foreach (tb_FileInfo file in list)
+                {
+                    string safeFileName = file.FileName.Substring(0, file.FileName.IndexOf('.'));//压缩文件的文件名
+                    zipFile.AddDirectory(Path.Combine(file.Directory, "原始文件"), safeFileName);
+                }
+                zipFile.Save(savePath);//太费时
+            }
+            return "Data/File/下载.zip";
+        }
+        private void DownloadTask(string savePath)
+        {
             //以字符流的形式下载文件
-            FileStream fs = new FileStream(savaPath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+            FileStream fs = new FileStream(savePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
             Response.ContentType = "application/octet-stream";
             //通知浏览器下载文件而不是打开
-            Response.AddHeader("Content-Disposition", "attachment; filename=" + HttpUtility.UrlEncode(safeFileName + ".zip", System.Text.Encoding.UTF8));
+            Response.AddHeader("Content-Disposition", "attachment; filename=" + HttpUtility.UrlEncode("下载.zip", Encoding.UTF8));
             Response.AddHeader("Content-Length", fs.Length.ToString());
             //还没有读取的文件内容长度
             long leftLength = fs.Length;
             //创建接收文件内容的字节数组
-            byte[] buffer = new byte[1024 * 100];
+            byte[] buffer = new byte[1024 * 10];
             //每次读取的最大字节数
             int maxLength = buffer.Length;
             //每次实际返回的字节数长度
@@ -551,7 +488,7 @@ namespace SurveyingResultManageSystem.Controllers
             tb_LogInfo log = new tb_LogInfo
             {
                 UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value,
-                FileName = filename,
+                FileName = "下载文件",
                 Explain = "下载成功！",
                 Time = DateTime.Now.ToString(),
                 Operation = LogOperations.DownloadFile()
@@ -609,6 +546,24 @@ namespace SurveyingResultManageSystem.Controllers
                 str1 = str1 + user.Levels;
             }
             return str1;
+        }
+        /// <summary>
+        /// 获取用户ID
+        /// </summary>
+        /// <returns></returns>
+        [Authentication]
+        [HttpPost]
+        public string GetUserID()
+        {
+            var sr = new StreamReader(Request.InputStream);
+            var stream = sr.ReadToEnd();
+            sr.Close();
+            tb_UserInfo user = userInfoService.Find(u => u.UserName == stream.Trim());
+            if (user != null)
+            {
+                return user.ID.ToString();
+            }
+            return null;
         }
         [Authentication]
         [HttpPost]//王军军增加8.23
@@ -682,6 +637,7 @@ namespace SurveyingResultManageSystem.Controllers
             featureItem2.Attributes.Add("Xoffset", fileInfo.Xoffset);// 水平坐标偏移值
             featureItem2.Attributes.Add("SUnitName", fileInfo.SurveyingUnitName);// 测绘单位名称，北湖区测绘队、苏仙区测绘队、市局测绘队
             featureItem2.Attributes.Add("Memo", fileInfo.Explain);// 成果说明
+            featureItem2.Attributes.Add("PublicOB", fileInfo.PublicObjs);
             featureItem2.url = ConfigurationManager.AppSettings["serverurl"];
            
             bool tt1 = openauto.UpdateFeature(featureItem2.url, fileInfo.ObjectID, featureItem2);

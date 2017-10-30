@@ -229,7 +229,7 @@ background-color:#0079c1;
     cursor:pointer;
 }
 .div-table{
-    min-height:600px;
+    max-height:800px;
     overflow:auto;
 }
 body

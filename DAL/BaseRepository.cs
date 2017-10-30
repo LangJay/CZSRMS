@@ -136,7 +136,7 @@ namespace DAL
         /// <param name="propertyName">排序属性名</param>
         /// <param name="isAsc">是否正序</param>
         /// <returns>排序后的IQueryable<T></returns>
-        private IQueryable<T> OrderBy(IQueryable<T> source, string propertyName, bool isAsc)
+        public IQueryable<T> OrderBy(IQueryable<T> source, string propertyName, bool isAsc)
         {
             if (source == null) throw new ArgumentNullException("source", "不能为空");
             if (string.IsNullOrEmpty(propertyName)) return source;

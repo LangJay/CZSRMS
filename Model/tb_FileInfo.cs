@@ -122,5 +122,9 @@ namespace Model
         public int UserID { get; set; }
         public string ObjectID { get; set; }
         public string MD5 { get; set; }
+        /// <summary>
+        /// 是否已经删除
+        /// </summary>
+        public Nullable<bool> WasDeleted { get; set; }
     }
 }

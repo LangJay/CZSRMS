@@ -19,12 +19,54 @@ using System.Threading.Tasks;
 using IDAL;
 using DAL;
 using BLL.Tools;
+using System.Linq.Expressions;
+
 namespace BLL
 {
     public class FileInfoService : BaseService<tb_FileInfo>, InterfaceFileInfoService
     {
         public FileInfoService() : base(RepositoryFactory.FileInfoRepository)
         {
+
+        }
+        public List<tb_FileInfo> FindPageList(int pageIndex, int pageSize, out int totalRecord, Expression<Func<tb_FileInfo, bool>> whereLamdba, string orderName, bool isAsc)
+        {
+            List<tb_FileInfo> list = new List<tb_FileInfo>();
+            try
+            {
+                var info = CurrentRepository.FindPageList(pageIndex, pageSize, out totalRecord, whereLamdba, orderName, isAsc);
+                foreach (tb_FileInfo item in info)
+                {
+                    if (item.WasDeleted != true)
+                        list.Add(item);
+                }
+                return list;
+            }
+            catch (Exception e)
+            {
+                Log.AddRecord(e);
+                totalRecord = 0;
+                return list;
+            }
+        }
+        public List<tb_FileInfo> FindAll(Expression<Func<tb_FileInfo, bool>> where, string orderName, bool isArsc)
+        {
+            List<tb_FileInfo> list = new List<tb_FileInfo>();
+            try
+            {
+                var info = CurrentRepository.FindList(where, orderName, false);
+                foreach (tb_FileInfo item in info)
+                {
+                    if (item.WasDeleted != true)
+                        list.Add(item);
+                }
+                return list;
+            }
+            catch (Exception e)
+            {
+                Log.AddRecord(e);
+                return list;
+            }
         }
     }
 }

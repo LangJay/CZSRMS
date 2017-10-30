@@ -10,6 +10,7 @@
                         搜索 <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
+                        <li><a onclick="searchbtn('MyFile')">我的文件</a></li>
                         <li><a onclick="searchbtn('SurveyingUnitName')">测绘单位名称</a></li>
                         <li><a onclick="searchbtn('CoodinateSystem')">坐标信息框架</a></li>
                         <li><a onclick="searchbtn('ProjectName')">所属项目名称</a></li>
@@ -33,13 +34,22 @@
                     文件名称
                 </th>
                 <th>
+                    完成时间
+                </th>
+                <th>
+                    完成人
+                </th>
+                <th>
+                    测绘单位名称
+                </th>
+                <th>
+                    坐标系统
+                </th>
+                <th>
                     文件大小
                 </th>
                 <th>
                     上传时间
-                </th>
-                <th>
-                    测绘单位
                 </th>
                 <th>
                     操作
@@ -56,19 +66,28 @@
                         @item.FileName
                     </td>
                     <td>
+                        @(item.Finishtime)
+                    </td>
+                    <td>
+                        @(item.FinishPerson)
+                    </td>
+                    <td>
+                        @item.SurveyingUnitName
+                    </td>
+                    <td>
+                        @item.PcoodinateSystem
+                    </td>
+                    <td>
                         @(item.FileSize.ToString("f3") + " M")
                     </td>
                     <td>
                         @(item.UploadTime.Split(' ')[0])
                     </td>
                     <td>
-                        @item.SurveyingUnitName
-                    </td>
-                    <td>
                         <a class="a-delete-button" onclick="deleteFile(@item.ID)">
                             删除
                         </a>
-                        <a href="/Home/DownloadWithId?fileId=@item.ID">
+                        <a onclick="downloadFile(@item.ID)">
                             下载
                         </a>
                     </td>

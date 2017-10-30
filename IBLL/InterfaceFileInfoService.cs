@@ -15,6 +15,6 @@ namespace IBLL
 {
     public interface InterfaceFileInfoService:InterfaceBaseService<tb_FileInfo>
     {
-
+        new bool Delete(tb_FileInfo entity);
     }
 }
