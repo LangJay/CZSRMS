@@ -22,6 +22,14 @@ namespace SurveyingResultManageSystem.Controllers
 {
     public class HomeController : Controller
     {
+        /// <summary>
+        /// 排序字段，默认Finishtime
+        /// </summary>
+        private string ORDER_NAME = "Finishtime";
+        /// <summary>
+        /// 是否倒叙
+        /// </summary>
+        private bool DESC = false;
         private LogInfoService logInfoService;
         private UserInfoService userInfoService;
         private FileInfoService fileInfoService;
@@ -120,7 +128,7 @@ namespace SurveyingResultManageSystem.Controllers
             if (user.Levels == "0")// || user.Unit == "市局测绘队"
                 unit = "";
             pageInfo.pageList = fileInfoService.FindPageList(pageInfo.pageIndex, pageInfo.pageSize, out totalRecord,
-                f => f.PublicObjs.Contains(unit), "ID", false);
+                f => f.PublicObjs.Contains(unit) && f.WasDeleted == false, ORDER_NAME, DESC);
             if (!string.IsNullOrEmpty(keywords) || key == "MyFile")
             {
                 //把keywords存到cookies中
@@ -128,7 +136,7 @@ namespace SurveyingResultManageSystem.Controllers
                 Response.Cookies.Add(cook);
                 pageInfo.keywords = keywords;
                 //重新检索
-                pageInfo.pageList = fileInfoService.FindAll(f => f.PublicObjs.Contains(unit), "id", false);
+                pageInfo.pageList = fileInfoService.FindAll(f => f.PublicObjs.Contains(unit) && f.WasDeleted == false, ORDER_NAME, DESC);
                 List<tb_FileInfo> list = new List<tb_FileInfo>();
                 IEnumerable<tb_FileInfo> iEn;
                 switch (key)
@@ -186,7 +194,7 @@ namespace SurveyingResultManageSystem.Controllers
             {
                 List<tb_FileInfo> list = new List<tb_FileInfo>();
                 //重新检索
-                pageInfo.pageList = fileInfoService.FindAll(f => f.PublicObjs.Contains(unit), "id", false);
+                pageInfo.pageList = fileInfoService.FindAll(f => f.PublicObjs.Contains(unit) && f.WasDeleted == false, ORDER_NAME, DESC);
                 IEnumerable<tb_FileInfo> iEn = pageInfo.pageList.Where(f => f.CoodinateSystem.Contains(category) || f.ProjectType.Contains(category)
                 || f.FileType.Contains(category) || f.SurveyingUnitName.Contains(category));
                 int index = 1;
@@ -351,8 +359,9 @@ namespace SurveyingResultManageSystem.Controllers
             }
         }
        
-        //地图管理多选下载
+        //地图管理下载
         [Authentication]
+        [HttpPost]
         public void DownloadsWithObjId()
         {
             var sr = new StreamReader(Request.InputStream);

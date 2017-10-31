@@ -339,7 +339,7 @@
                 async: false,
                 data: JSON.stringify(user),
                 success: function (data) {
-                    if (data == "用户名已经存在！") {
+                    if (data != "创建成功!") {
                         alert(data);
                     }
                     else

@@ -85,9 +85,10 @@ namespace SurveyingResultManageSystem.Controllers
             var sr = new StreamReader(Request.InputStream);
             var stream = sr.ReadToEnd();
             sr.Close();
+            string username = System.Web.HttpContext.Current.Request.Cookies["username"].Value;
             tb_LogInfo log = new tb_LogInfo()
             {
-                UserName = System.Web.HttpContext.Current.Request.Cookies["username"].Value,
+                UserName = username,
                 Time = DateTime.Now.ToString(),
                 FileName = "",
                 Operation = LogOperations.CreateUser()
@@ -95,6 +96,19 @@ namespace SurveyingResultManageSystem.Controllers
             try
             {
                 tb_UserInfo obj = JsonConvert.DeserializeObject<tb_UserInfo>(stream) as tb_UserInfo;
+                //检查是否有足够权限创建
+                //1、获取本账号权限
+                string levels = GetUserLevels();
+                if(levels == "0")
+                {
+                    if (obj.Levels == "0")
+                        return Content("您没有权限创建管理员账户，请联系系统管理员！");
+                }
+                else if(levels == "-1")
+                {
+                    if (obj.Levels == "1")
+                        return Content("您不能创建管理员账户，请各测区管理员创建！");
+                }
                 //添加一个分类设置的xml文件，以用户名命名
                 bool createxml = MyXML.CreateXML(obj.UserName);
                 if (obj == null || createxml == false)

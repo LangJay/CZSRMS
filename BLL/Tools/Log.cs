@@ -39,7 +39,7 @@ namespace BLL.Tools
                 string path = rootPath + "\\Log";
                 if (!Directory.Exists(path))//判断是否有该文件    
                     Directory.CreateDirectory(path);//不存在则创建log文件夹  
-                string logFileName = path + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + ".log";//生成日志文件  
+                string logFileName = path + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + ".txt";//生成日志文件  
 
                 writer = File.AppendText(logFileName);//文件中添加文件流  
                 writer.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + e.Message + e.StackTrace);
@@ -72,7 +72,7 @@ namespace BLL.Tools
                 string path = rootPath + "\\Log";
                 if (!Directory.Exists(path))//判断是否有该文件    
                     Directory.CreateDirectory(path);//不存在则创建log文件夹  
-                string logFileName = path + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + ".log";//生成日志文件  
+                string logFileName = path + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + ".txt";//生成日志文件  
 
                 writer = File.AppendText(logFileName);//文件中添加文件流  
                 writer.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + e);

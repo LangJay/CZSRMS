@@ -450,7 +450,7 @@
     function download(idsjson) {
         //window.open("/Home/Downloads?idsjson=" + idsjson);
         $.ajax({
-            url: '/Home/Downloads',
+            url: '/Home/DownloadsWithObjId',
             type: "post",
             dataType: "text",
             data: idsjson,

@@ -37,7 +37,7 @@ namespace Model
         /// </summary>
         public string LastLogintime { set; get; }
         /// <summary>
-        /// 用户权限等级，0最高，1其次，以此类推。
+        /// 用户权限等级，-1是系统管理员 0最高，1其次，以此类推。
         /// </summary>
         public string Levels { set; get; }
         /// <summary>

@@ -25,6 +25,8 @@ namespace ArcServer
     };
     public class openauto
     {
+
+        string spt = "[{ \"geometry\":{ \"spatialReference\":{\"wkt\":\"PROJCS[\\\"CGCS2000_3_Degree_GK_CM_11330E\\\",GEOGCS[\\\"GCS_China_Geodetic_Coordinate_System_2000\\\",DATUM[\\\"D_China_2000\\\",SPHEROID[\\\"CGCS2000\\\",6378137.0,298.257222101]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],PROJECTION[\\\"Gauss_Kruger\\\"],PARAMETER[\\\"False_Easting\\\",500000.0],PARAMETER[\\\"False_Northing\\\",0.0],PARAMETER[\\\"Central_Meridian\\\",113.5],PARAMETER[\\\"Scale_Factor\\\",1.0],PARAMETER[\\\"Latitude_Of_Origin\\\",0.0],UNIT[\\\"Meter\\\",1.0]]\"}}}]";
         public static bool AddFeature(string layerUrl, FeatureItem featureItem)
         {
             string url = layerUrl + "/addFeatures";
@@ -215,7 +217,7 @@ namespace ArcServer
             if (!res1.Contains("geometry"))
                 return false;
                     
-            int begin = res1.IndexOf("[",res1.IndexOf("[")+1);
+            int begin = res1.IndexOf("features")+10;
             int end = res1.LastIndexOf("]");
             string featuresJson = res1.Substring(begin, end - begin + 1);
             string features = string.Format("features={0}&", featuresJson);

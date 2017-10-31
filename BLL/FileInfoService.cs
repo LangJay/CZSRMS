@@ -29,7 +29,7 @@ namespace BLL
         {
 
         }
-        public List<tb_FileInfo> FindPageList(int pageIndex, int pageSize, out int totalRecord, Expression<Func<tb_FileInfo, bool>> whereLamdba, string orderName, bool isAsc)
+        public new List<tb_FileInfo> FindPageList(int pageIndex, int pageSize, out int totalRecord, Expression<Func<tb_FileInfo, bool>> whereLamdba, string orderName, bool isAsc)
         {
             List<tb_FileInfo> list = new List<tb_FileInfo>();
             try
@@ -37,8 +37,7 @@ namespace BLL
                 var info = CurrentRepository.FindPageList(pageIndex, pageSize, out totalRecord, whereLamdba, orderName, isAsc);
                 foreach (tb_FileInfo item in info)
                 {
-                    if (item.WasDeleted != true)
-                        list.Add(item);
+                    list.Add(item);
                 }
                 return list;
             }
@@ -49,7 +48,7 @@ namespace BLL
                 return list;
             }
         }
-        public List<tb_FileInfo> FindAll(Expression<Func<tb_FileInfo, bool>> where, string orderName, bool isArsc)
+        public new List<tb_FileInfo> FindAll(Expression<Func<tb_FileInfo, bool>> where, string orderName, bool isArsc)
         {
             List<tb_FileInfo> list = new List<tb_FileInfo>();
             try
@@ -57,8 +56,7 @@ namespace BLL
                 var info = CurrentRepository.FindList(where, orderName, false);
                 foreach (tb_FileInfo item in info)
                 {
-                    if (item.WasDeleted != true)
-                        list.Add(item);
+                    list.Add(item);
                 }
                 return list;
             }
