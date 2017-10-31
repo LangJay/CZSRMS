@@ -23,7 +23,7 @@
             <ul id="div_title_ul">
                 <li id="li-setpwd"><a href="/SetPasswords/Index">设置密码</a></li>
                 <li id="li-setcategory"><a href="/Category/CategoryIndex">分类设置</a></li>
-                <li><a href="/Home/FileManager">首页</a></li>
+                <li id="li-first"><a href="/Home/FileManager">首页</a></li>
             </ul>
         </div>
         <div id="div_message">
@@ -86,9 +86,16 @@
     {
         if (status == "success")
         {
-            if (data == 0) {
+            if (data == 0 || data == -1) {
                 $(".li-user").css("display", "none");
-                $("#li-setpwd").append("<li> <a href='/UserInfoManager/UserManager'>账户管理</a></li ><li><a href='/LogInfoManager/LogInfoManager'>日志管理</a></li>")
+                $("#li-setpwd").append("<li> <a href='/UserInfoManager/UserManager'>账户管理</a></li ><li><a href='/LogInfoManager/LogInfoManager'>日志管理</a></li>");
+            }
+            if (data == -1)
+            {
+                $("#li-setpwd").append("<li> <a href='/FileManager/FileRecoverView'>数据恢复</a></li >");
+                $("#li-setcategory").css("display", "none");
+                $("#li-first").css("display", "none");
+                $("#div_message_right").css("display", "none");
             }
         }
     });

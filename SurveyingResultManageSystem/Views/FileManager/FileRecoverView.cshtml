@@ -1,0 +1,56 @@
+﻿@using Model;
+@model Model.PageInfo<tb_FileInfo>
+<div id="filerecover">
+    @Html.Action("FileRecover")
+</div>
+<script type="text/javascript">
+
+    //获取数据
+    function getDate(pageIndex) {
+        //获取文件数据
+        $.ajax({
+            url: 'FileRecover',
+            type: "get",
+            dataType: "html",
+            data: { pageIndex: pageIndex },
+            async: false,
+            success: function (data) {
+                //这里是ajax提交成功后，程序返回的数据处理函数。data是返回的数据，数据类型在dataType参数里定义！
+                $("#filerecover").html(data);
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(textStatus);
+            }
+        });
+    };
+    //翻页
+    function refresh(pageIndex) {
+        var a = $(".subclass").find(".checked")[0];
+        var category = "";
+        if (a != undefined) {
+            category = a.innerText;
+            if (category == undefined)
+                category = "";
+        }
+        var keywords = $(".search").val();
+        getDate(pageIndex);
+    };
+    //恢复数据
+    function recoverFile(id)
+    {
+        //获取文件名
+        $.getJSON("/FileManager/Recover?id=" + Number(id), function (data) {
+            alert(data);
+        });
+    };
+    //彻底删除
+    function deleteFile(id)
+    {
+        //获取文件名
+        if (confirm("你确定要彻底删除" + filename + "吗？")) {
+            $.getJSON("/FileManager/Delete?id=" + Number(id), function (data) {
+                alert(data);
+            });
+        }
+    }
+</script>

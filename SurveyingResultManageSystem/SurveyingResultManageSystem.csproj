@@ -173,6 +173,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\style\FileRecover.css" />
     <Content Include="Content\style\SetPasswords.css" />
     <Content Include="Data\Manager.xml" />
     <Content Include="Content\bootstrap.css" />
@@ -261,11 +262,12 @@
     <Content Include="Views\Shared\Manager.cshtml" />
     <Content Include="Views\Category\CategoryIndex.cshtml" />
     <Content Include="Views\Home\GetFileView.cshtml" />
+    <Content Include="Views\FileManager\FileRecover.cshtml" />
+    <Content Include="Views\FileManager\FileRecoverView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Droplist\" />
-    <Folder Include="Views\FileManager\" />
     <Folder Include="Views\Layout\" />
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,21 @@
+﻿.table tr th {
+    text-align: center;
+}
+.button {
+    background-color: #0972A7;
+    border: none;
+    color: white;
+    outline: none;
+    height: 30px;
+}
+
+    .button:before {
+        background-color: #0972A7;
+        border: none;
+        color: white;
+        outline: none;
+    }
+
+    .button:active {
+        background-color: #5090C7;
+    }

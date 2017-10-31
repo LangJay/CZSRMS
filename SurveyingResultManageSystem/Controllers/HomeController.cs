@@ -49,7 +49,7 @@ namespace SurveyingResultManageSystem.Controllers
         {
             try
             {
-                tb_UserInfo userInfo = userInfoService.FindUserInfoWithUserName(user.UserName);
+                tb_UserInfo userInfo = userInfoService.Find(u => u.UserName == user.UserName);
                 if (userInfo == null)
                     ModelState.AddModelError("UserName", "用户名不存在");
                 else if (userInfo.Password == user.Password)
@@ -61,6 +61,10 @@ namespace SurveyingResultManageSystem.Controllers
                     //更新最后登录时间
                     userInfo.LastLogintime = DateTime.Now.ToString();
                     userInfoService.Update(userInfo);
+                    if (userInfo.Levels == "-1")
+                    {
+                        return RedirectToAction("UserManager", "UserInfoManager");
+                    }
                     return RedirectToAction("FileManager", "Home");
                 }
                 else
@@ -92,6 +96,7 @@ namespace SurveyingResultManageSystem.Controllers
             Response.Cookies.Add(cookie);
             return RedirectToAction("Login", "Home");
         }
+        [MapAuthentication]
         [Authentication]
         [HttpGet]
         public ActionResult FileManager()
@@ -102,6 +107,7 @@ namespace SurveyingResultManageSystem.Controllers
             ViewBag.Data = logInfoService.FindLogListAndFirst(l => l.Time.Contains(date) && operation.Contains(l.Operation));
             return View();
         }
+        [MapAuthentication]
         [Authentication]
         public ActionResult MapManager()
         {

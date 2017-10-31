@@ -19,6 +19,14 @@ namespace SurveyingResultManageSystem.Controllers
 {
     public class FileManagerController : Controller
     {
+        /// <summary>
+        /// 排序字段，默认Finishtime
+        /// </summary>
+        private string ORDER_NAME = "Finishtime";
+        /// <summary>
+        /// 是否倒叙
+        /// </summary>
+        private bool DESC = false;
         private FileInfoService fileInfoService;
         private UserInfoService userInfoService;
         private LogInfoService logInfoService;
@@ -244,6 +252,60 @@ namespace SurveyingResultManageSystem.Controllers
                 Log.AddRecord(ex);
                 return null;
             }
+        }
+        /// <summary>
+        /// 系统管理员恢复数据分页
+        /// </summary>
+        /// <returns></returns>
+        [Authentication]
+        public PartialViewResult FileRecover(int? pageIndex)
+        { 
+           
+            return PartialView(getPartialModel(pageIndex));
+        }
+        /// <summary>
+        /// 获取分页model
+        /// </summary>
+        /// <param name="pageIndex"></param>
+        /// <returns></returns>
+        private PageInfo<tb_FileInfo> getPartialModel(int? pageIndex)
+        {
+            //分类分页数据
+            PageInfo<tb_FileInfo> pageInfo = new PageInfo<tb_FileInfo>()
+            {
+                pageIndex = pageIndex ?? 1
+            };
+            int totalRecord;
+            pageInfo.pageList = fileInfoService.FindPageList(pageInfo.pageIndex, 1, out totalRecord,
+                f => f.WasDeleted == true, ORDER_NAME, DESC);
+            pageInfo.totalRecord = totalRecord;
+            double res = (totalRecord / 1.0) / 1;
+            pageInfo.totalPage = (int)Math.Ceiling(res);
+            return pageInfo;
+        }
+        [Authentication]
+        public ActionResult FileRecoverView()
+        {
+            return View();
+        }
+        [Authentication]
+        [HttpGet]
+        public void Recover(int id)
+        {
+            //根据id查找数据库记录
+            tb_FileInfo file = fileInfoService.Find(u => u.ID == id);
+            //找到原来的图形，重新上载到地图
+
+            //数据库标识字段WasDelete恢复false
+            Response.Write("恢复成功！");
+        }
+        [Authentication]
+        [HttpGet]
+        public void Delete(int id)
+        {
+            //根据id查找数据库记录
+            tb_FileInfo file = fileInfoService.Find(u => u.ID == id);
+            Response.Write("删除成功！");
         }
     }
 }

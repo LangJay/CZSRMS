@@ -11,6 +11,7 @@ namespace Model
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
     public partial class tb_FileInfo
@@ -20,31 +21,38 @@ namespace Model
         /// 文件名
         /// /// </summary>
         [StringLength(200, MinimumLength = 0, ErrorMessage = "最多200个字符")]
+        [DisplayName("文件名称")]
         public string FileName { get; set; }
         /// <summary>
         /// 文件路径，最大
         /// </summary>
         [StringLength(500, MinimumLength = 0, ErrorMessage = "最多500个字符")]
+        [DisplayName("文件路径")]
         public string Directory { get; set; }
         /// <summary>
         /// 坐标框架信息，供选：西安1980、北京1954、国家2000、郴州独立
         /// </summary>
+        [DisplayName("坐标系统")]
         public string CoodinateSystem { get; set; }
         /// <summary>
         /// 完成时间信息
         /// </summary>
+        [DisplayName("完成时间")]
         public string FinishtimeInfo { get; set; }
         /// <summary>
         /// 完成人信息
         /// </summary>
+        [DisplayName("完成人")]
         public string FinishPersonInfo { get; set; }
         /// <summary>
         /// 最小坐标
         /// </summary>
+        [DisplayName("最小坐标")]
         public Nullable<double> MinCoodinate { get; set; }
         /// <summary>
         /// 最大坐标
         /// </summary>
+        [DisplayName("最大坐标")]
         public Nullable<double> MaxCoodinate { get; set; }
         /// <summary>
         /// 文件中对象数量
@@ -98,6 +106,7 @@ namespace Model
         /// <summary>
         /// 测绘单位名称，供选：北湖区测绘队、苏仙区测绘队、市局测绘队
         /// </summary>
+        [DisplayName("测绘单位名称")]
         public string SurveyingUnitName { get; set; }
         /// <summary>
         /// 成果说明

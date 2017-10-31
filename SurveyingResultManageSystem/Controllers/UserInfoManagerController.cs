@@ -62,9 +62,18 @@ namespace SurveyingResultManageSystem.Controllers
                 foreach (tb_UserInfo l in iEn)
                 {
                     if ((pageIndex - 1) * pageInfo.pageSize < index && pageIndex * pageInfo.pageSize >= index)
+                    {
+                        if (l.Levels == "0")
+                            l.Levels = "管理员";
+                        else if(l.Levels == "1")
+                            l.Levels = "普通账户";
+                        else
+                            l.Levels = "系统管理员";
                         list.Add(l);
+                    }
                     index++;
                 }
+               
                 pageInfo.pageList = list;
                 totalRecord = index - 1;
             }
@@ -73,6 +82,19 @@ namespace SurveyingResultManageSystem.Controllers
                 //没有关键词的时候
                 pageInfo.keywords = "";
             }
+            //修改等级显示
+            List<tb_UserInfo> users = new List<tb_UserInfo>();
+            foreach (tb_UserInfo l in pageInfo.pageList)
+            {
+                if (l.Levels == "0")
+                    l.Levels = "管理员";
+                else if (l.Levels == "1")
+                    l.Levels = "普通账户";
+                else
+                    l.Levels = "系统管理员";
+                users.Add(l);
+            }
+            pageInfo.pageList = users;
             pageInfo.totalRecord = totalRecord;
             double res = (totalRecord / 1.0) / pageInfo.pageSize;
             pageInfo.totalPage = (int)Math.Ceiling(res);
@@ -160,8 +182,25 @@ namespace SurveyingResultManageSystem.Controllers
             {
                 if (username != "")
                 {
-                    //删除对应的xml文件
-                    if (userInfoService.Delete(u => u.UserName == username) && MyXML.DeleteXML(username))
+                    //判断是否有权限
+                    tb_UserInfo user = userInfoService.Find(u => u.UserName == username);
+                    string levels = GetUserLevels();
+                    if (user.Levels == "0")
+                    {
+                        if (levels != "-1")
+                            return Content("您没有权限删除管理员账户！");
+                    }
+                    else if(user.Levels == "-1")
+                    {
+                        return Content("您没有权限删除系统管理员账户！");
+                    }
+                    else if(user.Levels == "1")
+                    {
+                        if(levels != "0")
+                            return Content("您没有权限删除普通账户！");
+                    }
+                        //删除对应的xml文件
+                        if (userInfoService.Delete(u => u.UserName == username) && MyXML.DeleteXML(username))
                     {
                         log.Explain = "删除成功！";
                         logInfoService.Add(log);

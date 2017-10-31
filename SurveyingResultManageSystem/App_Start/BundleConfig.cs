@@ -34,6 +34,7 @@ namespace SurveyingResultManageSystem
             bundles.Add(new StyleBundle("~/Content/style/MoreLogInfo.css").Include("~/Content/style/MoreLogInfo.css"));
             bundles.Add(new StyleBundle("~/Content/style/SetPasswords.css").Include("~/Content/style/SetPasswords.css"));
             bundles.Add(new StyleBundle("~/Content/style/CategoryIndex.css").Include("~/Content/style/CategoryIndex.css"));
+            bundles.Add(new StyleBundle("~/Content/style/FileRecover.css").Include("~/Content/style/FileRecover.css"));
             //Scripts
 
         }

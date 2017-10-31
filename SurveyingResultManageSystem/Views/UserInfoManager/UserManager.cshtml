@@ -228,11 +228,6 @@
         var table = document.getElementsByClassName('table')[0];
         var username = table.rows[row].cells[0].innerText;
         var levels = table.rows[row].cells[2].innerText;
-        if (levels == 0)
-        {
-            alert("无法删除管理员账户！");
-            return;
-        }
         if (confirm("你确定删除该用户？"))
         {
             //删除数据
