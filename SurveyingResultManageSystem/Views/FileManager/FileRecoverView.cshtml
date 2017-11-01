@@ -41,15 +41,17 @@
         //获取文件名
         $.getJSON("/FileManager/Recover?id=" + Number(id), function (data) {
             alert(data);
+            getDate(1);
         });
     };
     //彻底删除
     function deleteFile(id)
     {
         //获取文件名
-        if (confirm("你确定要彻底删除" + filename + "吗？")) {
+        if (confirm("你确定要彻底删除该文件吗？")) {
             $.getJSON("/FileManager/Delete?id=" + Number(id), function (data) {
-                alert(data);
+                alert(data.result);
+                getDate(1);
             });
         }
     }

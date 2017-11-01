@@ -264,6 +264,7 @@
     <Content Include="Views\Home\GetFileView.cshtml" />
     <Content Include="Views\FileManager\FileRecover.cshtml" />
     <Content Include="Views\FileManager\FileRecoverView.cshtml" />
+    <Content Include="Views\Home\ShowImage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -2,7 +2,6 @@
     position: relative;
     padding-top: 60%;
     font-family: "futura", arial;
-    overflow: hidden;
 }
 
 .fader .slide {
@@ -15,10 +14,6 @@
 	text-align:left;
 }
 
-.fader img.slide {
-    height: auto;
-	
-}
 
 .fader .prev,
 .fader .next {

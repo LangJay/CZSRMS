@@ -90,4 +90,42 @@ namespace SurveyingResultManageSystem.App_Start
             }
         }
     }
+    /// <summary>
+    /// 其他用户不能进的地方
+    /// </summary>
+    public class RecoverAuthenticationAttribute : ActionFilterAttribute
+    {
+        private UserInfoService userInfoService;
+        public RecoverAuthenticationAttribute()
+        {
+            userInfoService = new UserInfoService();
+        }
+        public override void OnActionExecuted(ActionExecutedContext filterContext)
+        {
+            try
+            {
+                var cook = HttpContext.Current.Request.Cookies["username"];
+                if (cook == null)
+                {
+                    filterContext.Result = new RedirectResult("/Home/Login");
+                }
+                string username = cook.Value;
+                tb_UserInfo user = userInfoService.Find(u => u.UserName == username);
+                if (user == null)
+                {
+                    filterContext.Result = new RedirectResult("/Home/Login");
+                }
+                else if (user.Levels != "-1")
+                {
+                    filterContext.Result = new RedirectResult("/Home/Error");
+                }
+                base.OnActionExecuted(filterContext);
+            }
+            catch (Exception e)
+            {
+                Log.AddRecord(e);
+            }
+        }
+    }
+
 }

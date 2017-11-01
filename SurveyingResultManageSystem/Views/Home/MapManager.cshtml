@@ -785,48 +785,49 @@
             var id = document.getElementById("tdid").innerHTML;
             var idh = id.split(':');
             var idd = idh[1].trim();
+            window.open("/Home/ShowImage/" + idd);
             // console.log(idh[1]);
-            map.infoWindow.hide();
-            var dialogwdith = $(window).width() + $(".modal-dialog").width();
-            $(".modal-content").css({
-                left: (dialogwdith - $(".modal-content").width()) / 2,
-            })
-            var image1 = document.getElementById("dowebok")
-            if (image1.childNodes.length > 0) {
-                $("#dowebok").children().remove();
+            //map.infoWindow.hide();
+            //var dialogwdith = $(window).width() + $(".modal-dialog").width();
+            //$(".modal-content").css({
+            //    left: (dialogwdith - $(".modal-content").width()) / 2,
+            //})
+            //var image1 = document.getElementById("dowebok")
+            //if (image1.childNodes.length > 0) {
+            //    $("#dowebok").children().remove();
 
-            }
-            var info;
-            var imagepath = "";
-            $.ajax({
-                url: "/Home/getimginfo",
-                type: "post",
-                dataType: "text",
-                async: false,
-                data: idd,
-                success: function (data) {
-                    info = data;
-                    var img = info.split("%$%");
-                    if (img.length > 0) {
-                        for (var i = 0; i < img.length; i++) {
-                            imagepath = imagepath + "<img class='slide' src='" + img[i] + "'></img>";
-                        }
-                        image1.innerHTML = imagepath + "<div class='fader_controls'><div class='page prev' data-target='prev'>&lsaquo;</div><div class='page next' data-target='next'>&rsaquo;</div> <ul class='pager_list'></ul></div>";
-                    }
-                    else {
+            //}
+            //var info;
+            //var imagepath = "";
+            //$.ajax({
+            //    url: "/Home/getimginfo",
+            //    type: "post",
+            //    dataType: "text",
+            //    async: false,
+            //    data: idd,
+            //    success: function (data) {
+            //        info = data;
+            //        var img = info.split("%$%");
+            //        if (img.length > 0) {
+            //            for (var i = 0; i < img.length; i++) {
+            //                imagepath = imagepath + "<img class='slide' src='" + img[i] + "'></img>";
+            //            }
+            //            image1.innerHTML = imagepath + "<div class='fader_controls'><div class='page prev' data-target='prev'>&lsaquo;</div><div class='page next' data-target='next'>&rsaquo;</div> <ul class='pager_list'></ul></div>";
+            //        }
+            //        else {
 
-                        image1.innerHTML = "<img class='slide' src='~/Scripts/easyfader/images/img1.jpg'></img><img class='slide' src='~/Scripts/easyfader/images/img2.jpg'></img><img class='slide' src='~/Scripts/easyfader/images/img3.jpg'></img><div class='fader_controls'><div class='page prev' data-target='prev'>&lsaquo;</div><div class='page next' data-target='next'>&rsaquo;</div> <ul class='pager_list'></ul></div>";
-                    }
-                    //console.log(imagepath);
-                    $("#myModal1").modal('show');
-                    $('#dowebok').easyFader();
-                },
-                error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert(XMLHttpRequest.status);
-                    //alert(XMLHttpRequest.readyState);
-                    //alert(textStatus);
-                }
-            });
+            //            image1.innerHTML = "<img class='slide' src='~/Scripts/easyfader/images/img1.jpg'></img><img class='slide' src='~/Scripts/easyfader/images/img2.jpg'></img><img class='slide' src='~/Scripts/easyfader/images/img3.jpg'></img><div class='fader_controls'><div class='page prev' data-target='prev'>&lsaquo;</div><div class='page next' data-target='next'>&rsaquo;</div> <ul class='pager_list'></ul></div>";
+            //        }
+            //        //console.log(imagepath);
+            //        $("#myModal1").modal('show');
+            //        $('#dowebok').easyFader();
+            //    },
+            //    error: function (XMLHttpRequest, textStatus, errorThrown) {
+            //        alert(XMLHttpRequest.status);
+            //        //alert(XMLHttpRequest.readyState);
+            //        //alert(textStatus);
+            //    }
+            //});
 
 
 

@@ -1,0 +1,19 @@
+﻿
+@Styles.Render("~/Scripts/easyfader/css/jquery.easyfader.css")
+<script src="~/Scripts/easyfader/js/jquery.easyfader.js"></script>
+<div id="Fader" class="fader" style="text-align:left">
+    @foreach(var url in ViewBag.Imagelist)
+    {
+        <img class="slide" src=@url />
+    }
+    <div class="fader_controls">
+        <div class="page prev" data-target="prev">‹</div>
+        <div class="page next" data-target="next">›</div>
+        <ul class="pager_list"></ul>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#Fader').easyFader();
+    });
+</script>

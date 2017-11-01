@@ -111,8 +111,8 @@ namespace SurveyingResultManageSystem.Controllers
         [Authentication]
         public ActionResult MapManager()
         {
-            string operation = LogOperations.UploadFile() + LogOperations.DownloadFile() + LogOperations.DeleteFile();
             //获取消息滚动条数据，取当天的数据
+            string operation = LogOperations.UploadFile() + LogOperations.DownloadFile() + LogOperations.DeleteFile();
             string date = DateTime.Now.ToString("d");
             ViewBag.Data = logInfoService.FindLogListAndFirst(l => l.Time.Contains(date) && operation.Contains(l.Operation));
             return View();
@@ -329,9 +329,10 @@ namespace SurveyingResultManageSystem.Controllers
                     return false;
                 }
                 using (TransactionScope tran = new TransactionScope())
-                { 
+                {
                     //删除数据库 
-                    bool success = fileInfoService.Delete(file);
+                    file.WasDeleted = true;
+                    bool success = fileInfoService.Update(file);
                     if (success)
                     {
                         //删除图形，考虑没有图形文件的情况
@@ -339,9 +340,9 @@ namespace SurveyingResultManageSystem.Controllers
                         log.FileName = file.FileName;
                         log.Explain = "删除成功！";
                         logInfoService.Add(log);
-                        //删除文件
-                        DirectoryInfo dreInfo = new DirectoryInfo(file.Directory);
-                        dreInfo.Delete(true);
+                        //在这里文件不再删除了
+                        //DirectoryInfo dreInfo = new DirectoryInfo(file.Directory);
+                        //dreInfo.Delete(true);
                         //提交事务
                         tran.Complete();
                     }
@@ -452,7 +453,7 @@ namespace SurveyingResultManageSystem.Controllers
                 }
                 catch (Exception e)
                 {
-                    savePath  = HttpRuntime.AppDomainAppPath.ToString() + "/Data/File/temp.zip";//压缩文件保存路径
+                    savePath  = HttpRuntime.AppDomainAppPath.ToString() + "/Home/Data/File/下载.zip";//压缩文件保存路径
                 }
             }
             //把下载文件压缩成文件夹
@@ -527,13 +528,6 @@ namespace SurveyingResultManageSystem.Controllers
             bool tt1 = DeleteFile(u => u.ObjectID.Contains(stream.Trim()));
             return tt1;
         }
-        public static string get_uft8(string unicodeString)
-        {
-            UTF8Encoding utf8 = new UTF8Encoding();
-            Byte[] encodedBytes = utf8.GetBytes(unicodeString);
-            String decodedString = utf8.GetString(encodedBytes);
-            return decodedString;
-        }
         /// <summary>
         /// 根据图形id删除图形
         /// </summary>
@@ -546,6 +540,51 @@ namespace SurveyingResultManageSystem.Controllers
             bool tt = openauto.DeleFeature(item1.url, objectid);
             return tt;
         }
+        /// <summary>
+        /// 显示缩略图
+        /// </summary>
+        /// <returns></returns>
+        [MapAuthentication]
+        public ActionResult ShowImage(int id)
+        {
+            //获取消息滚动条数据，取当天的数据
+            string operation = LogOperations.UploadFile() + LogOperations.DownloadFile() + LogOperations.DeleteFile();
+            string date = DateTime.Now.ToString("d");
+            ViewBag.Data = logInfoService.FindLogListAndFirst(l => l.Time.Contains(date) && operation.Contains(l.Operation));
+            //获取图片
+            var baseurl = "http://" + Request.Url.Host + ":" + Request.Url.Port;
+            tb_FileInfo user = fileInfoService.Find(u => u.ID == id);
+            if(user == null)
+            {
+                string objId = id.ToString();
+                user = fileInfoService.Find(u => u.ObjectID == objId);
+            }
+            if(user == null)
+            {
+                //跳转到错误页
+                return RedirectToAction("Error", "Home");
+            }
+            string path1 = user.Directory + "预览文件\\";
+            DirectoryInfo dir = new DirectoryInfo(path1);
+            var startindex = path1.IndexOf("\\Data\\File");
+            var path2 = path1.Substring(startindex);
+            FileInfo[] inf = dir.GetFiles();
+            List<string> imageList = new List<string>();
+            foreach (FileInfo finf in inf)
+            {
+                var filename = "";
+                if (finf.Extension.Equals(".jpg"))
+                    //如果扩展名为“.xml”
+                    path2.Replace("\\", "/");
+                filename = filename + baseurl + path2 + finf.Name;
+                imageList.Add(filename);
+            }
+            ViewBag.Imagelist = imageList;
+            return View();
+        }
+
+
+
         [Authentication]
         [HttpPost]//王军军增加8.23
         public string GetUserinfo()

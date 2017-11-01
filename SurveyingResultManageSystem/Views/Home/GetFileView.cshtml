@@ -90,7 +90,7 @@
                         <a onclick="downloadFile(@item.ID)">
                             下载
                         </a>
-                    </td>
+                        @Html.ActionLink("缩略图","ShowImage",new { id = item.ID },new { target = "_blank" })
                 </tr>
             }
         </table>
