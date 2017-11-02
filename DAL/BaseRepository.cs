@@ -12,6 +12,7 @@
 using IDAL;
 using Model;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -122,6 +123,24 @@ namespace DAL
                 dbContext.Set<T>().Attach(entity);
                 dbContext.Entry<T>(entity).State = System.Data.Entity.EntityState.Modified;
                 return dbContext.SaveChanges() > 0;
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
+        }
+        public bool UpdateMulti(List<T> list)
+        {
+            try
+            {
+                bool success = false;
+                foreach (T t in list)
+                {
+                    dbContext.Set<T>().Attach(t);
+                    dbContext.Entry<T>(t).State = System.Data.Entity.EntityState.Modified;
+                    success = dbContext.SaveChanges() > 0;
+                }
+                return success;
             }
             catch(Exception e)
             {

@@ -230,6 +230,11 @@ namespace BLL.Tools
             }
             return null;
         }
+        /// <summary>
+        /// 获取所有子节点信息
+        /// </summary>
+        /// <param name="kind"></param>
+        /// <returns></returns>
         private static List<string> GetListByKind(string kind)
         {
             List<string> list = new List<string>();

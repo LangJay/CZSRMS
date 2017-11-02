@@ -51,7 +51,18 @@ namespace BLL
                 return false;
             }
         }
-
+        public bool UpdateMulti(List<T> list)
+        {
+            try
+            {
+                return CurrentRepository.UpdateMulti(list);
+            }
+            catch (Exception e)
+            {
+                Log.AddRecord(e);
+                return false;
+            }
+        }
         public bool Delete(T entity)
         {
             try

@@ -10,6 +10,8 @@
  **************************************************/
 
 
+using System.Collections.Generic;
+
 namespace IBLL
 {
     public interface InterfaceBaseService<T> where T:class
@@ -27,6 +29,8 @@ namespace IBLL
         /// <param name="entity">数据实体</param>
         /// <returns>是否成功</returns>
         bool Update(T entity);
+
+        bool UpdateMulti(List<T> list);
 
         /// <summary>
         /// 删除

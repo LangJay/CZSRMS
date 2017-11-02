@@ -10,6 +10,7 @@
  **************************************************/
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -38,6 +39,7 @@ namespace IDAL
         /// <returns>是否成功</returns>
         bool Update(T entity);
 
+        bool UpdateMulti(List<T> list);
         /// <summary>
         /// 删除
         /// </summary>
