@@ -46,7 +46,7 @@
                 </div>
             }
         </div>
-        <div id="div-addcategory">
+        <div id="div-addcategory" style="display:none">
             <p class="p-add">分类名称：</p>
             <input id="input-typename" type="text" />
             <p class="p-add">子类名称:</p>
@@ -61,7 +61,6 @@
         </div>
     </div>
    @*/* 123*/*@
-</div>
 <script>
     $(document).ready(function () {
         //查看用户权限，分配功能
@@ -155,6 +154,7 @@
     //编辑分类按钮
     function editCategory()
     {
+        $("#div-addcategory").css("display", "inline");
         $("#all-category").removeClass("displaynone");
         $("#input-add-submit").addClass("displaynone");
         $("#div-addcategory").removeClass("displaynone");

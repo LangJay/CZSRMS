@@ -627,15 +627,22 @@
             $(e).attr('src', selectimg);
         }
     }
-    //搜索
+    //搜索,把key存储起来
     function searchbtn(key) {
+        sessionStorage.setItem("key", key);
         var keywords = $(".search").val();
         var pageIndex = 1;
+        //获取所有子分类，将点击的背景深色
+        var a = $(".subclass").find("a");
+        for (var i = 0; i < a.length; i++) {
+            $(a[i]).removeClass("checked");
+        }
         getDate(pageIndex,"", keywords,key);
     }
     //翻页
     function refresh(pageIndex)
     {
+        var key = sessionStorage.getItem("key");
         var a = $(".subclass").find(".checked")[0];
         var category = "";
         if (a != undefined)
@@ -645,7 +652,7 @@
                 category = "";
         }
         var keywords = $(".search").val();
-        getDate(pageIndex, category, keywords,"");
+        getDate(pageIndex, category, keywords,key);
     }
     //删除
     function deleteFile(fileId) {

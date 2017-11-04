@@ -40,7 +40,7 @@
     {
         //获取文件名
         $.getJSON("/FileManager/Recover?id=" + Number(id), function (data) {
-            alert(data);
+            alert(data.result);
             getDate(1);
         });
     };
