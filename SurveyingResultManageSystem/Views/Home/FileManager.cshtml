@@ -139,6 +139,68 @@
         </div><!-- /.modal-content -->
     </div>
 </div>
+@*高级检索div*@
+<div class="modal fade" id="divserch" tabindex="-2" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel" style="color:white">
+                    高级检索
+                </h4>
+            </div>
+            <form id="fileForm">
+                <div class="modal-body">
+                    <table style="margin-left:150px">
+                        <tr>
+                            <td>文件名：</td>
+                            <td><input type="text" id="FileName" placeholder="输入该范围的条件" /></td>
+                        </tr>
+                        <tr>
+                            <td>上传时间：</td>
+                            <td><input type="text" id="UploadTime" placeholder="输入该范围的条件" /></td>
+                        </tr>
+                        <tr>
+                            <td>完成时间：</td>
+                            <td><input type="text" id="FinishTime" placeholder="输入该范围的条件"/></td>
+                        </tr>
+                        <tr>
+                            <td>完成人：</td>
+                            <td><input type="text" id="FinishPerson" placeholder="输入该范围的条件"/></td>
+                        </tr>
+                        <tr>
+                            <td>项目名称：</td>
+                            <td><input type="text" id="ProjectType" placeholder="输入该范围的条件"/></td>
+                        </tr>
+                        <tr>
+                            <td>坐标框架：</td>
+                            <td><input type="text" id="PcoodinateSystem" placeholder="输入该范围的条件"/></td>
+                        </tr>
+                        <tr>
+                            <td>测绘单位名称：</td>
+                            <td><input type="text" id="SurveyingUnitName" placeholder="输入该范围的条件"/></td>
+                        </tr>
+                    </table>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"
+                            data-dismiss="modal">
+                        关闭
+                    </button>
+                    <button type="button" onclick="submitSerchInfo()" class="btn btn-primary">
+                        提交
+                    </button>
+                </div>
+            </form>
+            <iframe style="display:none" name="fileFrame" id="fileFrame"></iframe>
+        </div><!-- /.modal-content -->
+    </div>
+</div>
 <script type="text/javascript">
     var currentAjax = null;
     //查看用户权限，分配功能
@@ -226,6 +288,8 @@
             4 接收完成
     */
     $(function () {
+        var order = sessionStorage.getItem("order");
+        var desc = sessionStorage.getItem(order);
         $('#myModal').on('hide.bs.modal', function (e) {
             if (currentAjax) {
                 if (currentAjax.readyState != 4) {
@@ -236,7 +300,7 @@
                         $(".progress-bar").html("");
                         //根据什么搜索记录是否存在呢？然后删除记录
                         //刷新数据
-                        getDate(1, "", "");
+                        getDate(1, "", "", order, desc,"");
                     }
                     else {
                         e.preventDefault();
@@ -387,10 +451,12 @@
                     }
                 },
                 success: function (data) {
+                    var order = sessionStorage.getItem("order");
+                    var desc = sessionStorage.getItem(order);
                     $(".progress-bar").css("width", "100%");
                     $(".progress-bar").html("100%");
                     $("#myModal").modal('hide');
-                    getDate(1, "", "");
+                    getDate(1, "", "", order, desc,"");
                     if (data != "上传成功！")
                         alert(data);
                     console.log("=====" + data +"======");
@@ -472,14 +538,14 @@
     };
 
     //获取数据
-    function getDate(pageIndex, category, keywords,key) {
+    function getDate(pageIndex, category, keywords, key, order, desc, powerKeys) {
         $("#loading").css("display", "block");
         //获取文件数据
         $.ajax({
             url: 'GetFileView',
             type: "get",
             dataType: "html",
-            data: { category: category, pageIndex: pageIndex, keywords: keywords,key:key },
+            data: { category: category, pageIndex: pageIndex, keywords: keywords, key: key, order: order, desc: desc, powerKeys: powerKeys },
             async: false,
             success: function (data) {
                 //这里是ajax提交成功后，程序返回的数据处理函数。data是返回的数据，数据类型在dataType参数里定义！
@@ -523,13 +589,41 @@
                 }
             }
         });
+        //排序点击效果
+        var index = sessionStorage.getItem("sortimgindex");
+        var e = $(".table tr:eq(0) th:eq(" + index + ")").children(".img-sort");
+        var desc = sessionStorage.getItem(sessionStorage.getItem("order"));
+        var url = e.css("backgroundImage");
+        if (desc == "asc") {
+            url = url.replace("desc", "asc");
+            url = url.replace("gray", "blue");
+            e.css("backgroundImage", url);
+        }
+        else if (desc == "desc") {
+            url = url.replace("asc", "desc");
+            url = url.replace("gray", "blue");
+            e.css("backgroundImage", url);
+        }
+        //去掉删除了的列
+        var indexsStr = sessionStorage.getItem("index");
+        if (indexsStr != null)
+        {
+            var indexs = JSON.parse(indexsStr);
+            for (var i = 0; i < indexs.length;i++)
+            {
+                $(".table tr td:nth-child(" + indexs[i] + ")").css("display", "none");
+                $(".table tr th:nth-child(" + indexs[i] + ")").css("display", "none");
+            }
+        }
     };
     //点击子分类
     function clickclass(e) {
+        var order = sessionStorage.getItem("order");
+        var desc = sessionStorage.getItem(order);
         //获得分类名
         var kind = e.innerText;
         var pageIndex = 1;
-        getDate(pageIndex, kind, "","");
+        getDate(pageIndex, kind, "", "", order, desc,"");
         //获取所有子分类，将点击的背景深色
         var a = $(".subclass").find("a");
         for (var i = 0; i < a.length; i++)
@@ -629,6 +723,8 @@
     }
     //搜索,把key存储起来
     function searchbtn(key) {
+        var order = sessionStorage.getItem("order");
+        var desc = sessionStorage.getItem(order);
         sessionStorage.setItem("key", key);
         var keywords = $(".search").val();
         var pageIndex = 1;
@@ -637,11 +733,13 @@
         for (var i = 0; i < a.length; i++) {
             $(a[i]).removeClass("checked");
         }
-        getDate(pageIndex,"", keywords,key);
+        getDate(pageIndex, "", keywords, key, order, desc,"");
     }
     //翻页
     function refresh(pageIndex)
     {
+        var order = sessionStorage.getItem("order");
+        var desc = sessionStorage.getItem(order);
         var key = sessionStorage.getItem("key");
         var a = $(".subclass").find(".checked")[0];
         var category = "";
@@ -652,10 +750,16 @@
                 category = "";
         }
         var keywords = $(".search").val();
-        getDate(pageIndex, category, keywords,key);
+        var str = sessionStorage.getItem("powerKeys");
+        if (str == null)
+            getDate(pageIndex, category, keywords, key, order, desc, "");
+        else
+            getDate(pageIndex, "", "", "", order, desc, str);
     }
     //删除
     function deleteFile(fileId) {
+        var order = sessionStorage.getItem("order");
+        var desc = sessionStorage.getItem(order);
         //获取文件名
         var obj = $("#" + fileId).children("#file_" + fileId)[0];
         var filename = obj.innerText;
@@ -665,7 +769,7 @@
                 if (data.code == 4)
                 {
                     $("#" + fileId).remove();
-                    getDate(1, "", "", "");
+                    getDate(1, "", "", "", order, desc,"");
                     alert("删除成功！");
                 }
                 else {
@@ -677,6 +781,8 @@
     //文件管理多选删除
     function deleteFiles()
     {
+        var order = sessionStorage.getItem("order");
+        var desc = sessionStorage.getItem(order);
         //获取所有id
         var ids = JSON.parse(sessionStorage.getItem('selectimg'));
         if(ids != null && ids.length > 0)
@@ -695,7 +801,7 @@
                             for (var i = 0; i < arr.length; i++) {
                                 $("#" + arr[i]).remove();
                             }
-                            getDate(1, "", "","");
+                            getDate(1, "", "", "", order, desc,"");
                         },
                         error: function (XMLHttpRequest, textStatus, errorThrown) {
                             alert("删除失败!");
@@ -743,5 +849,65 @@
                 alert("下载失败!");
             }
         });
+    };
+    //点击排序
+
+    function sort(order, e) {
+        sessionStorage.setItem("order", order);
+        sessionStorage.setItem("sortimgindex", $(e).parent().prevAll().length);
+        var desc = sessionStorage.getItem(order);
+        if (desc == null)
+        {
+            desc = "asc";
+            sessionStorage.setItem(order, "asc");
+        }
+        else if (desc == "asc")
+        {
+            sessionStorage.setItem(order, "desc");
+            desc = "desc";
+        }
+        else if (desc == "desc")
+        {
+            sessionStorage.setItem(order, "asc");
+            desc = "asc";
+        }
+        var key = sessionStorage.getItem("key");
+        var a = $(".subclass").find(".checked")[0];
+        var category = "";
+        if (a != undefined) {
+            category = a.innerText;
+            if (category == undefined)
+                category = "";
+        }
+        var keywords = $(".search").val();
+        var str = sessionStorage.getItem("powerKeys");
+        if (str == null)
+            getDate(1, category, keywords, key, order, desc, "");
+        else
+            getDate(1, "", "", "", order, desc, str);
+    };
+    //高级检索
+    function powerSerch() {
+        var dialogwdith = $(window).width() + $(".modal-dialog").width();
+        $(".modal-content").css({
+            left: (dialogwdith - $(".modal-content").width()) / 2,
+        });
+        $("#divserch").modal('show');
+    };
+    //高级检索提交按钮
+    function submitSerchInfo()
+    {
+        var keys = new Array();
+        keys[0] = $("#FileName").val();
+        keys[1] = $("#FinishTime").val();
+        keys[2] = $("#UploadTime").val();
+        keys[3] = $("#FinishPerson").val();
+        keys[4] = $("#ProjectType").val();
+        keys[5] = $("#PcoodinateSystem").val();
+        keys[6] = $("#SurveyingUnitName").val();
+        var str = JSON.stringify(keys);
+        sessionStorage.setItem("powerKeys", str);
+        getDate(1, "", "", "", "", "", str);
+        $("#divserch").modal("hide");
     }
 </script>

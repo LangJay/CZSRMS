@@ -53,7 +53,7 @@ namespace BLL
             List<tb_FileInfo> list = new List<tb_FileInfo>();
             try
             {
-                var info = CurrentRepository.FindList(where, orderName, false);
+                var info = CurrentRepository.FindList(where, orderName, isArsc);
                 foreach (tb_FileInfo item in info)
                 {
                     list.Add(item);

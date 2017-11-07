@@ -119,8 +119,14 @@ namespace SurveyingResultManageSystem.Controllers
         }
         [Authentication]
         [HttpGet]
-        public PartialViewResult GetFileView(string category, int? pageIndex, string keywords,string key)
+        public PartialViewResult GetFileView(string category, int? pageIndex, string keywords,string key,string order,string desc,string powerKeys)
         {
+            if(!string.IsNullOrEmpty(order))
+                ORDER_NAME = order;
+            if (desc == "asc")
+                DESC = true;
+            else
+                DESC = false;
             //分类分页数据
             PageInfo<tb_FileInfo> pageInfo = new PageInfo<tb_FileInfo>()
             {
@@ -135,51 +141,14 @@ namespace SurveyingResultManageSystem.Controllers
                 unit = "";
             pageInfo.pageList = fileInfoService.FindPageList(pageInfo.pageIndex, pageInfo.pageSize, out totalRecord,
                 f => f.PublicObjs.Contains(unit) && f.WasDeleted == false, ORDER_NAME, DESC);
-            if (!string.IsNullOrEmpty(keywords) || key == "MyFile")
+            if(!string.IsNullOrEmpty(powerKeys))
             {
-                //把keywords存到cookies中
-                HttpCookie cook = new HttpCookie("keywords", keywords);
-                Response.Cookies.Add(cook);
-                pageInfo.keywords = keywords;
-                //重新检索
+                string[] powerSerchKeys = JsonConvert.DeserializeObject<string[]>(powerKeys) as string[];
                 pageInfo.pageList = fileInfoService.FindAll(f => f.PublicObjs.Contains(unit) && f.WasDeleted == false, ORDER_NAME, DESC);
                 List<tb_FileInfo> list = new List<tb_FileInfo>();
                 IEnumerable<tb_FileInfo> iEn;
-                switch (key)
-                {
-
-                    case "MyFile":
-                        iEn = pageInfo.pageList.Where(f => f.UserID == user.ID);
-                        break;
-                    case "SurveyingUnitName":
-                        iEn = pageInfo.pageList.Where(f => f.SurveyingUnitName.Contains(keywords));
-                        break;
-                    case "CoodinateSystem":
-                        iEn = pageInfo.pageList.Where(f => f.CoodinateSystem.Contains(keywords));
-                        break;
-                    case "ProjectName":
-                        iEn = pageInfo.pageList.Where(f => f.ProjectName.Contains(keywords));
-                        break;
-                    case "FinishPerson":
-                        iEn = pageInfo.pageList.Where(f => f.FinishPerson.Contains(keywords));
-                        break;
-                    case "Finishtime":
-                        iEn = pageInfo.pageList.Where(f => f.Finishtime.Contains(keywords));
-                        break;
-                    case "UploadTime":
-                        iEn = pageInfo.pageList.Where(f => f.UploadTime.Contains(keywords));
-                        break;
-                    case "FileName":
-                        iEn = pageInfo.pageList.Where(f => f.FileName.Contains(keywords));
-                        break;
-                    default:
-                        iEn = pageInfo.pageList.Where(f => f.FileName.Contains(keywords) || f.Directory.Contains(keywords) ||
-                        f.CoodinateSystem.Contains(keywords) || f.FinishtimeInfo.Contains(keywords) || f.FinishPersonInfo.Contains(keywords) ||
-                        f.Mark.Contains(keywords) || f.ProjectName.Contains(keywords) || f.FileType.Contains(keywords) || f.ProjectType.Contains(keywords) ||
-                        f.CenterMeridian.Contains(keywords) || f.Finishtime.Contains(keywords) || f.FinishPerson.Contains(keywords) ||
-                        f.SurveyingUnitName.Contains(keywords) || f.Explain.Contains(keywords) || f.UploadTime.Contains(keywords));
-                        break;
-                }
+                iEn = pageInfo.pageList.Where(f => f.FileName.Contains(powerSerchKeys[0]) && f.Finishtime.Contains(powerSerchKeys[1]) && f.UploadTime.Contains(powerSerchKeys[2]) 
+                && f.FinishPerson.Contains(powerSerchKeys[3]) && f.ProjectType.Contains(powerSerchKeys[4]) && f.PcoodinateSystem.Contains(powerSerchKeys[5]) && f.SurveyingUnitName.Contains(powerSerchKeys[6]));
                 int index = 1;
                 foreach (tb_FileInfo l in iEn)
                 {
@@ -189,34 +158,97 @@ namespace SurveyingResultManageSystem.Controllers
                 }
                 pageInfo.pageList = list;
                 totalRecord = index - 1;
+                pageInfo.totalRecord = totalRecord;
+                double res = (totalRecord / 1.0) / pageInfo.pageSize;
+                pageInfo.totalPage = (int)Math.Ceiling(res);
+                return PartialView(pageInfo);
             }
             else
             {
-                //没有关键词的时候
-                pageInfo.keywords = "";
-            }
-            //根据分类检索
-            if (category != "" && category != null)
-            {
-                List<tb_FileInfo> list = new List<tb_FileInfo>();
-                //重新检索
-                pageInfo.pageList = fileInfoService.FindAll(f => f.PublicObjs.Contains(unit) && f.WasDeleted == false, ORDER_NAME, DESC);
-                IEnumerable<tb_FileInfo> iEn = pageInfo.pageList.Where(f => f.CoodinateSystem.Contains(category) || f.ProjectType.Contains(category)
-                || f.FileType.Contains(category) || f.SurveyingUnitName.Contains(category));
-                int index = 1;
-                foreach (tb_FileInfo l in iEn)
+                if (!string.IsNullOrEmpty(keywords) || key == "MyFile")
                 {
-                    if ((pageIndex - 1) * pageInfo.pageSize < index && pageIndex * pageInfo.pageSize >= index)
-                        list.Add(l);
-                    index++;
+                    //把keywords存到cookies中
+                    HttpCookie cook = new HttpCookie("keywords", keywords);
+                    Response.Cookies.Add(cook);
+                    pageInfo.keywords = keywords;
+                    //重新检索
+                    pageInfo.pageList = fileInfoService.FindAll(f => f.PublicObjs.Contains(unit) && f.WasDeleted == false, ORDER_NAME, DESC);
+                    List<tb_FileInfo> list = new List<tb_FileInfo>();
+                    IEnumerable<tb_FileInfo> iEn;
+                    switch (key)
+                    {
+
+                        case "MyFile":
+                            iEn = pageInfo.pageList.Where(f => f.UserID == user.ID);
+                            break;
+                        case "SurveyingUnitName":
+                            iEn = pageInfo.pageList.Where(f => f.SurveyingUnitName.Contains(keywords));
+                            break;
+                        case "CoodinateSystem":
+                            iEn = pageInfo.pageList.Where(f => f.CoodinateSystem.Contains(keywords));
+                            break;
+                        case "ProjectName":
+                            iEn = pageInfo.pageList.Where(f => f.ProjectName.Contains(keywords));
+                            break;
+                        case "FinishPerson":
+                            iEn = pageInfo.pageList.Where(f => f.FinishPerson.Contains(keywords));
+                            break;
+                        case "Finishtime":
+                            iEn = pageInfo.pageList.Where(f => f.Finishtime.Contains(keywords));
+                            break;
+                        case "UploadTime":
+                            iEn = pageInfo.pageList.Where(f => f.UploadTime.Contains(keywords));
+                            break;
+                        case "FileName":
+                            iEn = pageInfo.pageList.Where(f => f.FileName.Contains(keywords));
+                            break;
+                        default:
+                            iEn = pageInfo.pageList.Where(f => f.FileName.Contains(keywords) || f.Directory.Contains(keywords) ||
+                            f.CoodinateSystem.Contains(keywords) || f.FinishtimeInfo.Contains(keywords) || f.FinishPersonInfo.Contains(keywords) ||
+                            f.Mark.Contains(keywords) || f.ProjectName.Contains(keywords) || f.FileType.Contains(keywords) || f.ProjectType.Contains(keywords) ||
+                            f.CenterMeridian.Contains(keywords) || f.Finishtime.Contains(keywords) || f.FinishPerson.Contains(keywords) ||
+                            f.SurveyingUnitName.Contains(keywords) || f.Explain.Contains(keywords) || f.UploadTime.Contains(keywords));
+                            break;
+                    }
+                    int index = 1;
+                    foreach (tb_FileInfo l in iEn)
+                    {
+                        if ((pageIndex - 1) * pageInfo.pageSize < index && pageIndex * pageInfo.pageSize >= index)
+                            list.Add(l);
+                        index++;
+                    }
+                    pageInfo.pageList = list;
+                    totalRecord = index - 1;
                 }
-                pageInfo.pageList = list;
-                totalRecord = index - 1;
+                else
+                {
+                    //没有关键词的时候
+                    pageInfo.keywords = "";
+                }
+                //根据分类检索
+                if (category != "" && category != null)
+                {
+                    List<tb_FileInfo> list = new List<tb_FileInfo>();
+                    //重新检索
+                    pageInfo.pageList = fileInfoService.FindAll(f => f.PublicObjs.Contains(unit) && f.WasDeleted == false, ORDER_NAME, DESC);
+                    IEnumerable<tb_FileInfo> iEn = pageInfo.pageList.Where(f => f.CoodinateSystem.Contains(category) || f.ProjectType.Contains(category)
+                    || f.FileType.Contains(category) || f.SurveyingUnitName.Contains(category));
+                    int index = 1;
+                    foreach (tb_FileInfo l in iEn)
+                    {
+                        if ((pageIndex - 1) * pageInfo.pageSize < index && pageIndex * pageInfo.pageSize >= index)
+                            list.Add(l);
+                        index++;
+                    }
+                    pageInfo.pageList = list;
+                    totalRecord = index - 1;
+                }
+                pageInfo.totalRecord = totalRecord;
+                double res = (totalRecord / 1.0) / pageInfo.pageSize;
+                pageInfo.totalPage = (int)Math.Ceiling(res);
+                return PartialView(pageInfo);
             }
-            pageInfo.totalRecord = totalRecord;
-            double res = (totalRecord / 1.0) / pageInfo.pageSize;
-            pageInfo.totalPage = (int)Math.Ceiling(res);
-            return PartialView(pageInfo);
+           
         }
         public ActionResult Error()
         {

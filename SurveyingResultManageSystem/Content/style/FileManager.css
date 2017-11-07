@@ -2,7 +2,7 @@
 #div_menu {
     border-right: 1px solid #808080;
     float: left;
-    width: 240px;
+    width: 16em;
     height: 100%;
 }
 
@@ -14,10 +14,12 @@
     display: block;
     border-top: 1px solid #00486d;
 }
-.li_div a:hover {
-    cursor: pointer;
-    background-color: #c8c8c8;
-}
+
+    .li_div a:hover {
+        cursor: pointer;
+        background-color: #c8c8c8;
+    }
+
 .checked {
     background-color: #c8c8c8;
 }
@@ -29,29 +31,35 @@
 ul li {
     list-style-type: none;
 }
-ul li h4 {
-    color: white;
-    margin: 0px;
-    padding: 15px 0px 15px 0px;
-    background-color: #0972A7;
-    width: 100%;
-    display: inline-flex;
-    text-align: center;
-    padding-top: 15px;
-}
+
+    ul li h4 {
+        color: white;
+        margin: 0px;
+        padding: 15px 0px 15px 0px;
+        background-color: #0972A7;
+        width: 100%;
+        display: inline-flex;
+        text-align: center;
+        padding-top: 15px;
+    }
+
 .li_div {
     background-color: #d6d6d6;
     width: 100%;
 }
+
 #li_map {
     margin-top: 1px;
 }
+
 ul {
     padding: 0px;
 }
-.select_img:hover{
-    cursor:pointer;
+
+.select_img:hover {
+    cursor: pointer;
 }
+
 #div_menu_ul h4:hover {
     background-color: #5090C7;
     cursor: pointer;
@@ -80,7 +88,7 @@ ul {
 }
 
 #div-filemanager {
-    padding-left: 240px;
+    padding-left: 16em;
 }
 
 #div_filemanager_pager {
@@ -104,9 +112,10 @@ ul {
     border-bottom: 1px solid #0972A7;
 }
 
-#div_filemanager_list_header input {
-    height: 28px;
-}
+    #div_filemanager_list_header input {
+        height: 28px;
+    }
+
 .button {
     background-color: #0972A7;
     border: none;
@@ -114,16 +123,17 @@ ul {
     outline: none;
     height: 30px;
 }
-.button:before {
-    background-color: #0972A7;
-    border: none;
-    color: white;
-    outline: none;
-}
 
-.button:active {
-    background-color: #5090C7;
-}
+    .button:before {
+        background-color: #0972A7;
+        border: none;
+        color: white;
+        outline: none;
+    }
+
+    .button:active {
+        background-color: #5090C7;
+    }
 
 #div_filemanager_list_header_search {
     display: inline;
@@ -142,18 +152,20 @@ ul {
 .modal .table {
     margin-bottom: 0px;
 }
-a:hover
-{
-    cursor:pointer;
+
+a:hover {
+    cursor: pointer;
 }
 
-.modal td,.modal th {
+.modal td, .modal th {
     text-align: center;
 }
 
-.table tr th{
-text-align:center;
+.table tr th {
+    text-align: center;
+    font-size:0.8em;
 }
+
 #div_filemanager_list_footer {
     border-top: 1px solid #d8d7d7;
     height: 50px;
@@ -172,9 +184,11 @@ text-align:center;
     right: 30px;
     padding-top: 10px;
 }
-.modal-content{
+
+.modal-content {
     width: 650px;
 }
+
 .modal-dialog {
     width: auto;
 }
@@ -187,41 +201,47 @@ text-align:center;
 
 .modal-dialog td {
     min-width: 120px;
-    text-align:left;
+    text-align: left;
 }
 
 .modal-dialog .modal-header {
     background-color: #0972A7;
     border-bottom: 1px solid #d8d7d7;
 }
+
 .classheader {
     height: 40px;
     font-size: 16px;
     padding-top: 10px;
 }
+
 .subclass {
     background-color: #ececec;
-    display:none;
+    display: none;
 }
-.subclass a{
-    padding: 5px 0px 5px 60px;
-    border-bottom:1px solid white;
-}
+
+    .subclass a {
+        padding: 5px 0px 5px 60px;
+        border-bottom: 1px solid white;
+    }
+
 textarea {
     resize: vertical;
 }
+
 .progress-bar {
-    text-align:right;
+    text-align: right;
 }
-.combo
-{
-    min-width:160px;
+
+.combo {
+    min-width: 160px;
 }
 /*加载动画*/
-.card{
-    margin:10px 0px 10px 0px;
-    display:none;
+.card {
+    margin: 10px 0px 10px 0px;
+    display: none;
 }
+
 @-moz-keyframes throbber-loader {
     0% {
         background: #dde2e7;
@@ -277,48 +297,73 @@ textarea {
     margin: 0 1.6em;
 }
 
-.throbber-loader:not(:required):before, .throbber-loader:not(:required):after {
-    background: #dde2e7;
-    content: '\x200B';
-    display: inline-block;
-    width: 0.9em;
-    height: 1.5em;
-    position: absolute;
-    top: 0;
-}
+    .throbber-loader:not(:required):before, .throbber-loader:not(:required):after {
+        background: #dde2e7;
+        content: '\x200B';
+        display: inline-block;
+        width: 0.9em;
+        height: 1.5em;
+        position: absolute;
+        top: 0;
+    }
 
-.throbber-loader:not(:required):before {
-    -moz-animation: throbber-loader 2000ms 150ms infinite ease-out;
-    -webkit-animation: throbber-loader 2000ms 150ms infinite ease-out;
-    animation: throbber-loader 2000ms 150ms infinite ease-out;
-    left: -1.6em;
-}
+    .throbber-loader:not(:required):before {
+        -moz-animation: throbber-loader 2000ms 150ms infinite ease-out;
+        -webkit-animation: throbber-loader 2000ms 150ms infinite ease-out;
+        animation: throbber-loader 2000ms 150ms infinite ease-out;
+        left: -1.6em;
+    }
 
-.throbber-loader:not(:required):after {
-    -moz-animation: throbber-loader 2000ms 450ms infinite ease-out;
-    -webkit-animation: throbber-loader 2000ms 450ms infinite ease-out;
-    animation: throbber-loader 2000ms 450ms infinite ease-out;
-    right: -1.6em;
-}
+    .throbber-loader:not(:required):after {
+        -moz-animation: throbber-loader 2000ms 450ms infinite ease-out;
+        -webkit-animation: throbber-loader 2000ms 450ms infinite ease-out;
+        animation: throbber-loader 2000ms 450ms infinite ease-out;
+        right: -1.6em;
+    }
 /*输入框样式*/
 
-.modal-body input,.modal-body select
-{
-    height:28px;
-    min-width:180px;
+.modal-body input, .modal-body select {
+    height: 28px;
+    min-width: 180px;
 }
-.btn-primary{
-    height:28px;
-    background-color:#0972A7;
-    border-radius:0px;
-    padding-top:3px;
-    border:none;
+
+.btn-primary {
+    height: 28px;
+    background-color: #0972A7;
+    border-radius: 0px;
+    padding-top: 3px;
+    border: none;
 }
-.btn-primary:active
-{
-    background-color:#5090C7;
-}
-.red-border
-{
+
+    .btn-primary:active {
+        background-color: #5090C7;
+    }
+
+.red-border {
     /*border: 1px solid #0972A7;*/
+}
+/* 列表头图标*/
+.img-sort {
+    vertical-align: bottom;
+    height: 22px;
+    width: 22px;
+    display: inline-block;
+    background-image: url('../../Sources/Images/desc_gray.png');
+}
+
+
+
+.img-close {
+    vertical-align: bottom;
+    height: 22px;
+    width: 22px;
+    display: inline-block;
+    background-image: url('../../Sources/Images/close_red.png');
+}
+/*高级搜索按钮*/
+#div-powerserch {
+    display: inline;
+    position: absolute;
+    padding-top: 10px;
+    left: 550px;
 }

@@ -221,9 +221,17 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Sources\Images\asc_blue.png" />
+    <Content Include="Sources\Images\asc_gray.png" />
+    <Content Include="Sources\Images\asc_white.png" />
     <Content Include="Sources\Images\bottom.png" />
     <Content Include="Sources\Images\card_setting_c0307230.png" />
     <Content Include="Sources\Images\chenzhou.png" />
+    <Content Include="Sources\Images\close_red.png" />
+    <Content Include="Sources\Images\close_white.png" />
+    <Content Include="Sources\Images\desc_blue.png" />
+    <Content Include="Sources\Images\desc_gray.png" />
+    <Content Include="Sources\Images\desc_white.png" />
     <Content Include="Sources\Images\file.png" />
     <Content Include="Sources\Images\loading.gif" />
     <Content Include="Sources\Images\login_bg.png" />

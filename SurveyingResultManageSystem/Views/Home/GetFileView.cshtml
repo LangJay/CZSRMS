@@ -21,6 +21,9 @@
                     </ul>
                 </div>
             </div>
+            <div id="div-powerserch">
+                <input onclick="powerSerch()" class="button" type="button" value="高级检索" />
+            </div>
             <div id="div_filemanager_list_header_upload">
                 <input onclick="uploadFile()" class="button"  type="button" value="上传文件" />
             </div>
@@ -32,24 +35,53 @@
                 </th>
                 <th>
                     文件名称
+                    <a class="img-sort" onclick="sort('FileName',this)"></a>
+                    <a class="img-close" onclick="thclose(this)"></a>
                 </th>
                 <th>
                     完成时间
+                    <a class="img-sort" onclick="sort('Finishtime',this)"></a>
+                    <a class="img-close" onclick="thclose(this)"></a>
                 </th>
                 <th>
                     完成人
+                    <a class="img-sort" onclick="sort('FinishPerson',this)"></a>
+                    <a class="img-close" onclick="thclose(this)"></a>
                 </th>
                 <th>
                     测绘单位名称
+                    <a class="img-sort" onclick="sort('SurveyingUnitName',this)"></a>
+                    <a class="img-close" onclick="thclose(this)"></a>
                 </th>
                 <th>
                     坐标系统
+                    <a class="img-sort" onclick="sort('PcoodinateSystem',this)"></a>
+                    <a class="img-close" onclick="thclose(this)"></a>
+                </th>
+                <th>
+                    文件类型
+                    <a class="img-sort" onclick="sort('FileType',this)"></a>
+                    <a class="img-close" onclick="thclose(this)"></a>
+                </th>
+                <th>
+                    项目类型
+                    <a class="img-sort" onclick="sort('ProjectType',this)"></a>
+                    <a class="img-close" onclick="thclose(this)"></a>
+                </th>
+                <th>
+                    中央子午线
+                    <a class="img-sort" onclick="sort('CenterMeridian',this)"></a>
+                    <a class="img-close" onclick="thclose(this)"></a>
                 </th>
                 <th>
                     文件大小
+                    <a class="img-sort" onclick="sort('FileSize',this)"></a>
+                    <a class="img-close" onclick="thclose(this)"></a>
                 </th>
                 <th>
                     上传时间
+                    <a class="img-sort" onclick="sort('UploadTime',this)"></a>
+                    <a class="img-close" onclick="thclose(this)"></a>
                 </th>
                 <th>
                     操作
@@ -62,7 +94,7 @@
                     <td>
                         <img class="select_img" onclick="selectimg(this)" src="~/Sources/Images/select.png" />
                     </td>
-                    <td id="file_@item.ID">
+                    <td id="file_@item.ID" width="250px">
                         @item.FileName
                     </td>
                     <td>
@@ -76,6 +108,15 @@
                     </td>
                     <td>
                         @item.PcoodinateSystem
+                    </td>
+                    <td>
+                        @item.FileType
+                    </td>
+                    <td>
+                        @item.ProjectType
+                    </td>
+                    <td>
+                        @item.CenterMeridian
                     </td>
                     <td>
                         @(item.FileSize.ToString("f3") + " M")
@@ -146,5 +187,26 @@
             $("#footer-right-btn5").attr("disabled", "true");
             $("#footer-right-btn5").css("background-color", "#5090C7");
         }
+       
     });
+    function thclose(e)
+    {
+        $(e).parent().css("display", "none");
+        var index = $(e).parent().prevAll().length + 1;
+        var tds = $(".table td:eq(" + index + ")");
+        $(".table tr td:nth-child(" + index + ")").css("display", "none");
+        var indexNew = new Array();
+        indexNew[0] = index;
+        var indexOldStr = sessionStorage.getItem("index");
+
+        if (indexOldStr == null)
+        {
+            sessionStorage.setItem("index",JSON.stringify(indexNew));
+        }
+        else
+        {
+            var indexOld = JSON.parse(indexOldStr);
+            sessionStorage.setItem("index",JSON.stringify(indexOld.concat(indexNew)));
+        }
+    }
 </script>
