@@ -173,7 +173,11 @@
                             <td><input type="text" id="FinishPerson" placeholder="输入该范围的条件"/></td>
                         </tr>
                         <tr>
-                            <td>项目名称：</td>
+                            <td>文件类型：</td>
+                            <td><input type="text" id="FileType" placeholder="输入该范围的条件" /></td>
+                        </tr>
+                        <tr>
+                            <td>项目类型：</td>
                             <td><input type="text" id="ProjectType" placeholder="输入该范围的条件"/></td>
                         </tr>
                         <tr>
@@ -440,7 +444,6 @@
                 data: formData,
                 dataType: "text",
                 processData: false,
-                //Options to tell JQuery not to process data or worry about content-type
                 contentType: false,
                 xhr: function () {
                     var xhr = $.ajaxSettings.xhr();
@@ -550,11 +553,10 @@
             success: function (data) {
                 //这里是ajax提交成功后，程序返回的数据处理函数。data是返回的数据，数据类型在dataType参数里定义！
                 $("#div-filemanager").html(data);
-                $("#loading").css("display", "none");
+                $("#loading").css("display", "block");
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 alert(textStatus);
-                $("#loading").css("display", "none");
             }
         });
         var imgnum = $(".table").find("img").length;
@@ -615,6 +617,8 @@
                 $(".table tr th:nth-child(" + indexs[i] + ")").css("display", "none");
             }
         }
+
+        $("#loading").css("display", "none");
     };
     //点击子分类
     function clickclass(e) {
@@ -829,24 +833,26 @@
             var idsjson = JSON.stringify(ids);
             download(idsjson);
         }
-        
     };
     function download(idsjson) {
         //window.open("/Home/Downloads?idsjson=" + idsjson);
+        $("#loading").css("display", "block");
         $.ajax({
             url: '/Home/Downloads',
             type: "post",
             dataType: "text",
             data: idsjson,
-            async: false,
+            async: true,
             success: function (data) {
                 if (data != "")
                     window.open(data);
                 else
                     alert("下载失败!");
+                $("#loading").css("display", "none");
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 alert("下载失败!");
+                $("#loading").css("display", "none");
             }
         });
     };
@@ -902,9 +908,10 @@
         keys[1] = $("#FinishTime").val();
         keys[2] = $("#UploadTime").val();
         keys[3] = $("#FinishPerson").val();
-        keys[4] = $("#ProjectType").val();
-        keys[5] = $("#PcoodinateSystem").val();
-        keys[6] = $("#SurveyingUnitName").val();
+        keys[4] = $("#FileType").val();
+        keys[5] = $("#ProjectType").val();
+        keys[6] = $("#PcoodinateSystem").val();
+        keys[7] = $("#SurveyingUnitName").val();
         var str = JSON.stringify(keys);
         sessionStorage.setItem("powerKeys", str);
         getDate(1, "", "", "", "", "", str);

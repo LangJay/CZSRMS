@@ -147,8 +147,8 @@ namespace SurveyingResultManageSystem.Controllers
                 pageInfo.pageList = fileInfoService.FindAll(f => f.PublicObjs.Contains(unit) && f.WasDeleted == false, ORDER_NAME, DESC);
                 List<tb_FileInfo> list = new List<tb_FileInfo>();
                 IEnumerable<tb_FileInfo> iEn;
-                iEn = pageInfo.pageList.Where(f => f.FileName.Contains(powerSerchKeys[0]) && f.Finishtime.Contains(powerSerchKeys[1]) && f.UploadTime.Contains(powerSerchKeys[2]) 
-                && f.FinishPerson.Contains(powerSerchKeys[3]) && f.ProjectType.Contains(powerSerchKeys[4]) && f.PcoodinateSystem.Contains(powerSerchKeys[5]) && f.SurveyingUnitName.Contains(powerSerchKeys[6]));
+                iEn = pageInfo.pageList.Where(f => f.FileName.Contains(powerSerchKeys[0]) && f.Finishtime.Contains(powerSerchKeys[1]) && f.UploadTime.Contains(powerSerchKeys[2]) && f.FinishPerson.Contains(powerSerchKeys[3])
+                && f.FileType.Contains(powerSerchKeys[4]) && f.ProjectType.Contains(powerSerchKeys[5]) && f.PcoodinateSystem.Contains(powerSerchKeys[6]) && f.SurveyingUnitName.Contains(powerSerchKeys[7]));
                 int index = 1;
                 foreach (tb_FileInfo l in iEn)
                 {
