@@ -213,7 +213,7 @@ namespace 批量上传文件
                                     filename = finf.FullName;
                                 //读取文件的完整目录和文件名
                             }
-                            upObjectId = openauto.readshpfile(filename, fi2);
+                            upObjectId = Openauto.Readshpfile(filename, fi2);
                             fileInfo.ObjectID = upObjectId;
 
                         }

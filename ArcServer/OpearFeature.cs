@@ -7,6 +7,9 @@ using ESRI.ArcGIS.Client.Tasks;
 using System.Net;
 using System.IO;
 using System.Text.RegularExpressions;
+using Model;
+using System.Configuration;
+
 namespace ArcServer
 {
 
@@ -23,75 +26,12 @@ namespace ArcServer
         public string resultid { set; get; }//图形id号
         public string url { set; get; }//feature url地址
     };
-    public class openauto
+    public class Openauto
     {
 
         string spt = "[{ \"geometry\":{ \"spatialReference\":{\"wkt\":\"PROJCS[\\\"CGCS2000_3_Degree_GK_CM_11330E\\\",GEOGCS[\\\"GCS_China_Geodetic_Coordinate_System_2000\\\",DATUM[\\\"D_China_2000\\\",SPHEROID[\\\"CGCS2000\\\",6378137.0,298.257222101]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],PROJECTION[\\\"Gauss_Kruger\\\"],PARAMETER[\\\"False_Easting\\\",500000.0],PARAMETER[\\\"False_Northing\\\",0.0],PARAMETER[\\\"Central_Meridian\\\",113.5],PARAMETER[\\\"Scale_Factor\\\",1.0],PARAMETER[\\\"Latitude_Of_Origin\\\",0.0],UNIT[\\\"Meter\\\",1.0]]\"}}}]";
-        public static bool AddFeature(string layerUrl, FeatureItem featureItem)
-        {
-            string url = layerUrl + "/addFeatures";
-            string data = "f=json"; //以json格式返回结果
-
-            ESRI.ArcGIS.Client.Graphic g = new ESRI.ArcGIS.Client.Graphic()
-            {
-                //Graphic的Attributes在ArcGIS API for WPF 中是只读的
-                //如果是可写的，就可以直接使用Graphic的Attributes，而不需要拼接json
-              // Attributes = featureItem.Attributes, 
-                Geometry = featureItem.Geometry
-            };
-            FeatureSet fs = new FeatureSet();
-            fs.Features.Add(g);
-            //使用FeatureSet自带的ToJson函数转换，可以帮助转换Feature的Geometry对象
-            //ArcGIS的Geometry对象序列化为json字符串时和标准的json不太一样
-            string json = fs.ToJson();
-            int begin = json.IndexOf("[");
-            int end = json.IndexOf("]", begin);
-            string featuresJson = json.Substring(begin, end - begin + 1);
-            string features = string.Format("features={0}&", featuresJson);
-            //features = features.Insert(features.IndexOf("}}]"), ",\"z\":0");
-            data = features+data;
-
-            //使用fastJson转换Attributes
-            //fastJSON.JSON.Instance.Parameters.UseEscapedUnicode = false;
-            //string attr = fastJSON.JSON.Instance.ToJSON(featureItem.Attributes);
-            string attr = Newtonsoft.Json.JsonConvert.SerializeObject(featureItem.Attributes);
-            //int attrPos = data.IndexOf("attributes");
-            //将原来空的Attributes替换掉，以自己转换的json字符串实际情况为准
-            string para = "";
-            if (data.IndexOf("attributes") >0)
-            { 
-             para = data.Replace("\"attributes\":{}", "\"attributes\":" + attr);
-            }
-            else
-            {
-                int aa = data.IndexOf("geometry")-1;
-                attr = "\"attributes\" : " + attr + " ,";
-                para =data.Insert(aa,attr);
-            }
-           // para = "features=[{\"attributes\" : {\"MapNo\" : \"ss04\",\"ExpNo\" : \"ss05\" } ,\"geometry\" : {\"x\" : 122.96499991,\"y\" : 27.797333,\"z\":0}}]&f=json";
-            string res = PostData(url, para);
-
-            //处理返回的结果
-            if (res.Contains("error"))
-                return false;
-            Dictionary<string, List<Dictionary<string, object>>> resDic
-                = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, List<Dictionary<string, object>>>>(res);
-            if (resDic.ContainsKey("addResults"))
-            {
-                List<Dictionary<string, object>> addRes = resDic["addResults"];
-                foreach (Dictionary<string, object> dic in addRes)
-                {
-                    if (dic.ContainsKey("success"))
-                    {
-                        if (dic["success"].ToString().ToLower() == "true")
-                            return true;
-                        else return false;
-                    }
-                }
-            }
-            return false;
-        }
-        public static bool AddFeature1(string layerUrl, FeatureItem1 featureItem)
+       
+        public static bool AddFeature(string layerUrl, FeatureItem1 featureItem)
         {
             string url = layerUrl + "/addFeatures";
             string data = "f=json"; //以json格式返回结果
@@ -301,7 +241,7 @@ namespace ArcServer
             }
             return responseString;
         }
-        public static string readshpfile(string pathfile,FeatureItem1 featureItem)
+        public static string Readshpfile(string pathfile,FeatureItem1 featureItem)
         {
             GeoShape.FeatureClassImpForShp shp1 = new GeoShape.FeatureClassImpForShp(pathfile);
             string idh = "";
@@ -344,60 +284,77 @@ namespace ArcServer
             postion = "[{ \"geometry\":{ \"spatialReference\":{\"wkt\":\"PROJCS[\\\"CGCS2000_3_Degree_GK_CM_11330E\\\",GEOGCS[\\\"GCS_China_Geodetic_Coordinate_System_2000\\\",DATUM[\\\"D_China_2000\\\",SPHEROID[\\\"CGCS2000\\\",6378137.0,298.257222101]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],PROJECTION[\\\"Gauss_Kruger\\\"],PARAMETER[\\\"False_Easting\\\",500000.0],PARAMETER[\\\"False_Northing\\\",0.0],PARAMETER[\\\"Central_Meridian\\\",113.5],PARAMETER[\\\"Scale_Factor\\\",1.0],PARAMETER[\\\"Latitude_Of_Origin\\\",0.0],UNIT[\\\"Meter\\\",1.0]]\"},\"rings\":" + postion + "}}]";
            // spatialReference\":{\"wkt\":\"PROJCS[\\\"CGCS2000_3_Degree_GK_CM_11330E\\\",GEOGCS[\\\"GCS_China_Geodetic_Coordinate_System_2000\\\",DATUM[\\\"D_China_2000\\\",SPHEROID[\\\"CGCS2000\\\",6378137.0,298.257222101]],PRIMEM[\\\"Greenwich\\\",0.0],UNIT[\\\"Degree\\\",0.0174532925199433]],PROJECTION[\\\"Gauss_Kruger\\\"],PARAMETER[\\\"False_Easting\\\",500000.0],PARAMETER[\\\"False_Northing\\\",0.0],PARAMETER[\\\"Central_Meridian\\\",113.5],PARAMETER[\\\"Scale_Factor\\\",1.0],PARAMETER[\\\"Latitude_Of_Origin\\\",0.0],UNIT[\\\"Meter\\\",1.0]]\"}
             string url = featureItem.url;
-            //  FeatureItem1 fi = new FeatureItem1();
             featureItem.Geometry = postion;
-            // fi.Attributes = new Dictionary<string, object>();
-            // fi.Attributes = featureItem.Attributes;
             featureItem.resultid = "";
-            bool res = AddFeature1(url, featureItem);
+            bool res = AddFeature(url, featureItem);
             idh = idh + featureItem.resultid + ",";
             shp1.Close();//关闭，不然一直占用文件
             idh = idh.Substring(0, idh.Length - 1);
             return idh;
         }
-        
-        static void Main(string[] args)
+
+        /// <summary>
+        /// 王军军 发布地图
+        /// </summary>
+        /// <param name="fileInfo"></param>
+        /// <returns></returns>
+        public static string PublishMap(tb_FileInfo fileInfo)
         {
-            FeatureItem1 fi2 = new FeatureItem1();
-            fi2.Attributes = new Dictionary<string, object>();
-            fi2.Attributes.Add("FileName", "ss03");//文件名
-            fi2.Attributes.Add("Directory", "ss05");//文件路径
-            fi2.Attributes.Add("CoodSystem", "ss05");//坐标框架信息
-            fi2.Attributes.Add("FinishTime", "2017/01/02");//完成时间信息
-            fi2.Attributes.Add("FshPerson", "ss05");//完成人信息
-            fi2.Attributes.Add("MinCood", 12.23);//最小坐标
-            fi2.Attributes.Add("MaxCood", 23.23);//最大坐标
-            fi2.Attributes.Add("ObjectNum", 0);//文件中对象数量
-            fi2.Attributes.Add("Mark", "");// 备注信息
-            fi2.Attributes.Add("ProName", "");// 所属项目名称
-            fi2.Attributes.Add("FileType", "");// 文件类型，宗地图、供地红线图、报批红线图、地籍图、勘测定界报告、竣工验收测绘报告
-            fi2.Attributes.Add("ProType", "");// 所属项目类型，供地、报批、竣工验收
-            fi2.Attributes.Add("CenterMed", "");// 中央子午线
-            fi2.Attributes.Add("Yoffset", 0.00);// 纵坐标偏移值
-            fi2.Attributes.Add("Xoffset", 0.00);// 水平坐标偏移值
-            fi2.Attributes.Add("SUnitName", "");// 测绘单位名称，北湖区测绘队、苏仙区测绘队、市局测绘队
-            fi2.Attributes.Add("Memo", "");// 成果说明
-            fi2.Attributes.Add("IsPublic", 1);// 是否公开
-            fi2.Attributes.Add("UploadTime", "2017/3/5");// 上传时间
-            fi2.Attributes.Add("FileSize", 0);// 文件大小，单位M
-            fi2.Attributes.Add("UserID", 1);// 用户ID
-            fi2.Attributes.Add("PublicOB ", "");// 公开单位
-            
+            var path1 = fileInfo.Directory + "范围文件\\";
+            string upObjectId = null;
+            DirectoryInfo dir = new DirectoryInfo(path1);
+            var filename = "";
+            if (Directory.Exists(path1))
+            {
+                FileInfo[] inf = dir.GetFiles();
+                foreach (FileInfo finf in inf)
+                {
+                    if (finf.Extension.Equals(".shp"))
+                        //如果扩展名为“.xml”
+                        filename = finf.FullName;
+                    //读取文件的完整目录和文件名
+                }
+            }
+            if (filename != "")
+            {
 
-            string url = "http://localhost:6080/arcgis/rest/services/fwx1g/FeatureServer/0";
-            fi2.url = url;
-            string cc = readshpfile("E:\\wff.shp", fi2);
-            var tt = DeleFeature(fi2.url, cc);
-            if (tt)
-            {
-                Console.WriteLine("删除成功");
+                //  path1 = path1 + filename;
+                FeatureItem1 fi2 = new FeatureItem1()
+                {
+                    Attributes = new Dictionary<string, object>()
+                };
+                fi2.Attributes.Add("FileName", fileInfo.FileName);//文件名
+                fi2.Attributes.Add("Directory", fileInfo.Directory);//文件路径
+                fi2.Attributes.Add("CoodSystem", fileInfo.CoodinateSystem);//坐标框架信息
+                if (fileInfo.Finishtime.Trim() != "")
+                {
+                    fi2.Attributes.Add("FinishTime", fileInfo.Finishtime);
+                }//完成时间信息
+                fi2.Attributes.Add("FshPerson", fileInfo.FinishPerson);//完成人信息
+                fi2.Attributes.Add("ObjectNum", fileInfo.ObjectNum);//文件中对象数量
+                fi2.Attributes.Add("MinCood", fileInfo.MinCoodinate);//最小坐标
+                fi2.Attributes.Add("MaxCood", fileInfo.MaxCoodinate);//最大坐标
+                fi2.Attributes.Add("Mark", fileInfo.Mark);// 备注信息
+                fi2.Attributes.Add("ProName", fileInfo.ProjectName);// 所属项目名称
+                fi2.Attributes.Add("FileType", fileInfo.FileType);// 文件类型，宗地图、供地红线图、报批红线图、地籍图、勘测定界报告、竣工验收测绘报告
+                fi2.Attributes.Add("ProType", fileInfo.ProjectType);// 所属项目类型，供地、报批、竣工验收
+                fi2.Attributes.Add("CenterMed", fileInfo.CenterMeridian);// 中央子午线
+                fi2.Attributes.Add("Yoffset", fileInfo.Yoffset);// 纵坐标偏移值
+                fi2.Attributes.Add("Xoffset", fileInfo.Xoffset);// 水平坐标偏移值
+                fi2.Attributes.Add("SUnitName", fileInfo.SurveyingUnitName);// 测绘单位名称，北湖区测绘队、苏仙区测绘队、市局测绘队
+                fi2.Attributes.Add("Memo", fileInfo.Explain);// 成果说明
+                if (fileInfo.UploadTime.Trim() != "")
+                {
+                    fi2.Attributes.Add("UploadTime", fileInfo.UploadTime);
+                }// 上传时间
+                fi2.Attributes.Add("FileSize", fileInfo.FileSize);// 文件大小，单位M
+                fi2.Attributes.Add("UserID", fileInfo.UserID);// 用户ID
+                fi2.Attributes.Add("PublicOB", fileInfo.PublicObjs); // 公开单位
+                fi2.url = ConfigurationManager.AppSettings["serverurl"];
+                upObjectId = Readshpfile(filename, fi2);
+                fileInfo.ObjectID = upObjectId;
             }
-            var tt1 = UpdateFeature(fi2.url, "288,13", fi2);
-            if (tt1)
-            {
-                Console.WriteLine("更新成功");
-            }
+            return upObjectId;
         }
-
     }
 }

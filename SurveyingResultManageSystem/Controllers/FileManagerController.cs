@@ -38,7 +38,10 @@ namespace SurveyingResultManageSystem.Controllers
             fileInfoService = new FileInfoService();
             logInfoService = new LogInfoService();
         }
-
+        /// <summary>
+        /// 获取下拉框选项内容
+        /// </summary>
+        /// <returns></returns>
         [Authentication]
         [HttpGet]
         public string GetSelectedCategory()
@@ -59,6 +62,10 @@ namespace SurveyingResultManageSystem.Controllers
             }
             return json;
         }
+        /// <summary>
+        /// 上传文件
+        /// </summary>
+        /// <returns></returns>
         [Authentication]
         [HttpPost]
         public string UpLoadFile()
@@ -86,8 +93,6 @@ namespace SurveyingResultManageSystem.Controllers
                 }
                 try
                 {
-                    //解压该文件
-                    // string zipFileSavePath = Path.Combine(fileSaveFolder, fileInfo.ProjectName);//解压到该目录
                     //创建该目录i
                     Directory.CreateDirectory(fileSaveFolder);
                     FileCompressExtend fce = new FileCompressExtend();
@@ -123,7 +128,7 @@ namespace SurveyingResultManageSystem.Controllers
                     fileInfo.PublicObjs = fileInfo.PublicObjs.Replace(",", "|");
                 }
                 //发布地图
-                string upObjectId = PublishMap(fileInfo);
+                string upObjectId = Openauto.PublishMap(fileInfo);
                 if (upObjectId != null)
                 {
                     //写入数据库
@@ -183,67 +188,6 @@ namespace SurveyingResultManageSystem.Controllers
             }
             return "上传失败！";
         }
-        /// <summary>
-        /// 王军军 发布地图
-        /// </summary>
-        /// <param name="fileInfo"></param>
-        /// <returns></returns>
-        private string PublishMap(tb_FileInfo fileInfo)
-        {
-            var path1 = fileInfo.Directory + "范围文件\\";
-            string upObjectId = null;
-            DirectoryInfo dir = new DirectoryInfo(path1);
-            var filename = "";
-            if (Directory.Exists(path1))
-            {
-                FileInfo[] inf = dir.GetFiles();
-                foreach (FileInfo finf in inf)
-                {
-                    if (finf.Extension.Equals(".shp"))
-                        //如果扩展名为“.xml”
-                        filename = finf.FullName;
-                    //读取文件的完整目录和文件名
-                }
-            }
-            if (filename != "")
-            {
-
-                //  path1 = path1 + filename;
-                FeatureItem1 fi2 = new FeatureItem1();
-                fi2.Attributes = new Dictionary<string, object>();
-                fi2.Attributes.Add("FileName", fileInfo.FileName);//文件名
-                fi2.Attributes.Add("Directory", fileInfo.Directory);//文件路径
-                fi2.Attributes.Add("CoodSystem", fileInfo.CoodinateSystem);//坐标框架信息
-                if (fileInfo.Finishtime.Trim() != "")
-                {
-                    fi2.Attributes.Add("FinishTime", fileInfo.Finishtime);
-                }//完成时间信息
-                fi2.Attributes.Add("FshPerson", fileInfo.FinishPerson);//完成人信息
-                fi2.Attributes.Add("ObjectNum", fileInfo.ObjectNum);//文件中对象数量
-                fi2.Attributes.Add("MinCood", fileInfo.MinCoodinate);//最小坐标
-                fi2.Attributes.Add("MaxCood", fileInfo.MaxCoodinate);//最大坐标
-                fi2.Attributes.Add("Mark", fileInfo.Mark);// 备注信息
-                fi2.Attributes.Add("ProName", fileInfo.ProjectName);// 所属项目名称
-                fi2.Attributes.Add("FileType", fileInfo.FileType);// 文件类型，宗地图、供地红线图、报批红线图、地籍图、勘测定界报告、竣工验收测绘报告
-                fi2.Attributes.Add("ProType", fileInfo.ProjectType);// 所属项目类型，供地、报批、竣工验收
-                fi2.Attributes.Add("CenterMed", fileInfo.CenterMeridian);// 中央子午线
-                fi2.Attributes.Add("Yoffset", fileInfo.Yoffset);// 纵坐标偏移值
-                fi2.Attributes.Add("Xoffset", fileInfo.Xoffset);// 水平坐标偏移值
-                fi2.Attributes.Add("SUnitName", fileInfo.SurveyingUnitName);// 测绘单位名称，北湖区测绘队、苏仙区测绘队、市局测绘队
-                fi2.Attributes.Add("Memo", fileInfo.Explain);// 成果说明
-                if (fileInfo.UploadTime.Trim() != "")
-                {
-                    fi2.Attributes.Add("UploadTime", fileInfo.UploadTime);
-                }// 上传时间
-                fi2.Attributes.Add("FileSize", fileInfo.FileSize);// 文件大小，单位M
-                fi2.Attributes.Add("UserID", fileInfo.UserID);// 用户ID
-                fi2.Attributes.Add("PublicOB", fileInfo.PublicObjs); // 公开单位
-                fi2.url = ConfigurationManager.AppSettings["serverurl"];
-                upObjectId = openauto.readshpfile(filename, fi2);
-                fileInfo.ObjectID = upObjectId;
-            }
-            return upObjectId;
-        }
         private string GetMD5HashFromFile(Stream stream)
         {
             try
@@ -271,7 +215,6 @@ namespace SurveyingResultManageSystem.Controllers
         /// <returns></returns>
         public PartialViewResult FileRecover(int? pageIndex)
         {
-
             return PartialView(getPartialModel(pageIndex));
         }
         /// <summary>
@@ -308,7 +251,7 @@ namespace SurveyingResultManageSystem.Controllers
             using (TransactionScope tran = new TransactionScope())
             {
                 //找到原来的图形，重新上载到地图
-                string objectId = PublishMap(file);
+                string objectId = Openauto.PublishMap(file);
                 //数据库标识字段WasDelete恢复false
                 file.WasDeleted = false;
                 bool success = fileInfoService.Update(file);

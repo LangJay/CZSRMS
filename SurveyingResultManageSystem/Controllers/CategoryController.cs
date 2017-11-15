@@ -224,15 +224,6 @@ namespace SurveyingResultManageSystem.Controllers
                 {
                     return Content("编辑失败！");
                 }
-                //Category newcategory = category;
-                ////取出新旧名
-                //string oldname = category.kind.Split('^')[0];
-                //Category oldcategory = MyXML.GetElement(oldname);
-                //string newname = category.kind.Split('^')[1];
-                //newcategory.kind = newname;
-                //newcategory.select = oldcategory.select;
-                //bool success = MyXML.EditElement(oldname, newcategory);
-                //if (!success) return Content("编辑失败！");
             }
             catch (Exception e)
             {

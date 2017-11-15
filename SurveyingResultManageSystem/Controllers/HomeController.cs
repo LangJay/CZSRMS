@@ -33,7 +33,6 @@ namespace SurveyingResultManageSystem.Controllers
         private LogInfoService logInfoService;
         private UserInfoService userInfoService;
         private FileInfoService fileInfoService;
-        CZSRMS_DBEntities db = new CZSRMS_DBEntities();
         public HomeController()
         {
             logInfoService = new LogInfoService();
@@ -569,7 +568,7 @@ namespace SurveyingResultManageSystem.Controllers
         {
             FeatureItem1 item1 = new FeatureItem1();
             item1.url = ConfigurationManager.AppSettings["serverurl"];
-            bool tt = openauto.DeleFeature(item1.url, objectid);
+            bool tt = Openauto.DeleFeature(item1.url, objectid);
             return tt;
         }
         /// <summary>
@@ -726,7 +725,7 @@ namespace SurveyingResultManageSystem.Controllers
             featureItem2.Attributes.Add("PublicOB", fileInfo.PublicObjs);
             featureItem2.url = ConfigurationManager.AppSettings["serverurl"];
            
-            bool tt1 = openauto.UpdateFeature(featureItem2.url, fileInfo.ObjectID, featureItem2);
+            bool tt1 = Openauto.UpdateFeature(featureItem2.url, fileInfo.ObjectID, featureItem2);
             
             bool tt2 = fileInfoService.Update(fileInfo);//更新数据库
             return tt1 && tt2;
