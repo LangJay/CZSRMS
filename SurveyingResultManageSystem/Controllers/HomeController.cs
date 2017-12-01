@@ -502,7 +502,7 @@ namespace SurveyingResultManageSystem.Controllers
         private void DownloadTask(string savePath)
         {
             //以字符流的形式下载文件
-            FileStream fs = new FileStream(savePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+            FileStream fs = new FileStream(savePath, FileMode.Open, FileAccess.Read, FileShare.Read);
             Response.ContentType = "application/octet-stream";
             //通知浏览器下载文件而不是打开
             Response.AddHeader("Content-Disposition", "attachment; filename=" + HttpUtility.UrlEncode("下载.zip", Encoding.UTF8));
