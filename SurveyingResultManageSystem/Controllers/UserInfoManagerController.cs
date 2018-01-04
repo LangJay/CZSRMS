@@ -242,14 +242,30 @@ namespace SurveyingResultManageSystem.Controllers
                 tb_UserInfo obj = JsonConvert.DeserializeObject<tb_UserInfo>(stream) as tb_UserInfo;
                 //根据信息找到完整用户信息
                 tb_UserInfo user = userInfoService.Find(u => u.UserName == obj.UserName);
+                string username = System.Web.HttpContext.Current.Request.Cookies["username"].Value;
+                if(username != user.UserName && username != "Manager")
+                {
+                    if(user.Levels == "0")
+                    {
+                        log.Explain = "你没有权限重置管理员密码！";
+                        logInfoService.Add(log);
+                        return Content("你没有权限重置管理员密码！");
+                    }
+                }
+                if (user.Levels == "-1")
+                {
+                    log.Explain = "系统管理员不能重置密码！";
+                    logInfoService.Add(log);
+                    return Content("系统管理员不能重置密码！");
+                }
                 user.Password = ConfigurationManager.AppSettings["DefaultPwd"];
                 if (user != null)
                 {
                     if (userInfoService.Update(user))
                     {
-                        log.Explain = "修改成功！";
+                        log.Explain = "密码重置为123！";
                         logInfoService.Add(log);
-                        return Content("修改成功！");
+                        return Content("密码重置为123！");
                     }
                     else
                     {
@@ -266,7 +282,7 @@ namespace SurveyingResultManageSystem.Controllers
                 logInfoService.Add(log);
                 return Content("修改失败！");
             }
-            return Content("删除成功！");
+            return Content("密码重置为123！");
         }
         [AuthorityAuthentication]
         [HttpGet]

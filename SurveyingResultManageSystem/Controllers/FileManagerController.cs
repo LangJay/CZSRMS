@@ -76,7 +76,9 @@ namespace SurveyingResultManageSystem.Controllers
             {
                 var file = files[0];
                 string fileName = file.FileName.Split('\\').Last();
-                string fileSaveFolder = HttpRuntime.AppDomainAppPath.ToString() + "Data\\File\\" + DateTime.Now.ToFileTime().ToString() + "\\";
+
+                string BaseFolder = ConfigurationManager.AppSettings["DataPath"];
+                string fileSaveFolder = BaseFolder + DateTime.Now.ToFileTime().ToString() + "\\";
                 tb_FileInfo fileInfo = new tb_FileInfo();
                 string fileSavePath = null;//带文件名路径
                 //读取文件并保存

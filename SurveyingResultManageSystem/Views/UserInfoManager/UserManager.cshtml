@@ -285,7 +285,7 @@
             async: false,
             data: JSON.stringify(user),
             success: function (data) {
-                alert("密码重置为123");
+                alert(data);
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 if (XMLHttpRequest.state != 200)
