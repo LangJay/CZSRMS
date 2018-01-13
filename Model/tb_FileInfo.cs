@@ -129,7 +129,13 @@ namespace Model
         /// 用户ID
         /// </summary>
         public int UserID { get; set; }
+        /// <summary>
+        /// ArcServer图形ID
+        /// </summary>
         public string ObjectID { get; set; }
+        /// <summary>
+        /// MD5，暂时没用到
+        /// </summary>
         public string MD5 { get; set; }
         /// <summary>
         /// 是否已经删除

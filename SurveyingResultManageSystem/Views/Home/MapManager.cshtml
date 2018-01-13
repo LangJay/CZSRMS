@@ -497,9 +497,9 @@
         }
         fatch3.refresh();
     };
-    require(["esri/map", "esri/layers/ArcGISDynamicMapServiceLayer","esri/layers/ArcGISImageServiceLayer","esri/layers/FeatureLayer", "esri/layers/GraphicsLayer", "esri/InfoTemplate", "esri/geometry/Point", "esri/dijit/Search", "dojo/dom",
+    require(["esri/map", "esri/layers/ArcGISDynamicMapServiceLayer", "esri/layers/ArcGISImageServiceLayer","esri/layers/ArcGISTiledMapServiceLayer","esri/layers/FeatureLayer", "esri/layers/GraphicsLayer", "esri/InfoTemplate", "esri/geometry/Point", "esri/dijit/Search", "dojo/dom",
         "dojo/on", "dojo/domReady!"],
-        function (Map, ArcGISDynamicMapServiceLayer, ArcGISImageServiceLayer, FeatureLayer, GraphicsLayer, InfoTemplate, Point, Search, dom, on) {
+        function (Map, ArcGISDynamicMapServiceLayer, ArcGISImageServiceLayer, ArcGISTiledMapServiceLayer, FeatureLayer, GraphicsLayer, InfoTemplate, Point, Search, dom, on) {
             map = new Map("mapDiv", { logo: false });
             map.infoWindow.resize(350, 400);
             graphiclayer = new GraphicsLayer();
@@ -536,13 +536,14 @@
             });
             var baseURL = "http://172.26.9.66:6080/arcgis/rest/services/CZ_ZW_L9_L20_DLG_Map/MapServer"
             var baseImageURL = "http://172.26.9.66:6080/arcgis/rest/services/CZ_ZW_L9_L20_DOM_Map/MapServer"
-            //var imageLayer = new ArcGISImageMapserviceLayer(baseImageURL, {
-            //});
+            var url1 = "http://172.26.9.66:6080/arcgis/rest/services/苏仙4/MapServer";
+            var url2 = "http://172.26.9.39/ArcGIS/rest/services/CZ_GZ_L18_L20_DLG_GDB_TX/MapServer";
+            //esri.config.defaults.io.proxyUrl = "http://172.26.9.59/DotNet/proxy.ashx ";
+            //esri.config.defaults.io.alwaysUseProxy = false;
+            var baseLayer = new ArcGISTiledMapServiceLayer(url1);
             //添加底图
-            var baseLayer = new ArcGISDynamicMapServiceLayer(baseURL, {
-                "showAttribution": false
-            });
-             map.addLayer(baseLayer);
+            //var baseLayer = new ArcGISDynamicMapServiceLayer(url2, { "showAttribution": false });
+            map.addLayer(baseLayer);
             //不是管理员账户筛选要素显示
             if (ss[1].trim() != "0") {
                 fatch3.setDefinitionExpression("SUnitName like '%" + ss[0].trim() + "%' or PublicOB like '%" + ss[0].trim() + "%'");
