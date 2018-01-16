@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PackDocument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <PackFiles>
+    <PackFile ProjectName="市建材厂.001---1dwg" CoodinateSystem="郴州独立坐标系" CenterMeridian="113.5" Yoffset="0" Xoffset="0" FileType="宗地图" ProjectType="报批" SurveyingUnitName="北湖区测绘队" FinishPerson="asdfaf" Explain="afasdfdf">
+      <FinishtimeInfo>2008-01-13T15:59:21</FinishtimeInfo>
+    </PackFile>
+  </PackFiles>
+</PackDocument>

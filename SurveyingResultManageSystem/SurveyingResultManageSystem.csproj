@@ -63,6 +63,12 @@
     <Reference Include="FilePackageLib">
       <HintPath>..\packages\FilePackageLib.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.AI.Web">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Web.2.2.0\lib\net45\Microsoft.AI.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.2.2.0\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
@@ -211,6 +217,8 @@
     <Content Include="Sources\Images\chenzhou.png" />
     <Content Include="Sources\Images\close_red.png" />
     <Content Include="Sources\Images\close_white.png" />
+    <Content Include="Sources\Images\cz_sl.png" />
+    <Content Include="Sources\Images\cz_yx.png" />
     <Content Include="Sources\Images\desc_blue.png" />
     <Content Include="Sources\Images\desc_gray.png" />
     <Content Include="Sources\Images\desc_white.png" />

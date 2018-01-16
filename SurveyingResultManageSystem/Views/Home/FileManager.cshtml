@@ -48,6 +48,10 @@
                             <td colspan="3"><input id="input_file" type="file" accept=".pack" name="file" /></td>
                         </tr>
                         <tr>
+                            <td style="width:80px;">选择xml文件：</td>
+                            <td colspan="3"><input id="input_file_xml" onchange="ChangeXML()" type="file" accept=".xml" name="file" /></td>
+                        </tr>
+                        <tr>
                             <td>文件类型：</td>
                             <td>
                                 <span>
@@ -69,26 +73,26 @@
                                 </span>
                             </td>
                             <td>所属项目名称：</td>
-                            <td><input name="ProjectName" id="projectname" class="red-border"/></td>
+                            <td><input name="ProjectName" id="projectname" class="red-border" /></td>
                         </tr>
                         <tr>
                             <td>纵坐标偏移值：</td>
-                            <td><input type="number" name="Yoffset" id="yoffset" class="red-border" value="0"/></td>
+                            <td><input type="number" name="Yoffset" id="yoffset" class="red-border" value="0" /></td>
                             <td>水平坐标偏移值：</td>
-                            <td><input type="number" name="Xoffset" id="xoffset" class="red-border" value="0"/></td>
+                            <td><input type="number" name="Xoffset" id="xoffset" class="red-border" value="0" /></td>
                         </tr>
-                      
+
                         <tr>
                             <td>是否需要进库：</td>
                             <td>
-                            是：<input style="min-width:initial;height:auto;" type="radio" checked="checked" name="Warehousing" value="true" class="red-border" /> 
-                            否：<input style="min-width:initial;height:auto;" type="radio" name="Warehousing" value="false" class="red-border" />
+                                是：<input style="min-width:initial;height:auto;" type="radio" checked="checked" name="Warehousing" value="true" class="red-border" />
+                                否：<input style="min-width:initial;height:auto;" type="radio" name="Warehousing" value="false" class="red-border" />
                             </td>
-                            
+
                         </tr>
                         <tr>
                             <td>中央子午线：</td>
-                            <td><input maxlength="50" name="CenterMeridian" id="centermeridian" class="red-border" value="113:30:00.00"/></td>
+                            <td><input maxlength="50" name="CenterMeridian" id="centermeridian" class="red-border" value="113:30:00.00" /></td>
                             <td>测绘单位名称：</td>
                             <td>
                                 <span>
@@ -98,7 +102,7 @@
                         </tr>
                         <tr>
                             <td>完成时间：</td>
-                            <td><input type="date" name="Finishtime" id="finishtime" value="" class="red-border"/></td>
+                            <td><input type="text" name="Finishtime" id="finishtime" value="" class="red-border" /></td>
                             <td>完成人名称：</td>
                             <td><input maxlength="50" name="FinishPerson" id="finishperson" /></td>
                         </tr>
@@ -111,8 +115,7 @@
                             <td>文件公开对象：</td>
                             <td colspan="3">
                                 <span>
-                                <select id="selectObjs" class="js-example-basic-multiple" multiple="multiple" style="min-width:176px" >
-                                </select>
+                                    <select id="selectObjs" class="js-example-basic-multiple" multiple="multiple" style="min-width:176px"></select>
                                 </span>
                             </td>
                         </tr>
@@ -916,5 +919,40 @@
         sessionStorage.setItem("powerKeys", str);
         getDate(1, "", "", "", "", "", str);
         $("#divserch").modal("hide");
+    }
+    //xml选择文件变化
+    function ChangeXML() {
+        if ($("#input_file_xml").val() == "") return;
+        var file = document.getElementById("input_file_xml").files[0];// 获取文件对象
+        var FileController = "../FileManager/ReadCliendXML";// 接收上传文件的后台地址 
+        // FormData 对象
+        var form = new FormData();
+        form.append("file", file);// 文件对象
+        // XMLHttpRequest 对象
+        var xhr = new XMLHttpRequest();
+        xhr.open("post", FileController, true);
+        xhr.onload = function (data) {
+        };
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var b = xhr.response;
+                var jsondata = $.parseJSON(b);
+                var ProjectName = jsondata.ProjectName;
+                $("#filetype").find("option:contains(" + jsondata.FileType + ")").attr("selected", true);
+                $("#CoodinateSystem").find("option:contains(" + jsondata.CoordSystem + ")").attr("selected", true);
+                $("#projecttype").find("option:contains(" + jsondata.ProjectType + ")").attr("selected", true);
+                $("#projectname").val(jsondata.ProjectName);
+                $("#yoffset").val(jsondata.OffsetN);
+                $("#xoffset").val(jsondata.OffsetE);
+                $("#centermeridian").val(jsondata.CenterLong);
+                $("#surveyingunitname").find("option:contains(" + jsondata.SurveyingUnitName + ")").attr("selected", true);
+                var dateStr = new Date(parseInt(jsondata.FinishtimeInfo.substr(6, 13))).toLocaleDateString();
+                $("#finishtime").val(dateStr);
+                $("#finishperson").val(jsondata.FinishPerson);
+                $("#explain").val(jsondata.Explain);
+
+            }
+        };
+        xhr.send(form);
     }
 </script>

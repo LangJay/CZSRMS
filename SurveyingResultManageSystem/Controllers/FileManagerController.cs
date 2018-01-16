@@ -257,7 +257,7 @@ namespace SurveyingResultManageSystem.Controllers
                 //数据库标识字段WasDelete恢复false
                 file.WasDeleted = false;
                 bool success = fileInfoService.Update(file);
-                if(objectId != null && success)
+                if (objectId != null && success)
                 {
                     var response = new { result = "恢复成功！", fileId = id };
                     Response.Write(new JavaScriptSerializer().Serialize(response));
@@ -300,6 +300,39 @@ namespace SurveyingResultManageSystem.Controllers
                 Response.Write(new JavaScriptSerializer().Serialize(response));
             }
         }
-       
+        [HttpPost]
+        public JsonResult ReadCliendXML()
+        {
+            var cook = System.Web.HttpContext.Current.Request.Cookies["username"];
+            if (cook == null)
+            {
+                return null;
+            }
+            string username = cook.Value;
+            var file = Request.Files[0];
+            string FilePath = HttpRuntime.AppDomainAppPath.ToString() + "/Data/" + username + "_xmlfile.xml";
+            try
+            {
+                file.SaveAs(FilePath);
+                PackDocument packFiles = new PackDocument();
+                packFiles = MyXmlSerializer.LoadFromXml(FilePath, packFiles.GetType()) as PackDocument;
+                if (packFiles.PackFiles.Count > 0)
+                {
+                    PackFile packFile = packFiles.PackFiles[0];
+                    if (packFile.CoordSystem == "CGCS2000")
+                        packFile.CoordSystem = "国家2000";
+                    else if (packFile.CoordSystem == "郴州独立坐标系")
+                        packFile.CoordSystem = "郴州独立";
+                    return Json(packFile);
+                }
+                else
+                    return null;
+            }
+            catch
+            {
+                return null;
+            }
+
+        }
     }
 }

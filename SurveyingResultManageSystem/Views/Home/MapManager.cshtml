@@ -44,23 +44,24 @@
     </ul>
 </div>
 <div id="mapDiv">
-	<div id="topsearch">
-	   <div class="btn-group" id="btn-group1">
-	     <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="dropdowntoggle1">
-			文件名<span class="caret"></span>
-	    </a>
-	    <ul class="dropdown-menu">
-			<li><a onclick="searchbtn1('SurveyingUnitName')">测绘单位名称</a></li>
-			<li><a onclick="searchbtn1('CoodinateSystem')">坐标信息框架</a></li>
-			<li><a onclick="searchbtn1('ProjectName')">所属项目名称</a></li>
-			<li><a onclick="searchbtn1('FinishPerson')">完成人名称</a></li>
-			@*//<li><a onclick="searchbtn1('Finishtime')">完成时间</a></li>*@
-			@*<li><a onclick="searchbtn1('UploadTime')">上传时间</a></li>*@
-			<li><a onclick="searchbtn1('FileName')">文件名</a></li>
-	   </ul>
-      </div>
-	  <div id="search"></div>
-	</div>
+    <div id="BasemapToggle"></div>
+    <div id="topsearch">
+        <div class="btn-group" id="btn-group1">
+            <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="dropdowntoggle1">
+                文件名<span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a onclick="searchbtn1('SurveyingUnitName')">测绘单位名称</a></li>
+                <li><a onclick="searchbtn1('CoodinateSystem')">坐标信息框架</a></li>
+                <li><a onclick="searchbtn1('ProjectName')">所属项目名称</a></li>
+                <li><a onclick="searchbtn1('FinishPerson')">完成人名称</a></li>
+                @*//<li><a onclick="searchbtn1('Finishtime')">完成时间</a></li>*@
+                @*<li><a onclick="searchbtn1('UploadTime')">上传时间</a></li>*@
+                <li><a onclick="searchbtn1('FileName')">文件名</a></li>
+            </ul>
+        </div>
+        <div id="search"></div>
+    </div>
 </div>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel" aria-hidden="true">
@@ -497,10 +498,40 @@
         }
         fatch3.refresh();
     };
-    require(["esri/map", "esri/layers/ArcGISDynamicMapServiceLayer", "esri/layers/ArcGISImageServiceLayer","esri/layers/ArcGISTiledMapServiceLayer","esri/layers/FeatureLayer", "esri/layers/GraphicsLayer", "esri/InfoTemplate", "esri/geometry/Point", "esri/dijit/Search", "dojo/dom",
+    require(["esri/basemaps", "esri/map", "esri/dijit/BasemapToggle", "esri/layers/ArcGISDynamicMapServiceLayer", "esri/layers/ArcGISImageServiceLayer", "esri/layers/ArcGISTiledMapServiceLayer", "esri/layers/FeatureLayer", "esri/layers/GraphicsLayer", "esri/InfoTemplate", "esri/geometry/Point", "esri/dijit/Search", "dojo/dom",
         "dojo/on", "dojo/domReady!"],
-        function (Map, ArcGISDynamicMapServiceLayer, ArcGISImageServiceLayer, ArcGISTiledMapServiceLayer, FeatureLayer, GraphicsLayer, InfoTemplate, Point, Search, dom, on) {
-            map = new Map("mapDiv", { logo: false });
+        function (esriBasemaps, Map, BasemapToggle, ArcGISDynamicMapServiceLayer, ArcGISImageServiceLayer, ArcGISTiledMapServiceLayer, FeatureLayer, GraphicsLayer, InfoTemplate, Point, Search, dom, on) {
+
+            //esri.config.defaults.io.proxyUrl = "http://172.26.9.59:80/DotNet/proxy.ashx ";
+           // esri.config.defaults.io.alwaysUseProxy = false;
+            var baseURL = "http://172.26.9.66:6080/arcgis/rest/services/CZ_ZW_L9_L20_DLG_Map/MapServer"
+            var baseImageURL = "http://172.26.9.66:6080/arcgis/rest/services/CZ_ZW_L9_L20_DOM_Map/MapServer"
+            var cz_yx = "http://172.26.9.66:6080/arcgis/rest/services/苏仙4/MapServer";
+            var cz_sl = "http://172.26.9.39/ArcGIS/rest/services/CZ_GZ_L18_L20_DLG_GDB_TX/MapServer";
+            esriBasemaps.delorme = {
+                baseMapLayers: [{ url: cz_sl }
+                ],
+                thumbnailUrl: "~/Sources/Images/cz_sl.png",
+                title: "cz_sl"
+            };
+            esriBasemaps.delorme = {
+                baseMapLayers: [{ url: cz_yx }
+                ],
+                thumbnailUrl: "~/Sources/Images/cz_yx.png",
+                title: "cz_yx"
+            };
+            map = new Map("mapDiv",
+                {
+                    logo: false,
+                    basemap:"cz_yx"
+                });
+            var toggle = new BasemapToggle({
+                map: map,
+                basemap: "cz_yx"
+            }, "BasemapToggle");
+            toggle.startup();
+
+
             map.infoWindow.resize(350, 400);
             graphiclayer = new GraphicsLayer();
             var username = getCookie("username");
@@ -534,16 +565,7 @@
                 infoTemplate: new InfoTemplate("范围红线", tempstr)
 
             });
-            var baseURL = "http://172.26.9.66:6080/arcgis/rest/services/CZ_ZW_L9_L20_DLG_Map/MapServer"
-            var baseImageURL = "http://172.26.9.66:6080/arcgis/rest/services/CZ_ZW_L9_L20_DOM_Map/MapServer"
-            var url1 = "http://172.26.9.66:6080/arcgis/rest/services/苏仙4/MapServer";
-            var url2 = "http://172.26.9.39/ArcGIS/rest/services/CZ_GZ_L18_L20_DLG_GDB_TX/MapServer";
-            //esri.config.defaults.io.proxyUrl = "http://172.26.9.59/DotNet/proxy.ashx ";
-            //esri.config.defaults.io.alwaysUseProxy = false;
-            var baseLayer = new ArcGISTiledMapServiceLayer(url1);
-            //添加底图
-            //var baseLayer = new ArcGISDynamicMapServiceLayer(url2, { "showAttribution": false });
-            map.addLayer(baseLayer);
+           
             //不是管理员账户筛选要素显示
             if (ss[1].trim() != "0") {
                 fatch3.setDefinitionExpression("SUnitName like '%" + ss[0].trim() + "%' or PublicOB like '%" + ss[0].trim() + "%'");
