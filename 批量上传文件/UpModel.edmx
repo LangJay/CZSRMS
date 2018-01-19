@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="CZSRMS_DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="CZSRMS_DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="tb_CoodinateSystem">
           <Key>
             <PropertyRef Name="ID" />
@@ -44,6 +44,7 @@
           <Property Name="UserID" Type="int" Nullable="false" />
           <Property Name="ObjectID" Type="varchar" MaxLength="50" />
           <Property Name="MD5" Type="varchar(max)" />
+          <Property Name="WasDeleted" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="tb_FileType">
           <Key>
@@ -98,8 +99,7 @@
           <EntitySet Name="tb_Unit" EntityType="Self.tb_Unit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tb_UserInfo" EntityType="Self.tb_UserInfo" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CZSRMS_DBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -142,6 +142,7 @@
           <Property Name="UserID" Type="Int32" Nullable="false" />
           <Property Name="ObjectID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="MD5" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="WasDeleted" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="tb_FileType">
           <Key>
@@ -213,6 +214,7 @@
           <EntitySetMapping Name="tb_FileInfo">
             <EntityTypeMapping TypeName="CZSRMS_DBModel.tb_FileInfo">
               <MappingFragment StoreEntitySet="tb_FileInfo">
+                <ScalarProperty Name="WasDeleted" ColumnName="WasDeleted" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="FileName" ColumnName="FileName" />
                 <ScalarProperty Name="Directory" ColumnName="Directory" />

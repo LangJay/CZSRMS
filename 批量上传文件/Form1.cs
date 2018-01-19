@@ -3,6 +3,7 @@ using FilePackageLib;
 using Microsoft.Office.Interop.Excel;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.OleDb;
 using System.IO;
@@ -49,6 +50,7 @@ namespace 批量上传文件
         private void BeginBtn_Click(object sender, EventArgs e)
         {
             DataSet dataSet = ReadExcel1();
+            if (dataSet == null) return;
             System.Data.DataTable table = dataSet.Tables[0];
             string[,] excel = new string[table.Rows.Count,table.Columns.Count];
             int i1 = 0;
@@ -93,14 +95,15 @@ namespace 批量上传文件
                 //寻找对应的那条数据
                 for(int i = 0;i < excel.GetLength(0);i ++)
                 {
-                    if(excel[i,0] == name && excel[i,22] == "1")//筛选出finished为1的数据
+                    if(excel[i,0] == name && excel[i,2] == "是")//筛选出finished为1的数据
                     {
                         //读取文件并保存
                         string fileSaveFolder = "G:\\项目\\郴州测绘成果管理项目\\郴州市测绘成果项目管理系统\\SurveyingResultManageSystem\\" + "Data\\File\\" + DateTime.Now.ToFileTime().ToString() + "\\";
                         string fileSavePath = "";
                         try
                         {
-                            if (!Directory.Exists(fileSaveFolder)) Directory.CreateDirectory(fileSaveFolder);
+                            if (!Directory.Exists(fileSaveFolder))
+                                Directory.CreateDirectory(fileSaveFolder);
                             fileSavePath = Path.Combine(fileSaveFolder, NextFile.Name);
                             File.Copy(packfilePath, fileSavePath);
                         }
@@ -140,7 +143,8 @@ namespace 批量上传文件
                             MessageBox.Show("未知坐标系，第" + i + "行");
 
                         fileInfo.CoodinateSystem = coodinateS;
-                        string time = DateTime.FromOADate(double.Parse(excel[i, 19])).ToString("yyyy-MM-dd");
+                        //DateTime.FromOADate(double.Parse(excel[i, 19])).ToString("yyyy-MM-dd");
+                        string time = excel[i, 19].Split(' ')[0];
                         fileInfo.FinishtimeInfo = time;
                         fileInfo.FinishPersonInfo = excel[i, 20];
                         fileInfo.MinCoodinate = null;
@@ -165,6 +169,7 @@ namespace 批量上传文件
                         fileInfo.UserID = 0;
                         fileInfo.ObjectID = "";
                         fileInfo.MD5 = "";
+                        fileInfo.WasDeleted = false;
 
 
                         //填写内容，上传文件
@@ -217,8 +222,9 @@ namespace 批量上传文件
                             fileInfo.ObjectID = upObjectId;
 
                         }
-                        catch
+                        catch(Exception ex)
                         {
+                            AddRecord("C:\\Users\\zjl_h\\Desktop", NextFile.Name + "：" + ex.Message.ToString());
                             upObjectId = "";
                         }
                         //上传数据库
@@ -239,7 +245,6 @@ namespace 批量上传文件
                     
                 }
             }
-
         }
         public tb_FileInfo Add(tb_FileInfo entity)
         {
@@ -282,9 +287,8 @@ namespace 批量上传文件
             {
                 string excelfilePath = this.excelDirLab.Text;
                 //连接字符串
-                string connstring = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + excelfilePath + ";Extended Properties='Excel 8.0;HDR=NO;IMEX=1';"; // Office 07及以上版本 不能出现多余的空格 而且分号注意
-                //string connstring = Provider=Microsoft.JET.OLEDB.4.0;Data Source=" + path + ";Extended Properties='Excel 8.0;HDR=NO;IMEX=1';"; //Office 07以下版本 
-                using (OleDbConnection conn = new OleDbConnection(connstring))
+                string excelConnectionString = string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties='Excel 12.0 Xml;HDR=Yes;IMEX=1;Driver=Microsoft Excel Driver (*.xls, *.xlsx, *.xlsm, *.xlsb);DBQ=path to xls/xlsx/xlsm/xlsb file'", excelfilePath);
+                using (OleDbConnection conn = new OleDbConnection(excelConnectionString))
                 {
                     conn.Open();
                     System.Data.DataTable sheetsName = conn.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, new object[] { null, null, null, "Table" }); //得到所有sheet的名字
@@ -292,14 +296,15 @@ namespace 批量上传文件
                     string sql = string.Format("SELECT * FROM [{0}]", firstSheetName); //查询字符串
                     //string sql = string.Format("SELECT * FROM [{0}] WHERE [日期] is not null", firstSheetName); //查询字符串
 
-                    OleDbDataAdapter ada = new OleDbDataAdapter(sql, connstring);
+                    OleDbDataAdapter ada = new OleDbDataAdapter(sql, excelConnectionString);
                     DataSet set = new DataSet();
                     ada.Fill(set);
                     return set;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                AddRecord("C:\\Users\\zjl_h\\Desktop",ex.ToString());
                 return null;
             }
 

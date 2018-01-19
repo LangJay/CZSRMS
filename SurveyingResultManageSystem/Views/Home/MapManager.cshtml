@@ -4,13 +4,21 @@
 
 @*<link rel="stylesheet" type="text/css" href="http://192.168.0.205:80/aspnet_client/API/3.21/3.21/esri/css/esri.css" />
 <script src="http://192.168.0.205:80/aspnet_client/API/3.21/3.21/init.js"></script>*@
-<link rel="stylesheet" type="text/css" href="http://172.26.9.59/arcgis_js_api/library/3.21/3.21/esri/css/esri.css" />
-<script src="http://172.26.9.59/arcgis_js_api/library/3.21/3.21/init.js"></script>
+<link rel="stylesheet" type="text/css" href="http://192.168.0.231:8080/arcgis_js_api/library/3.21/3.21/esri/css/esri.css" />
+<script src="http://192.168.0.231:8080/arcgis_js_api/library/3.21/3.21/init.js"></script>
 
 @Styles.Render("~/Content/style/MapManager.css")
 @Styles.Render("~/Content/style/FileManager.css")
 @Styles.Render("~/Scripts/easyfader/css/jquery.easyfader.css")
+<style>
 
+    #BasemapToggle {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        z-index: 50;
+    }
+</style>
 <div id="div_menu">
     <ul id="div_menu_ul">
         <li id="li_file">
@@ -498,151 +506,143 @@
         }
         fatch3.refresh();
     };
-    require(["esri/basemaps", "esri/map", "esri/dijit/BasemapToggle", "esri/layers/ArcGISDynamicMapServiceLayer", "esri/layers/ArcGISImageServiceLayer", "esri/layers/ArcGISTiledMapServiceLayer", "esri/layers/FeatureLayer", "esri/layers/GraphicsLayer", "esri/InfoTemplate", "esri/geometry/Point", "esri/dijit/Search", "dojo/dom",
+
+    require(["esri/basemaps","esri/map", "esri/dijit/BasemapToggle","esri/layers/ArcGISDynamicMapServiceLayer", "esri/layers/ArcGISImageServiceLayer","esri/layers/ArcGISTiledMapServiceLayer","esri/layers/FeatureLayer", "esri/layers/GraphicsLayer", "esri/InfoTemplate", "esri/geometry/Point", "esri/dijit/Search", "dojo/dom",
         "dojo/on", "dojo/domReady!"],
-        function (esriBasemaps, Map, BasemapToggle, ArcGISDynamicMapServiceLayer, ArcGISImageServiceLayer, ArcGISTiledMapServiceLayer, FeatureLayer, GraphicsLayer, InfoTemplate, Point, Search, dom, on) {
-
-            //esri.config.defaults.io.proxyUrl = "http://172.26.9.59:80/DotNet/proxy.ashx ";
-           // esri.config.defaults.io.alwaysUseProxy = false;
-            var baseURL = "http://172.26.9.66:6080/arcgis/rest/services/CZ_ZW_L9_L20_DLG_Map/MapServer"
-            var baseImageURL = "http://172.26.9.66:6080/arcgis/rest/services/CZ_ZW_L9_L20_DOM_Map/MapServer"
-            var cz_yx = "http://172.26.9.66:6080/arcgis/rest/services/苏仙4/MapServer";
-            var cz_sl = "http://172.26.9.39/ArcGIS/rest/services/CZ_GZ_L18_L20_DLG_GDB_TX/MapServer";
-            esriBasemaps.delorme = {
-                baseMapLayers: [{ url: cz_sl }
-                ],
-                thumbnailUrl: "~/Sources/Images/cz_sl.png",
-                title: "cz_sl"
-            };
-            esriBasemaps.delorme = {
-                baseMapLayers: [{ url: cz_yx }
-                ],
-                thumbnailUrl: "~/Sources/Images/cz_yx.png",
-                title: "cz_yx"
-            };
-            map = new Map("mapDiv",
-                {
-                    logo: false,
-                    basemap:"cz_yx"
-                });
-            var toggle = new BasemapToggle({
-                map: map,
-                basemap: "cz_yx"
-            }, "BasemapToggle");
-            toggle.startup();
-
-
-            map.infoWindow.resize(350, 400);
-            graphiclayer = new GraphicsLayer();
-            var username = getCookie("username");
-            var userinfo = "";
-            $.ajax({
-                url: "/Home/GetUserinfo",
-                type: "post",
-                dataType: "text",
-                async: false,
-                data: username,
-                success: function (data) {
-                    userinfo = data;
-                },
-                error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert(XMLHttpRequest.status);
-                }
-            });
-            var ss = userinfo.split(',');
-            jx = ss[1].trim();
-            var tempstr;
-            if (jx == "0") {
-                tempstr = "<table width='100%' style='table-layout:fixed'><tr height='15%' width='100%'><th width='60%' align='left'>文件名:${FileName} </th><th width='40%' align='left'>完成人:${FshPerson} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>坐标信息:${CoodSystem} </th><th width='40%' align='left'>完成时间:${FinishTime:DateFormat(selector: 'date', fullYear: true)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>中央子午线:${CenterMed} </th><th width='40%' align='left'>上传时间:${UploadTime:DateFormat(selector: 'date', fullYear: true)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>文件类型:${FileType} </th><th width='40%' align='left'>文件大小:${FileSize:NumberFormat(places:2)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>项目名称:${ProName} </th><th width='40%' align='left' id='tdid'>图形ID:${OBJECTID} </th></tr><tr height='15%' width='100%'><th width='100%' align='left'>备注:${Memo} </th></tr></table><button style='margin:5px 15px' type='button' onclick='SYT()' class='btn btn-primary btn-xs'>缩略图</button><button style='margin:5px 15px' type='button' onclick='Change()' class='btn btn-primary btn-xs'>修  改</button><button style='margin:5px 15px' type='button' onclick='dele()' class='btn btn-primary btn-xs'>删  除</button><button style='margin:5px 0px 5px 15px' type='button' onclick='Down()' class='btn btn-primary btn-xs'>下  载</button>";
-
-            }
-            else {
-                tempstr = "<table width='100%' style='table-layout:fixed'><tr height='15%' width='100%'><th width='60%' align='left'>文件名:${FileName} </th><th width='40%' align='left'>完成人:${FshPerson} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>坐标信息:${CoodSystem} </th><th width='40%' align='left'>完成时间:${FinishTime:DateFormat(selector: 'date', fullYear: true)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>中央子午线:${CenterMed} </th><th width='40%' align='left'>上传时间:${UploadTime:DateFormat(selector: 'date', fullYear: true)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>文件类型:${FileType} </th><th width='40%' align='left'>文件大小:${FileSize:NumberFormat(places:2)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>项目名称:${ProName} </th><th width='40%' align='left' id='tdid'>图形ID:${OBJECTID} </th></tr><tr height='15%' width='100%'><th width='100%' align='left'>备注:${Memo} </th></tr></table><button style='margin:5px 15px' type='button' onclick='SYT()' class='btn btn-primary btn-xs'>缩略图</button><button style='margin:5px 15px' type='button' onclick='Change()' class='btn btn-primary btn-xs a-delete-button'>修  改</button><button style='margin:5px 15px' type='button' onclick='dele()' class='btn btn-primary btn-xs a-delete-button'>删  除</button><button style='margin:5px 0px 5px 15px' type='button' onclick='Down()' class='btn btn-primary btn-xs'>下  载</button>";
-            }
-            fatch3 = new FeatureLayer("http://172.26.9.59:6080/arcgis/rest/services/sfsss/FeatureServer/0", {
-                mode: FeatureLayer.MODE_SNAPSHOT,
-                outFields: ["*"],
-                infoTemplate: new InfoTemplate("范围红线", tempstr)
-
-            });
-           
-            //不是管理员账户筛选要素显示
-            if (ss[1].trim() != "0") {
-                fatch3.setDefinitionExpression("SUnitName like '%" + ss[0].trim() + "%' or PublicOB like '%" + ss[0].trim() + "%'");
-            }
-
-            // var ss= map.spatialReference
-
-            //var point = new Point({ "x": 451855.881, "y": 2852315.361, "spatialReference": { "wkt": "PROJCS['CGCS2000_3_Degree_GK_CM_11330E', GEOGCS['GCS_China_Geodetic_Coordinate_System_2000', DATUM['D_China_2000', SPHEROID['CGCS2000', 6378137'0, 298'257222101]], PRIMEM['Greenwich', 0'0], UNIT['Degree', 0'0174532925199433]], PROJECTION['Gauss_Kruger'], PARAMETER['False_Easting', 500000'0], PARAMETER['False_Northing', 0'0], PARAMETER['Central_Meridian', 113'5], PARAMETER['Scale_Factor', 1'0], PARAMETER['Latitude_Of_Origin', 0'0], UNIT['Meter', 1'0]]" } });
-            // fatch3.setDefinitionExpression("FileName='ss03'");
-            map.addLayer(fatch3);
-            search = new Search({
-                sources: [{
-                    featureLayer: fatch3,
-                    exactMatch: false,//精确查找
-                    // outFields: ["OBJECTID", "FileName", "Directory", "CoodSystem", "FinishTime", "FshPerson", "MinCood", "MaxCood", "ObjectNum", "Mark", "ProName", "FileType", "ProType", "CenterMed", "Yoffset", "Xoffset", "SUnitName", "Memo", "IsPublic", "UploadTime", "FileSize"],
-                    outFields: ["*"],
-                    searchFields: ["FileName"],//查找的关键字
-                    //   suggestionTemplate: "${FileName}",
-                    //  displayField: "FileName",
-                    //  suggestionTemplate: "${FileName}",
-                    name: "",
-                    placeholder: "根据关键字搜索",//搜索提示
-                    maxResults: 6,
-                    maxSuggestions: true,
-                    minCharacters: 0,
-                    enableInfoWindow: false,
-                    enableHighlight: false,
-                    searchQueryParams: { distance: 5000, maxAllowableOffset: 1 }
-                    //enableSuggestions: true
-
-                }],
-                map: map
-            }, "search");
-            // search.params.sources[0].searchFields[0] = searchfield;
-            search.startup();
-            on(search, 'search-results', function (e) {
-                if (e.results != null) {
-                    //查看用户权限，分配功能
-                    $.get("/UserInfoManager/GetUserLevels", function (data, status) {
-                        if (status == "success") {
-                            if (data == 0) {
-                                $(".a-delete-button").css("display", "inline");
-                            }
-                        }
+        function (esriBasemaps, Map, BasemapToggle, ArcGISDynamicMapServiceLayer, ArcGISImageServiceLayer, ArcGISTiledMapServiceLayer, FeatureLayer, GraphicsLayer, InfoTemplate, Point, Search, dom, on)
+        {
+            $.getJSON("../map.json", function (data) {
+                var czyx = data["czyx"];
+                var czsl = data["czsl"];
+                var cztb = data["cztb"];
+                esriBasemaps.czyx = {
+                    baseMapLayers: [{ url: czyx }],
+                    thumbnailUrl: "../Sources/Images/cz_yx.png",
+                    title: "影像图"
+                };
+                esriBasemaps.czsl = {
+                    baseMapLayers: [{ url: czsl }],
+                    thumbnailUrl: "../Sources/Images/cz_sl.png",
+                    title: "矢量图"
+                };
+                map = new Map("mapDiv",
+                    {
+                        logo: false,
+                        basemap: "czyx",
+                        center: [113.02, 25.78],
+                        zoom:12
                     });
-                    //Jimmy 2017/8/31 17:30 删除选择记录
-                    sessionStorage.clear();
-                    var aa1 = document.getElementById("div-table");
-                    var aa = aa1.childNodes;
-                    if (aa != null) {
-                        for (var i = 0; i < aa.length; i++) { aa1.removeChild(aa[i]); }
+                var toggle = new BasemapToggle({
+                    map: map,
+                    visible: true,
+                    basemap: "czsl"
+                }, "BasemapToggle");
+                toggle.startup();
+                map.infoWindow.resize(350, 400);
 
+                graphiclayer = new GraphicsLayer();
+                var username = getCookie("username");
+                var userinfo = "";
+                $.ajax({
+                    url: "/Home/GetUserinfo",
+                    type: "post",
+                    dataType: "text",
+                    async: false,
+                    data: username,
+                    success: function (data) {
+                        userinfo = data;
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert(XMLHttpRequest.status);
                     }
-                    searchresult = e;
-                    var resultStr = "";
-                    for (var i = 0; i < searchresult.results[0].length; i++) {
-                        //Jimmy 2017/8/31 17:30 给tr增加id，值为文件的id
-                        var id = searchresult.results[0][i].feature.attributes.OBJECTID;
-                        var sun = searchresult.results[0][i].feature.attributes.SUnitName;//文件所属单位
-                        var pob = searchresult.results[0][i].feature.attributes.PublicOB;//公开单位
-                        if (ss[1].trim() == "0") {
-                            resultStr += "<div class='ccccn' id='divid" + (i + 1) + "' onclick='openid(" + i + ",this)' onmouseover='openMarkerTipById1(" + i + ",this)' onmouseout='onmouseout_MarkerStyle(" + (i + 1) + ",this)' style=\"font-size: 10px;cursor:pointer;padding:0px 0 2px 2px;\"><table class='map-table'><tr id=" + id + "><td textalign='left'>" + (i + 1) + "、" + searchresult.results[0][i].feature.attributes.FileName;
-                            resultStr += "</td><td><img class='select_img' src='../Sources/Images/select.png' onclick='selectimg(this)'></img></td></tr></table></div>";
-                        }
-                        else if (sun == ss[0].trim() || pob.indexOf(ss[0].trim()) != -1) {
-                            resultStr += "<div class='ccccn' id='divid" + (i + 1) + "' onclick='openid(" + i + ",this)' onmouseover='openMarkerTipById1(" + i + ",this)' onmouseout='onmouseout_MarkerStyle(" + (i + 1) + ",this)' style=\"font-size: 10px;cursor:pointer;padding:0px 0 2px 2px; \"><table class='map-table'><tr id=" + id + "><td textalign='left'>" + (i + 1) + "、" + searchresult.results[0][i].feature.attributes.FileName;
-                            resultStr += "</td><td><img class='select_img' src='../Sources/Images/select.png' onclick='selectimg(this)'></img></td></tr></table></div>";
-                        }
+                });
+                var ss = userinfo.split(',');
+                jx = ss[1].trim();
+                var tempstr;
+                if (jx == "0") {
+                    tempstr = "<table width='100%' style='table-layout:fixed'><tr height='15%' width='100%'><th width='60%' align='left'>文件名:${FileName} </th><th width='40%' align='left'>完成人:${FshPerson} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>坐标信息:${CoodSystem} </th><th width='40%' align='left'>完成时间:${FinishTime:DateFormat(selector: 'date', fullYear: true)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>中央子午线:${CenterMed} </th><th width='40%' align='left'>上传时间:${UploadTime:DateFormat(selector: 'date', fullYear: true)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>文件类型:${FileType} </th><th width='40%' align='left'>文件大小:${FileSize:NumberFormat(places:2)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>项目名称:${ProName} </th><th width='40%' align='left' id='tdid'>图形ID:${OBJECTID} </th></tr><tr height='15%' width='100%'><th width='100%' align='left'>备注:${Memo} </th></tr></table><button style='margin:5px 15px' type='button' onclick='SYT()' class='btn btn-primary btn-xs'>缩略图</button><button style='margin:5px 15px' type='button' onclick='Change()' class='btn btn-primary btn-xs'>修  改</button><button style='margin:5px 15px' type='button' onclick='dele()' class='btn btn-primary btn-xs'>删  除</button><button style='margin:5px 0px 5px 15px' type='button' onclick='Down()' class='btn btn-primary btn-xs'>下  载</button>";
 
-                    }
-                    document.getElementById("div-table").innerHTML = resultStr;
                 }
                 else {
-                    $(".ccccn").remove();
+                    tempstr = "<table width='100%' style='table-layout:fixed'><tr height='15%' width='100%'><th width='60%' align='left'>文件名:${FileName} </th><th width='40%' align='left'>完成人:${FshPerson} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>坐标信息:${CoodSystem} </th><th width='40%' align='left'>完成时间:${FinishTime:DateFormat(selector: 'date', fullYear: true)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>中央子午线:${CenterMed} </th><th width='40%' align='left'>上传时间:${UploadTime:DateFormat(selector: 'date', fullYear: true)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>文件类型:${FileType} </th><th width='40%' align='left'>文件大小:${FileSize:NumberFormat(places:2)} </th></tr><tr height='15%' width='100%'><th width='60%' align='left'>项目名称:${ProName} </th><th width='40%' align='left' id='tdid'>图形ID:${OBJECTID} </th></tr><tr height='15%' width='100%'><th width='100%' align='left'>备注:${Memo} </th></tr></table><button style='margin:5px 15px' type='button' onclick='SYT()' class='btn btn-primary btn-xs'>缩略图</button><button style='margin:5px 15px' type='button' onclick='Change()' class='btn btn-primary btn-xs a-delete-button'>修  改</button><button style='margin:5px 15px' type='button' onclick='dele()' class='btn btn-primary btn-xs a-delete-button'>删  除</button><button style='margin:5px 0px 5px 15px' type='button' onclick='Down()' class='btn btn-primary btn-xs'>下  载</button>";
                 }
-            });
+                fatch3 = new FeatureLayer(cztb, {
+                    mode: FeatureLayer.MODE_SNAPSHOT,
+                    outFields: ["*"],
+                    infoTemplate: new InfoTemplate("范围红线", tempstr)
 
+                });
+
+                //不是管理员账户筛选要素显示
+                if (ss[1].trim() != "0") {
+                    fatch3.setDefinitionExpression("SUnitName like '%" + ss[0].trim() + "%' or PublicOB like '%" + ss[0].trim() + "%'");
+                }
+                map.addLayer(fatch3);
+                search = new Search({
+                    sources: [{
+                        featureLayer: fatch3,
+                        exactMatch: false,//精确查找
+                        // outFields: ["OBJECTID", "FileName", "Directory", "CoodSystem", "FinishTime", "FshPerson", "MinCood", "MaxCood", "ObjectNum", "Mark", "ProName", "FileType", "ProType", "CenterMed", "Yoffset", "Xoffset", "SUnitName", "Memo", "IsPublic", "UploadTime", "FileSize"],
+                        outFields: ["*"],
+                        searchFields: ["FileName"],//查找的关键字
+                        name: "",
+                        placeholder: "根据关键字搜索",//搜索提示
+                        maxResults: 6,
+                        maxSuggestions: true,
+                        minCharacters: 0,
+                        enableInfoWindow: false,
+                        enableHighlight: false,
+                        searchQueryParams: { distance: 5000, maxAllowableOffset: 1 }
+                        //enableSuggestions: true
+
+                    }],
+                    map: map
+                }, "search");
+                // search.params.sources[0].searchFields[0] = searchfield;
+                search.startup();
+                on(search, 'search-results', function (e) {
+                    if (e.results != null) {
+                        //查看用户权限，分配功能
+                        $.get("/UserInfoManager/GetUserLevels", function (data, status) {
+                            if (status == "success") {
+                                if (data == 0) {
+                                    $(".a-delete-button").css("display", "inline");
+                                }
+                            }
+                        });
+                        //Jimmy 2017/8/31 17:30 删除选择记录
+                        sessionStorage.clear();
+                        var aa1 = document.getElementById("div-table");
+                        var aa = aa1.childNodes;
+                        if (aa != null) {
+                            for (var i = 0; i < aa.length; i++) { aa1.removeChild(aa[i]); }
+
+                        }
+                        searchresult = e;
+                        var resultStr = "";
+                        for (var i = 0; i < searchresult.results[0].length; i++) {
+                            //Jimmy 2017/8/31 17:30 给tr增加id，值为文件的id
+                            var id = searchresult.results[0][i].feature.attributes.OBJECTID;
+                            var sun = searchresult.results[0][i].feature.attributes.SUnitName;//文件所属单位
+                            var pob = searchresult.results[0][i].feature.attributes.PublicOB;//公开单位
+                            if (ss[1].trim() == "0") {
+                                resultStr += "<div class='ccccn' id='divid" + (i + 1) + "' onclick='openid(" + i + ",this)' onmouseover='openMarkerTipById1(" + i + ",this)' onmouseout='onmouseout_MarkerStyle(" + (i + 1) + ",this)' style=\"font-size: 10px;cursor:pointer;padding:0px 0 2px 2px;\"><table class='map-table'><tr id=" + id + "><td textalign='left'>" + (i + 1) + "、" + searchresult.results[0][i].feature.attributes.FileName;
+                                resultStr += "</td><td><img class='select_img' src='../Sources/Images/select.png' onclick='selectimg(this)'></img></td></tr></table></div>";
+                            }
+                            else if (sun == ss[0].trim() || pob.indexOf(ss[0].trim()) != -1) {
+                                resultStr += "<div class='ccccn' id='divid" + (i + 1) + "' onclick='openid(" + i + ",this)' onmouseover='openMarkerTipById1(" + i + ",this)' onmouseout='onmouseout_MarkerStyle(" + (i + 1) + ",this)' style=\"font-size: 10px;cursor:pointer;padding:0px 0 2px 2px; \"><table class='map-table'><tr id=" + id + "><td textalign='left'>" + (i + 1) + "、" + searchresult.results[0][i].feature.attributes.FileName;
+                                resultStr += "</td><td><img class='select_img' src='../Sources/Images/select.png' onclick='selectimg(this)'></img></td></tr></table></div>";
+                            }
+
+                        }
+                        document.getElementById("div-table").innerHTML = resultStr;
+                    }
+                    else {
+                        $(".ccccn").remove();
+                    }
+                });
+
+            });
 
 
 
@@ -808,7 +808,7 @@
             var id = document.getElementById("tdid").innerHTML;
             var idh = id.split(':');
             var idd = idh[1].trim();
-            window.open("/Home/ShowImage/" + idd);
+            window.open("/Home/ShowImageWithObjectId/" + idd);
             // console.log(idh[1]);
             //map.infoWindow.hide();
             //var dialogwdith = $(window).width() + $(".modal-dialog").width();

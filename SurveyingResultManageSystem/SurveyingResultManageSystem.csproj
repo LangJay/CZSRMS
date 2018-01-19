@@ -194,6 +194,7 @@
     <Content Include="Scripts\select2\select2.min.css" />
     <Content Include="Scripts\select2\select2.min.js" />
     <Content Include="Scripts\easyfader\css\jquery.easyfader.css.bak" />
+    <Content Include="map.json" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Scripts\jquery-1.11.3.intellisense.js" />
     <Content Include="Scripts\jquery-1.11.3.js" />
@@ -263,6 +264,7 @@
     <Content Include="Views\FileManager\FileRecover.cshtml" />
     <Content Include="Views\FileManager\FileRecoverView.cshtml" />
     <Content Include="Views\Home\ShowImage.cshtml" />
+    <Content Include="Views\Home\ShowImageWithObjectId.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

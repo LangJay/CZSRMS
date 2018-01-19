@@ -42,5 +42,6 @@ namespace 批量上传文件
         public int UserID { get; set; }
         public string ObjectID { get; set; }
         public string MD5 { get; set; }
+        public bool WasDeleted { get; set; }
     }
 }

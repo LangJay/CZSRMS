@@ -1,0 +1,5 @@
+﻿{
+  "czyx": "https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer",
+  "czsl": "https://services.arcgisonline.com/arcgis/rest/services/World_Shaded_Relief/MapServer",
+  "cztb": "http://192.168.0.231:6080/arcgis/rest/services/CZ/FeatureServer/0"
+}

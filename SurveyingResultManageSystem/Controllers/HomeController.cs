@@ -585,11 +585,11 @@ namespace SurveyingResultManageSystem.Controllers
             //获取图片
             var baseurl = "http://" + Request.Url.Host + ":" + Request.Url.Port;
             tb_FileInfo user = fileInfoService.Find(u => u.ID == id);
-            if(user == null)
-            {
-                string objId = id.ToString();
-                user = fileInfoService.Find(u => u.ObjectID == objId);
-            }
+            //if(user == null)
+            //{
+            //    string objId = id.ToString();
+            //    user = fileInfoService.Find(u => u.ObjectID == objId);
+            //}
             if(user == null)
             {
                 //跳转到错误页
@@ -613,7 +613,44 @@ namespace SurveyingResultManageSystem.Controllers
             ViewBag.Imagelist = imageList;
             return View();
         }
-
+        /// <summary>
+        /// 显示缩略图
+        /// </summary>
+        /// <returns></returns>
+        [MapAuthentication]
+        public ActionResult ShowImageWithObjectId(int id)
+        {
+            //获取消息滚动条数据，取当天的数据
+            string operation = LogOperations.UploadFile() + LogOperations.DownloadFile() + LogOperations.DeleteFile();
+            string date = DateTime.Now.ToString("d");
+            ViewBag.Data = logInfoService.FindLogListAndFirst(l => l.Time.Contains(date) && operation.Contains(l.Operation));
+            //获取图片
+            var baseurl = "http://" + Request.Url.Host + ":" + Request.Url.Port;
+            string objId = id.ToString();
+            tb_FileInfo user = fileInfoService.Find(u => u.ObjectID == objId);
+            if (user == null)
+            {
+                //跳转到错误页
+                return RedirectToAction("Error", "Home");
+            }
+            string path1 = user.Directory + "预览文件\\";
+            DirectoryInfo dir = new DirectoryInfo(path1);
+            var startindex = path1.IndexOf("\\Data\\File");
+            var path2 = path1.Substring(startindex);
+            FileInfo[] inf = dir.GetFiles();
+            List<string> imageList = new List<string>();
+            foreach (FileInfo finf in inf)
+            {
+                var filename = "";
+                if (finf.Extension.Equals(".jpg"))
+                    //如果扩展名为“.xml”
+                    path2.Replace("\\", "/");
+                filename = filename + baseurl + path2 + finf.Name;
+                imageList.Add(filename);
+            }
+            ViewBag.Imagelist = imageList;
+            return View();
+        }
 
 
         [Authentication]
