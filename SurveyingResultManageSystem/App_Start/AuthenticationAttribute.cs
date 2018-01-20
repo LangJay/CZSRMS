@@ -14,7 +14,7 @@ namespace SurveyingResultManageSystem.App_Start
         {
             var user = HttpContext.Current.Request.Cookies["username"];
             if (user == null)
-                filterContext.Result = new RedirectResult("/Home/Login");
+                filterContext.Result = new RedirectResult("../Home/Login");
             base.OnActionExecuting(filterContext);
         }
     }
@@ -33,17 +33,17 @@ namespace SurveyingResultManageSystem.App_Start
                 var cook = HttpContext.Current.Request.Cookies["username"];
                 if(cook == null)
                 {
-                    filterContext.Result = new RedirectResult("/Home/Login");
+                    filterContext.Result = new RedirectResult("../Home/Login");
                 }
                 string username = cook.Value;
                 tb_UserInfo user = userInfoService.Find(u => u.UserName == username);
                 if(user == null)
                 {
-                    filterContext.Result = new RedirectResult("/Home/Login");
+                    filterContext.Result = new RedirectResult("../Home/Login");
                 }
                 else if(user.Levels == "1")
                 {
-                    filterContext.Result = new RedirectResult("/Home/Error");
+                    filterContext.Result = new RedirectResult("../Home/Error");
                 }
                 base.OnActionExecuted(filterContext);
             }
@@ -70,17 +70,17 @@ namespace SurveyingResultManageSystem.App_Start
                 var cook = HttpContext.Current.Request.Cookies["username"];
                 if (cook == null)
                 {
-                    filterContext.Result = new RedirectResult("/Home/Login");
+                    filterContext.Result = new RedirectResult("../Home/Login");
                 }
                 string username = cook.Value;
                 tb_UserInfo user = userInfoService.Find(u => u.UserName == username);
                 if (user == null)
                 {
-                    filterContext.Result = new RedirectResult("/Home/Login");
+                    filterContext.Result = new RedirectResult("../Home/Login");
                 }
                 else if (user.Levels == "-1")
                 {
-                    filterContext.Result = new RedirectResult("/Home/Error");
+                    filterContext.Result = new RedirectResult("../Home/Error");
                 }
                 base.OnActionExecuted(filterContext);
             }
@@ -107,17 +107,17 @@ namespace SurveyingResultManageSystem.App_Start
                 var cook = HttpContext.Current.Request.Cookies["username"];
                 if (cook == null)
                 {
-                    filterContext.Result = new RedirectResult("/Home/Login");
+                    filterContext.Result = new RedirectResult("../Home/Login");
                 }
                 string username = cook.Value;
                 tb_UserInfo user = userInfoService.Find(u => u.UserName == username);
                 if (user == null)
                 {
-                    filterContext.Result = new RedirectResult("/Home/Login");
+                    filterContext.Result = new RedirectResult("../Home/Login");
                 }
                 else if (user.Levels != "-1")
                 {
-                    filterContext.Result = new RedirectResult("/Home/Error");
+                    filterContext.Result = new RedirectResult("../Home/Error");
                 }
                 base.OnActionExecuted(filterContext);
             }

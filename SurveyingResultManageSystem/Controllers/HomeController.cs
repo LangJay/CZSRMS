@@ -581,9 +581,10 @@ namespace SurveyingResultManageSystem.Controllers
             //获取消息滚动条数据，取当天的数据
             string operation = LogOperations.UploadFile() + LogOperations.DownloadFile() + LogOperations.DeleteFile();
             string date = DateTime.Now.ToString("d");
-            ViewBag.Data = logInfoService.FindLogListAndFirst(l => l.Time.Contains(date) && operation.Contains(l.Operation));
             //获取图片
-            var baseurl = "http://" + Request.Url.Host + ":" + Request.Url.Port;
+            var requesturl = Request.Url.ToString();
+            int index = requesturl.IndexOf("Home");
+            var baseurl = requesturl.Substring(0, index);
             tb_FileInfo user = fileInfoService.Find(u => u.ID == id);
             //if(user == null)
             //{
@@ -625,7 +626,9 @@ namespace SurveyingResultManageSystem.Controllers
             string date = DateTime.Now.ToString("d");
             ViewBag.Data = logInfoService.FindLogListAndFirst(l => l.Time.Contains(date) && operation.Contains(l.Operation));
             //获取图片
-            var baseurl = "http://" + Request.Url.Host + ":" + Request.Url.Port;
+            var requesturl = Request.Url.ToString();
+            int index = requesturl.IndexOf("Home");
+            var baseurl = requesturl.Substring(0, index);
             string objId = id.ToString();
             tb_FileInfo user = fileInfoService.Find(u => u.ObjectID == objId);
             if (user == null)
@@ -635,7 +638,7 @@ namespace SurveyingResultManageSystem.Controllers
             }
             string path1 = user.Directory + "预览文件\\";
             DirectoryInfo dir = new DirectoryInfo(path1);
-            var startindex = path1.IndexOf("\\Data\\File");
+            var startindex = path1.IndexOf("Data\\File");
             var path2 = path1.Substring(startindex);
             FileInfo[] inf = dir.GetFiles();
             List<string> imageList = new List<string>();

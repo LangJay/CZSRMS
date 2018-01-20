@@ -4,8 +4,8 @@
 
 @*<link rel="stylesheet" type="text/css" href="http://192.168.0.205:80/aspnet_client/API/3.21/3.21/esri/css/esri.css" />
 <script src="http://192.168.0.205:80/aspnet_client/API/3.21/3.21/init.js"></script>*@
-<link rel="stylesheet" type="text/css" href="http://192.168.0.231:8080/arcgis_js_api/library/3.21/3.21/esri/css/esri.css" />
-<script src="http://192.168.0.231:8080/arcgis_js_api/library/3.21/3.21/init.js"></script>
+<link rel="stylesheet" type="text/css" href="http://192.168.0.231/arcgis_js_api/library/3.21/3.21/esri/css/esri.css" />
+<script src="http://192.168.0.231/arcgis_js_api/library/3.21/3.21/init.js"></script>
 
 @Styles.Render("~/Content/style/MapManager.css")
 @Styles.Render("~/Content/style/FileManager.css")
@@ -221,7 +221,7 @@
     $(document).ready(function () {
         //加载分类
         $.ajax({
-            url: "/FileManager/GetSelectedCategory",
+            url: "../FileManager/GetSelectedCategory",
             type: "get",
             dataType: "json",
             async: false,
@@ -238,10 +238,10 @@
         });
         //设置下拉选项的数据
         $(function setSelectData() {
-            var uniturl = "/Droplist/Unitlist";
-            var filetypeurl = "/Droplist/FiltTypelist";
-            var projecttypeurl = "/Droplist/ProjectTypelist";
-            var coodurl = "/Droplist/CoodinateSystemlist";
+            var uniturl = "../Droplist/Unitlist";
+            var filetypeurl = "../Droplist/FiltTypelist";
+            var projecttypeurl = "../Droplist/ProjectTypelist";
+            var coodurl = "../Droplist/CoodinateSystemlist";
             getDropData("CoodinateSystem", coodurl);
             getDropData("filetype", filetypeurl);
             getDropData("projecttype", projecttypeurl);
@@ -252,7 +252,7 @@
             //$("#surveyingunitname").val("苏仙区测绘队");
         });
         //查看用户权限，分配功能
-        $.get("/UserInfoManager/GetUserLevels", function (data, status) {
+        $.get("../UserInfoManager/GetUserLevels", function (data, status) {
             if (status == "success") {
                 if (data == 0) {
                     $(".a-delete-button").css("display", "inline");
@@ -284,7 +284,7 @@
 
         if (divlist.css("display") == "none") {
             $("#card-file").css("display", "block");
-            window.location.assign("/Home/FileManager");
+            window.location.assign("../Home/FileManager");
         }
         else {
             divlist.css("display", "none");
@@ -459,7 +459,7 @@
     function download(idsjson) {
         //window.open("/Home/Downloads?idsjson=" + idsjson);
         $.ajax({
-            url: '/Home/DownloadsWithObjId',
+            url: '../Home/DownloadsWithObjId',
             type: "post",
             dataType: "text",
             data: idsjson,
@@ -483,7 +483,7 @@
             if (ids != null) {
                 if (confirm("你确定要删除所选" + ids.length + "个文件吗？")) {
                     $.ajax({
-                        url: '/Home/DeletesWithObjId',
+                        url: '../Home/DeletesWithObjId',
                         type: "post",
                         dataType: "text",
                         data: JSON.stringify(ids),
@@ -529,8 +529,8 @@
                     {
                         logo: false,
                         basemap: "czyx",
-                        center: [113.02, 25.78],
-                        zoom:12
+                        center: [113.02, 26.00],
+                        zoom: 10
                     });
                 var toggle = new BasemapToggle({
                     map: map,
@@ -544,7 +544,7 @@
                 var username = getCookie("username");
                 var userinfo = "";
                 $.ajax({
-                    url: "/Home/GetUserinfo",
+                    url: "../Home/GetUserinfo",
                     type: "post",
                     dataType: "text",
                     async: false,
@@ -603,7 +603,7 @@
                 on(search, 'search-results', function (e) {
                     if (e.results != null) {
                         //查看用户权限，分配功能
-                        $.get("/UserInfoManager/GetUserLevels", function (data, status) {
+                        $.get("../UserInfoManager/GetUserLevels", function (data, status) {
                             if (status == "success") {
                                 if (data == 0) {
                                     $(".a-delete-button").css("display", "inline");
@@ -660,7 +660,7 @@
             });
             var info;
             $.ajax({
-                url: "/Home/getfileinfo",
+                url: "../Home/getfileinfo",
                 type: "post",
                 dataType: "text",
                 async: false,
@@ -741,7 +741,7 @@
             //  formData.append("fileinfo", JSON.stringify(file));
             var fileinfomation = JSON.stringify(info1);
             $.ajax({
-                url: "/Home/setfileinfo",
+                url: "../Home/setfileinfo",
                 type: "post",
                 dataType: "text",
                 async: false,
@@ -771,7 +771,7 @@
             var info;
             if (confirm("你确定要删除该文件吗？")) {
                 $.ajax({
-                    url: "/Home/delefeature",
+                    url: "../Home/delefeature",
                     type: "post",
                     dataType: "text",
                     async: false,
@@ -808,7 +808,7 @@
             var id = document.getElementById("tdid").innerHTML;
             var idh = id.split(':');
             var idd = idh[1].trim();
-            window.open("/Home/ShowImageWithObjectId/" + idd);
+            window.open("../Home/ShowImageWithObjectId/" + idd);
             // console.log(idh[1]);
             //map.infoWindow.hide();
             //var dialogwdith = $(window).width() + $(".modal-dialog").width();
@@ -906,7 +906,7 @@
             var username = getCookie("username");
             var userid = "";
             $.ajax({
-                url: "/Home/GetUserID",
+                url: "../Home/GetUserID",
                 type: "post",
                 dataType: "text",
                 async: false,

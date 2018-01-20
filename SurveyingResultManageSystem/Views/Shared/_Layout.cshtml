@@ -21,16 +21,19 @@
             <img style="margin:10px;display:inline" src="~/Sources/Images/地球.gif"/>
             <h1 onclick="linghome()" style="color:white;display:inline">郴州市测绘成果管理系统</h1>
             <ul id="div_title_ul">
-                <li id="li-setpwd"><a href="/SetPasswords/Index">设置密码</a></li>
-                <li id="li-setcategory"><a href="/Category/CategoryIndex">分类设置</a></li>
-                <li id="li-first"><a href="/Home/FileManager">首页</a></li>
+                <li id="li-setpwd"><a href="../SetPasswords/Index">设置密码</a></li>
+                <li id="li-setcategory"><a href="../Category/CategoryIndex">分类设置</a></li>
+                <li id="li-first"><a href="../Home/FileManager">首页</a></li>
             </ul>
+            <span class="help-span">
+                如需帮助，请联系：王工（13786516521）
+            </span>
         </div>
         <div id="div_message">
             <div id="div_message_left">
                 <img src="~/Sources/Images/manager_small.png" />
                 <p id="p-username"></p>
-                <a href="/Home/Logout">注销</a>
+                <a href="../Home/Logout">注销</a>
             </div>
             <div id="div_message_right">
                 <img src="~/Sources/Images/notice.png" />
@@ -51,7 +54,7 @@
                         }
                     </ul>
                 </div>
-                <a id="more-btn" href="/LogInfoManager/MoreLogInfo">更  多</a>
+                <a id="more-btn" href="../LogInfoManager/MoreLogInfo">更  多</a>
             </div>
         </div>
     </div>
@@ -82,24 +85,24 @@
     document.getElementById("J_scroll").style.WebkitAnimationDuration = speed;
     document.getElementById("J_scroll").style.animationDuration = speed;
     //查看用户权限，分配功能
-    $.get("/UserInfoManager/GetUserLevels", function (data, status)
+    $.get("../UserInfoManager/GetUserLevels", function (data, status)
     {
         if (status == "success")
         {
             if (data == 0 || data == -1) {
                 $(".li-user").css("display", "none");
-                $("#li-setpwd").append("<li> <a href='/UserInfoManager/UserManager'>账户管理</a></li ><li><a href='/LogInfoManager/LogInfoManager'>日志管理</a></li>");
+                $("#li-setpwd").append("<li> <a href='../UserInfoManager/UserManager'>账户管理</a></li ><li><a href='../LogInfoManager/LogInfoManager'>日志管理</a></li>");
             }
             if (data == -1)
             {
-                $("#li-setpwd").append("<li> <a href='/FileManager/FileRecoverView'>数据恢复</a></li >");
+                $("#li-setpwd").append("<li> <a href='../FileManager/FileRecoverView'>数据恢复</a></li >");
                 $("#li-first").css("display", "none");
                 $("#div_message_right").css("display", "none");
             }
         }
     });
     //获取用户名
-    $.get("/Home/GetUserName", function (data, status) {
+    $.get("../Home/GetUserName", function (data, status) {
         if (status == "success")
         {
             if (data != null)
@@ -108,17 +111,17 @@
             }
             else
             {
-                window.location.assign("/Home/Login");
+                window.location.assign("../Home/Login");
             }
         }
         else
         {
-            window.location.assign("/Home/Login");
+            window.location.assign("../Home/Login");
         }
     })
     // 链接到首页
     function linghome()
     {
-        window.location.assign("/Home/FileManager");
+        window.location.assign("../Home/FileManager");
     }
 </script>

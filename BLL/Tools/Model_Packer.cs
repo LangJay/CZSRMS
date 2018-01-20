@@ -22,7 +22,7 @@ namespace BLL.Tools
         [XmlAttribute("CoodinateSystem")]
         public string CoordSystem { get; set; }
         [XmlAttribute("CenterMeridian")]
-        public double CenterLong { get; set; }
+        public string CenterLong { get; set; }
         [XmlAttribute("Yoffset")]
         public double OffsetN { get; set; }
         [XmlAttribute("Xoffset")]

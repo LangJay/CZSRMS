@@ -26,7 +26,7 @@
     function submit()
     {
         //判断旧密码是否正确
-        $.get("/SetPasswords/GetPassWords", function (data, status) {
+        $.get("../SetPasswords/GetPassWords", function (data, status) {
             if (status == "success") {
                 var oldpwd = "";
                 oldpwd = data;
@@ -50,12 +50,12 @@
                 }
                 //上传新密码
 
-                $.post("/SetPasswords/SetPasswords", $("#input-new").val(),
+                $.post("../SetPasswords/SetPasswords", $("#input-new").val(),
                     function (data, status) {
                         if (status == "success")
                         {
                             alert("修改成功，请重新登录...");
-                            window.location.href = "/Home/Login";
+                            window.location.href = "../Home/Login";
                         }
                         else {
                             alert("服务器故障,请重试...");

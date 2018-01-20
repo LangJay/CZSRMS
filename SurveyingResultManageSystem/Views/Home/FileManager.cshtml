@@ -211,7 +211,7 @@
 <script type="text/javascript">
     var currentAjax = null;
     //查看用户权限，分配功能
-    $.get("/UserInfoManager/GetUserLevels", function (data, status) {
+    $.get("../UserInfoManager/GetUserLevels", function (data, status) {
         if (status == "success") {
             if (data == 0) {
                 $(".a-delete-button").css("display", "inline");
@@ -221,7 +221,7 @@
     $(document).ready(function () {
         //加载分类
         $.ajax({
-            url: "/FileManager/GetSelectedCategory",
+            url: "../FileManager/GetSelectedCategory",
             type: "get",
             dataType: "json",
             async: false,
@@ -238,10 +238,10 @@
         });
         //设置下拉选项的数据
         $(function setSelectData() {
-            var uniturl = "/Droplist/Unitlist";
-            var filetypeurl = "/Droplist/FiltTypelist";
-            var projecttypeurl = "/Droplist/ProjectTypelist";
-            var coodurl = "/Droplist/CoodinateSystemlist";
+            var uniturl = "../Droplist/Unitlist";
+            var filetypeurl = "../Droplist/FiltTypelist";
+            var projecttypeurl = "../Droplist/ProjectTypelist";
+            var coodurl = "../Droplist/CoodinateSystemlist";
             getDropData("CoodinateSystem", coodurl);
             getDropData("filetype", filetypeurl);
             getDropData("projecttype", projecttypeurl);
@@ -527,7 +527,7 @@
     //点击地图管理标题
     $("#h-map").click(function () {
         //加载地图
-        window.location.assign("/Home/MapManager");
+        window.location.assign("../Home/MapManager");
     });
     //点击父分类
     function clickheader(e) {
@@ -587,7 +587,7 @@
             img.src = selectedimg;
         }
         //查看用户权限，分配功能
-        $.get("/UserInfoManager/GetUserLevels", function (data, status) {
+        $.get("../UserInfoManager/GetUserLevels", function (data, status) {
             if (status == "success") {
                 if (data == 0) {
                     $(".a-delete-button").css("display", "inline");
@@ -771,7 +771,7 @@
         var obj = $("#" + fileId).children("#file_" + fileId)[0];
         var filename = obj.innerText;
         if (confirm("你确定要删除" + filename + "吗？")) {
-            $.getJSON("/Home/Delete?fileId=" + Number(fileId), function (data) {
+            $.getJSON("../Home/Delete?fileId=" + Number(fileId), function (data) {
                 console.log(data.code);
                 if (data.code == 4)
                 {
@@ -798,7 +798,7 @@
                 if (confirm("你确定要删除所选" + ids.length + "个文件吗？"))
                 {
                     $.ajax({
-                        url: '/Home/Deletes',
+                        url: '../Home/Deletes',
                         type: "post",
                         dataType: "text",
                         data: JSON.stringify(ids),
@@ -841,7 +841,7 @@
         //window.open("/Home/Downloads?idsjson=" + idsjson);
         $("#loading").css("display", "block");
         $.ajax({
-            url: '/Home/Downloads',
+            url: '../Home/Downloads',
             type: "post",
             dataType: "text",
             data: idsjson,

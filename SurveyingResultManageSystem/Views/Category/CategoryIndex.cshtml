@@ -64,7 +64,7 @@
 <script>
     $(document).ready(function () {
         //查看用户权限，分配功能
-        $.get("/UserInfoManager/GetUserLevels", function (data, status) {
+        $.get("../UserInfoManager/GetUserLevels", function (data, status) {
             if (status == "success") {
                 if (data == "-1") {
                     $("#btn-edit").css("display", "inline");
@@ -77,7 +77,7 @@
         //更新数据
         var k = e.children[0].innerText;
         $.ajax({
-            url: "/Category/EditCategorySelect",
+            url: "../Category/EditCategorySelect",
             type: "get",
             dataType: "text",
             async: false,
@@ -111,7 +111,7 @@
         //更新数据
         var k = e.children[0].innerText;
         $.ajax({
-            url: "/Category/EditCategorySelect",
+            url: "../Category/EditCategorySelect",
             type: "get",
             dataType: "text",
             async: false,
@@ -251,7 +251,7 @@
         category.kind = name;
         category.nodes = list;
         $.ajax({
-            url: "/Category/AddCategory",
+            url: "../Category/AddCategory",
             type: "post",
             dataType: "text",
             async: false,
@@ -294,7 +294,7 @@
         if (!a)//编辑
         {
             $.ajax({
-                url: "/Category/GetCategory",
+                url: "../Category/GetCategory",
                 type: "get",
                 dataType: "json",
                 async: false,
@@ -318,7 +318,7 @@
         else//删除
         {
             $.ajax({
-                url: "/Category/DeleteCategory",
+                url: "../Category/DeleteCategory",
                 type: "get",
                 dataType: "text",
                 async: false,
@@ -359,7 +359,7 @@
             category.kind = kind;
             category.nodes = list;
             $.ajax({
-                url: "/Category/EditCategory",
+                url: "../Category/EditCategory",
                 type: "post",
                 dataType: "text",
                 async: false,

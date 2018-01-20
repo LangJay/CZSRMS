@@ -125,7 +125,7 @@
 <script type="text/javascript">
     $(document).ready(function(){
         var id = "input-unit";
-        var url = "/Droplist/Unitlist";
+        var url = "../Droplist/Unitlist";
         //获取文件数据
         $.ajax({
             url: url,
@@ -182,7 +182,7 @@
     {
         $.ajax({
             type: 'post', //可选get
-            url: '/UserInfoManager/UserManager', //这里是接收数据的程序
+            url: '../UserInfoManager/UserManager', //这里是接收数据的程序
             data: 'pageIndex=' + pageIndex + "&&keywords=" + keywords, //传给PHP的数据，多个参数用&连接
             dataType: 'html', //服务器返回的数据类型 可选XML ,Json jsonp script html text等
             success: function (data) {
@@ -192,7 +192,7 @@
             error: function (XMLHttpRequest, textStatus, errorThrown)
             {
                 //应该跳转到ERROR页面
-                window.location.href("/Home/Error");
+                window.location.href("../Home/Error");
             }
         });
     };
@@ -233,7 +233,7 @@
             //删除数据
             //Post表单
             $.ajax({
-                url: "/UserInfoManager/DeleteUser",
+                url: "../UserInfoManager/DeleteUser",
                 type: "post",
                 dataType: "text",
                 async: false,
@@ -249,7 +249,7 @@
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     if (XMLHttpRequest.state != 200)
-                        window.location.href("/Home/Error");
+                        window.location.href("../Home/Error");
                     else {
                         getData(1, "");//刷新界面
                     }
@@ -279,7 +279,7 @@
         //重制密码
         //Post表单
         $.ajax({
-            url: "/UserInfoManager/ResetPassWords",
+            url: "../UserInfoManager/ResetPassWords",
             type: "post",
             dataType: "text",
             async: false,
@@ -289,7 +289,7 @@
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 if (XMLHttpRequest.state != 200)
-                    window.location.href("/Home/Error");
+                    window.location.href("../Home/Error");
                 else {
                     alert("密码重置为123");
                 }
@@ -328,7 +328,7 @@
         {
             //Post表单
             $.ajax({
-                url: "/UserInfoManager/AddUser",
+                url: "../UserInfoManager/AddUser",
                 type: "post",
                 dataType: "text",
                 async: false,
@@ -347,7 +347,7 @@
                 error: function (XMLHttpRequest, textStatus, errorThrown)
                 {
                     if (XMLHttpRequest.state != 200)
-                        window.location.href("/Home/Error");
+                        window.location.href("../Home/Error");
                     else
                     {
                         $("#myModal").modal('hide');
