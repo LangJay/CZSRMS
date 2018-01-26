@@ -2,7 +2,7 @@
 <PackDocument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <PackFiles>
     <PackFile ProjectName="尚品福城项目周边零星地块整合（划定整合用地蓝线）_292D594A84EC90C0D52717866B3DB8D8" CoodinateSystem="郴州独立坐标系" CenterMeridian="113:30:00.000" Yoffset="0" Xoffset="0" FileType="宗地图" ProjectType="供地" SurveyingUnitName="市局测绘队" FinishPerson="123" Explain="123">
-      <FinishtimeInfo>2018-01-20T08:45:43.0918604+08:00</FinishtimeInfo>
+      <FinishtimeInfo>2018-01-22T15:55:55.376734+08:00</FinishtimeInfo>
     </PackFile>
   </PackFiles>
 </PackDocument>

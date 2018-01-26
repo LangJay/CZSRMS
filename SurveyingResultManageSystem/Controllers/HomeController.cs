@@ -494,6 +494,7 @@ namespace SurveyingResultManageSystem.Controllers
                 {
                     string safeFileName = file.FileName.Substring(0, file.FileName.IndexOf('.'));//压缩文件的文件名
                     zipFile.AddDirectory(Path.Combine(file.Directory, "原始文件"), safeFileName);
+                   // zipFile.AddDirectory(file.Directory, safeFileName);
                 }
                 zipFile.Save(savePath);//太费时
             }
